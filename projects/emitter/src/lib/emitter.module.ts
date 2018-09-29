@@ -39,5 +39,5 @@ if (typeof Store.prototype.emitter !== 'function') {
                 return this['_internalStateOperations'].getRootStateOperations().dispatch<EmitterAction>(action);
             }
         };
-    };   
+    };
 }

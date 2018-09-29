@@ -7,23 +7,23 @@ import { Store } from '@ngxs/store';
  */
 @Injectable()
 export class EmitPayloadFactory {
-  public static injector: Injector | null = null;
+    public static injector: Injector | null = null;
 
-  constructor(injector: Injector) {
-    EmitPayloadFactory.injector = injector;
-  }
+    constructor(injector: Injector) {
+        EmitPayloadFactory.injector = injector;
+    }
 }
 
 /**
  * Decorates a property and defines new getter.
  */
 export function EmitPayload(emitter: Function): PropertyDecorator {
-  return (target: Object, key: string | symbol) => {
-    Object.defineProperty(target, key, {
-      get: () => {
-        const store = EmitPayloadFactory.injector !.get<Store>(Store);
-        return store.emitter(emitter);
-      }
-    });
-  };
+    return (target: Object, key: string | symbol) => {
+        Object.defineProperty(target, key, {
+            get: () => {
+                const store = EmitPayloadFactory.injector !.get<Store>(Store);
+                return store.emitter(emitter);
+            }
+        });
+    };
 }

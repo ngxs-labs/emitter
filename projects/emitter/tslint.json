@@ -12,6 +12,7 @@
             "element",
             "dispatcher",
             "kebab-case"
-        ]
+        ],
+        "no-non-null-assertion": false
     }
 }
