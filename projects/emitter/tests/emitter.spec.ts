@@ -10,7 +10,7 @@ import { EMITTER_META_KEY, DispatchEmitter } from '../src/lib/core/internal/inte
 import { EmitterAction } from '../src/lib/core/actions/actions';
 import { EmitStore } from '../src/lib/emit.service';
 import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
-import { EmitModule } from '../src/public_api';
+import { NgxsEmitPluginModule } from '../src/public_api';
 
 describe('Emitter', () => {
     interface Todo {
@@ -55,7 +55,7 @@ describe('Emitter', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([TodosState]),
-                EmitModule.forRoot()
+                NgxsEmitPluginModule.forRoot()
             ]
         });
 
@@ -92,7 +92,7 @@ describe('Emitter', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([BarState, Bar2State]),
-                EmitModule.forRoot()
+                NgxsEmitPluginModule.forRoot()
             ]
         });
 
@@ -120,7 +120,7 @@ describe('Emitter', () => {
             TestBed.configureTestingModule({
                 imports: [
                     NgxsModule.forRoot([BarState]),
-                    EmitModule.forRoot()
+                    NgxsEmitPluginModule.forRoot()
                 ]
             });
         } catch ({ message }) {
@@ -182,7 +182,7 @@ describe('Emitter', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([TodosState]),
-                EmitModule.forRoot()
+                NgxsEmitPluginModule.forRoot()
             ],
             providers: [
                 ApiService
@@ -227,7 +227,7 @@ describe('Emitter', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([TodosState]),
-                EmitModule.forRoot()
+                NgxsEmitPluginModule.forRoot()
             ],
             declarations: [
                 MockComponent
@@ -260,7 +260,7 @@ describe('Emitter', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([TodosState]),
-                EmitModule.forRoot()
+                NgxsEmitPluginModule.forRoot()
             ],
             declarations: [
                 MockComponent

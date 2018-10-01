@@ -5,15 +5,15 @@ import { PayloadEmitterFactory } from './core/decorators/payload-emitter';
 import { EmitStore } from './emit.service';
 
 @NgModule()
-export class EmitModule {
+export class NgxsEmitPluginModule {
     constructor(payloadEmitterFactory: PayloadEmitterFactory) {}
 
     /**
      * @returns a wrapper around `NgModule`
      */
-    public static forRoot(): ModuleWithProviders<EmitModule> {
+    public static forRoot(): ModuleWithProviders<NgxsEmitPluginModule> {
         return {
-            ngModule: EmitModule,
+            ngModule: NgxsEmitPluginModule,
             providers: [
                 PayloadEmitterFactory,
                 EmitStore,
