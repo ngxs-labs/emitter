@@ -2,6 +2,15 @@
  * Emitter action
  */
 export class EmitterAction<T = any> {
-    static type: string | null = null;
+    /**
+     * Action type
+     */
+    public static type: string | null = null;
+
+    /**
+     * Creates EmitterAction instance
+     *
+     * @param payload - Data to dispatch
+     */
     constructor(public payload?: T) {}
 }

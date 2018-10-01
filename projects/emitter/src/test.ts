@@ -7,5 +7,5 @@ import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@ang
 declare const require: any;
 
 getTestBed().initTestEnvironment(BrowserDynamicTestingModule, platformBrowserDynamicTesting());
-const context = require.context('./projects', true, /\.spec\.ts$/);
+const context = require.context('../tests', true, /\.spec\.ts$/);
 context.keys().map(context);

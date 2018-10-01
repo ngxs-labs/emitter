@@ -1,5 +1,12 @@
 import { Observable } from 'rxjs';
 
+/**
+ * @type EmitterMetadata
+ *
+ * Static metadata for the emitter function
+ *
+ * @property type - Action type
+ */
 export interface EmitterMetaData {
     type: string;
 }
@@ -9,7 +16,7 @@ export interface DispatchEmitter<T = any, U = any> {
 }
 
 export const META_KEY = 'NGXS_META';
-export const EMITTER_META_KEY = 'NGXS_SELECTOR_META';
+export const EMITTER_META_KEY = 'NGXS_EMITTER_META';
 
 export function ensureStoreMetadata(target: Function) {
     if (!target.hasOwnProperty(META_KEY)) {
