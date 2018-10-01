@@ -1,1 +1,1 @@
-export * from './lib/emitter.module';
+export * from './lib/emit.module';

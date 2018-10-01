@@ -1,27 +1,28 @@
 import { Injectable, Injector } from '@angular/core';
-import { Store } from '@ngxs/store';
+
+import { EmitStore } from '../../emit.service';
 
 /**
- * Allows the `@EmitPayload()` decorator to get access to the DI store.
+ * Allows the `@PayloadEmitter()` decorator to get access to the DI store.
  * @ignore
  */
 @Injectable()
-export class EmitPayloadFactory {
+export class PayloadEmitterFactory {
     public static injector: Injector | null = null;
 
     constructor(injector: Injector) {
-        EmitPayloadFactory.injector = injector;
+        PayloadEmitterFactory.injector = injector;
     }
 }
 
 /**
  * Decorates a property and defines new getter.
  */
-export function EmitPayload(emitter: Function): PropertyDecorator {
+export function PayloadEmitter(emitter: Function): PropertyDecorator {
     return (target: Object, key: string | symbol) => {
         Object.defineProperty(target, key, {
             get: () => {
-                const store = EmitPayloadFactory.injector !.get<Store>(Store);
+                const store = PayloadEmitterFactory.injector !.get<EmitStore>(EmitStore);
                 return store.emitter(emitter);
             }
         });

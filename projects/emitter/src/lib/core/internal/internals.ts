@@ -1,5 +1,11 @@
+import { Observable } from 'rxjs';
+
 export interface EmitterMetaData {
     type: string;
+}
+
+export interface DispatchEmitter<T = any, U = any> {
+    emit(payload?: T): Observable<U>;
 }
 
 export const META_KEY = 'NGXS_META';
