@@ -1,8 +1,6 @@
 import { Observable } from 'rxjs';
 
 /**
- * @type EmitterMetadata
- *
  * Static metadata for the emitter function
  *
  * @property type - Action type
@@ -11,7 +9,12 @@ export interface EmitterMetaData {
     type: string;
 }
 
-export interface DispatchEmitter<T = any, U = any> {
+/**
+ * Plain object that contains `emit` function that dispatches payload
+ *
+ * @property emit - Function that dispatches payload under the hood
+ */
+export interface Emittable<T = any, U = any> {
     emit(payload?: T): Observable<U>;
 }
 

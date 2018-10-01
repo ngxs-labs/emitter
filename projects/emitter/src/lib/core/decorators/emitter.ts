@@ -1,7 +1,10 @@
 import { ensureStoreMetadata, EmitterMetaData, EMITTER_META_KEY } from '../internal/internals';
 
 /**
- * Decorates a method with an emitter information.
+ * Decorates a method with an emitter information
+ *
+ * @param options - Options for configuring static metadata
+ * @returns - Factory for decorating method
  */
 export function Emitter(options?: Partial<EmitterMetaData>): MethodDecorator {
     return <T>(target: any, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => {

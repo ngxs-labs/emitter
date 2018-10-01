@@ -7,6 +7,9 @@ import { EmitStore } from '../../emit.service';
  */
 @Injectable()
 export class PayloadEmitterFactory {
+    /**
+     * Injector for accessing DI
+     */
     public static injector: Injector | null = null;
 
     /**
@@ -20,7 +23,10 @@ export class PayloadEmitterFactory {
 }
 
 /**
- * Decorates a property and defines new getter.
+ * Decorates a property and defines new getter
+ *
+ * @param emitter - Reference to the static function
+ * @returns - Factory function for decorating properties
  */
 export function PayloadEmitter(emitter: Function): PropertyDecorator {
     return (target: Object, key: string | symbol) => {
