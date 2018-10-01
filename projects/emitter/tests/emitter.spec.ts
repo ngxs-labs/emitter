@@ -22,7 +22,7 @@ describe('Emitter', () => {
         @State({ name: 'bar' })
         class BarState {
             @Emitter({ type: '@@[bar]' })
-            static foo() {}
+            public static foo() {}
         }
 
         const BarFooMeta = BarState.foo[EMITTER_META_KEY];
@@ -33,7 +33,7 @@ describe('Emitter', () => {
         @State({ name: 'bar' })
         class BarState {
             @Emitter()
-            static foo() {}
+            public static foo() {}
         }
 
         const BarFooMeta = BarState.foo[EMITTER_META_KEY];
