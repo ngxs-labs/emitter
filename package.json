@@ -1,5 +1,5 @@
 {
-    "name": "ngxs-contrib",
+    "name": "@ngxs-contrib",
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
