@@ -321,7 +321,7 @@ describe('NgxsEmitPluginModule', () => {
             const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
             expect(todoLength).toBe(10);
         });
-            
+ 
         fixture.componentInstance.setTodos!.emit().subscribe(() => {
             const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
             expect(todoLength).toBe(5);
