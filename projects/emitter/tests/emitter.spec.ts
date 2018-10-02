@@ -59,7 +59,7 @@ describe('Emitter', () => {
             ]
         });
 
-        const store: EmitStore = TestBed.get(Store);
+        const store: EmitStore = TestBed.get(EmitStore);
 
         store.emitter<Todo>(TodosState.addTodo).emit({
             text: 'buy coffee',
@@ -96,7 +96,7 @@ describe('Emitter', () => {
             ]
         });
 
-        const store: EmitStore = TestBed.get(Store);
+        const store: EmitStore = TestBed.get(EmitStore);
         store.emitter(Bar2State.foo2).emit();
 
         const bar2Value = store.selectSnapshot(state => state.bar).bar2;
@@ -189,7 +189,7 @@ describe('Emitter', () => {
             ]
         });
 
-        const store: EmitStore = TestBed.get(Store);
+        const store: EmitStore = TestBed.get(EmitStore);
 
         store
             .emitter<void>(TodosState.setTodosSync)
@@ -267,7 +267,7 @@ describe('Emitter', () => {
             ]
         });
 
-        const store: EmitStore = TestBed.get(Store);
+        const store: EmitStore = TestBed.get(EmitStore);
         const fixture = TestBed.createComponent(MockComponent);
 
         fixture.componentInstance.addTodoAction!.emit({
