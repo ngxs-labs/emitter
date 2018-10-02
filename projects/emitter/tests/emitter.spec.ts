@@ -49,7 +49,9 @@ describe('Emitter', () => {
             public static addTodo() {}
         }
 
-        @Component({ template: '' })
+        @Component({
+            template: ''
+        })
         class MockComponent {
             @PayloadEmitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
@@ -82,7 +84,9 @@ describe('Emitter', () => {
             }
         }
 
-        @Component({ template: '' })
+        @Component({
+            template: ''
+        })
         class MockComponent {
             @PayloadEmitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
