@@ -4,7 +4,36 @@ This package allows you to get rid of actions to make changes to the store.
 You're able to use decorators to register actions directly in your state, you should
 not create any actions in your project, as they don't give any profit, only bring extra boilerplate files.
 
-## Emitter Decorator
+## Installation
+
+To get started install this package from npm.
+
+```bash
+npm install @ngxs-contrib/emitter
+
+# or with yarn
+yarn add @ngxs-contrib/emitter
+```
+
+After installation - import the `NgxsEmitPluginModule` into your `app.module.ts`:
+
+```TS
+import { NgModule } from '@angular/core';
+import { NgxsEmitPluginModule } from '@ngxs-contrib/emitter';
+
+@NgModule({
+    imports: [
+        ...,
+        NgxsEmitPluginModule.forRoot()
+    ]
+})
+export class AppModule {}
+```
+
+### Emitter
+
+Emitter is just a single function that can be used to decorate static methods of your states, this will
+add extra static metadata.
 
 ```TS
 import { State } from '@ngxs/store';
@@ -30,7 +59,10 @@ export class CounterState {
 }
 ```
 
-## PayloadEmitter Decorator
+### PayloadEmitter
+
+`@PayloadEmitter` is a decorator that will define getter for the decorated property. You will get an
+access to the emittable object.
 
 ```TS
 import { Select } from '@ngxs/store';
@@ -59,7 +91,7 @@ export class CounterComponent {
 }
 ```
 
-### Dependency Injection with @Emitter decorator
+### Dependency Injection with `@Emitter` decorator
 
 If you want to subscribe to the changes, you can easily do this. 
 You can also use the action method in store. 
