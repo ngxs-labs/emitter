@@ -8,7 +8,6 @@ import { delay, take, tap } from 'rxjs/operators';
 import { Emitter } from '../src/lib/core/decorators/emitter';
 import { EMITTER_META_KEY, Emittable } from '../src/lib/core/internal/internals';
 import { EmitterAction } from '../src/lib/core/actions/actions';
-import { EmitStore } from '../src/lib/emit.service';
 import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
 
