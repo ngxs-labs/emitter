@@ -1,14 +1,6 @@
-import { Observable } from 'rxjs';
+import { Type } from '@angular/core';
 
-/**
- * Custom action interface
- *
- * @property type - Static property that defines action type
- */
-export interface CustomAction<T = any, U = any> {
-    type: string;
-    new (payload?: U): T;
-}
+import { Observable } from 'rxjs';
 
 /**
  * Static metadata for the emitter function
@@ -18,7 +10,7 @@ export interface CustomAction<T = any, U = any> {
  */
 export interface EmitterMetaData<T extends Function = any> {
     type: string;
-    action: CustomAction<T>;
+    action: Type<T>;
 }
 
 /**
