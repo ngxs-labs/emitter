@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngxs-dispatcher": {
+    "ngxs-contrib": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ngxs-dispatcher",
+            "outputPath": "dist/ngxs-contrib",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -50,18 +50,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngxs-dispatcher:build"
+            "browserTarget": "ngxs-contrib:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngxs-dispatcher:build:production"
+              "browserTarget": "ngxs-contrib:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngxs-dispatcher:build"
+            "browserTarget": "ngxs-contrib:build"
           }
         },
         "test": {
@@ -95,7 +95,7 @@
         }
       }
     },
-    "ngxs-dispatcher-e2e": {
+    "ngxs-contrib-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -103,11 +103,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "ngxs-dispatcher:serve"
+            "devServerTarget": "ngxs-contrib:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ngxs-dispatcher:serve:production"
+              "devServerTarget": "ngxs-contrib:serve:production"
             }
           }
         },
@@ -122,38 +122,38 @@
         }
       }
     },
-    "dispatcher": {
-      "root": "projects/dispatcher",
-      "sourceRoot": "projects/dispatcher/src",
+    "emitter": {
+      "root": "projects/emitter",
+      "sourceRoot": "projects/emitter/src",
       "projectType": "library",
-      "prefix": "dispatcher",
+      "prefix": "emitter",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/dispatcher/tsconfig.lib.json",
-            "project": "projects/dispatcher/ng-package.json"
+            "tsConfig": "projects/emitter/tsconfig.lib.json",
+            "project": "projects/emitter/ng-package.json"
           },
           "configurations": {
             "production": {
-              "project": "projects/dispatcher/ng-package.prod.json"
+              "project": "projects/emitter/ng-package.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/dispatcher/src/test.ts",
-            "tsConfig": "projects/dispatcher/tsconfig.spec.json",
-            "karmaConfig": "projects/dispatcher/karma.conf.js"
+            "main": "projects/emitter/src/test.ts",
+            "tsConfig": "projects/emitter/tsconfig.spec.json",
+            "karmaConfig": "projects/emitter/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/dispatcher/tsconfig.lib.json",
-              "projects/dispatcher/tsconfig.spec.json"
+              "projects/emitter/tsconfig.lib.json",
+              "projects/emitter/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -163,5 +163,5 @@
       }
     }
   },
-  "defaultProject": "ngxs-dispatcher"
+  "defaultProject": "ngxs-contrib"
 }
