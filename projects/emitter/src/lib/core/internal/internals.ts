@@ -1,3 +1,5 @@
+import { Type } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 /**
@@ -6,9 +8,9 @@ import { Observable } from 'rxjs';
  * @property type - Action type (optional)
  * @property action - Custom action to dispatch (optional)
  */
-export interface EmitterMetaData {
+export interface EmitterMetaData<T extends Function = any> {
     type: string;
-    action: any;
+    action: Type<T>;
 }
 
 /**
