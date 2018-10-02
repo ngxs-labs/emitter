@@ -17,27 +17,23 @@ export function Emitter(options?: Partial<EmitterMetaData>): MethodDecorator {
         }
 
         const meta = ensureStoreMetadata(target);
-        const type: string = (options && options.type) || `${target.name}.${key}`;
         const action: any | undefined = options && options.action;
+
+        if (action && typeof action.type !== 'string') {
+            throw new Error('Action type should be defined as a static property `type`');
+        }
+
+        const type: string = action ? action.type : ((options && options.type) || `${target.name}.${key}`);
 
         if (meta.actions[type]) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
-        // If the user passed custom action
-        if (action) {
-            meta.actions[action.type] = [{
-                fn: `${key}`,
-                options: {},
-                type: action.type
-            }];
-        } else {
-            meta.actions[type] = [{
-                fn: `${key}`,
-                options: {},
-                type
-            }];
-        }
+        meta.actions[type] = [{
+            fn: `${key}`,
+            options: {},
+            type
+        }];
 
         descriptor.value[EMITTER_META_KEY] = {
             type,
