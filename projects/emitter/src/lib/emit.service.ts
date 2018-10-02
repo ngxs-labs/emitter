@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
@@ -22,7 +22,7 @@ export class EmitStore extends Store {
         return {
             emit: (payload?: T): Observable<U> => {
                 EmitterAction.type = emitterEvent.type;
-                const Action: Type<any | EmitterAction> = emitterEvent.action ? emitterEvent.action : EmitterAction;
+                const Action: any | typeof EmitterAction = emitterEvent.action ? emitterEvent.action : EmitterAction;
                 return this.dispatch(new Action(payload));
             }
         };
