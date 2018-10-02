@@ -17,7 +17,7 @@ yarn add @ngxs-contrib/emitter
 
 After installation - import the `NgxsEmitPluginModule` into your `app.module.ts`:
 
-```TS
+```typescript
 import { NgModule } from '@angular/core';
 import { NgxsEmitPluginModule } from '@ngxs-contrib/emitter';
 
@@ -35,7 +35,7 @@ export class AppModule {}
 Emitter is just a single function that can be used to decorate static methods of your states, this will
 add extra static metadata.
 
-```TS
+```typescript
 import { State } from '@ngxs/store';
 import { Emitter, EmitterAction } from '@ngxs-contrib/emitter';
 
@@ -64,7 +64,7 @@ export class CounterState {
 `@PayloadEmitter` is a decorator that will define getter for the decorated property. You will get an
 access to the emittable object.
 
-```TS
+```typescript
 import { Select } from '@ngxs/store';
 import { PayloadEmitter, Emittable } from '@ngxs-contrib/emitter';
 
@@ -97,7 +97,7 @@ If you want to subscribe to the changes, you can easily do this.
 You can also use the action method in store. 
 Also you can access the dependencies with the injector.
 
- ```TS
+ ```typescript
 import { State } from '@ngxs/store';
 import { Injector } from '@angular/core';
 import { Emitter } from '@ngxs-contrib/emitter';
@@ -125,7 +125,7 @@ export class CounterState {
 }
 ```
 
- ```TS
+ ```typescript
 import { Select } from '@ngxs/store';
 import { PayloadEmitter, Emittable } from '@ngxs-contrib/emitter';
 
