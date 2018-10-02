@@ -1,4 +1,4 @@
-import { ensureStoreMetadata, EmitterMetaData, EMITTER_META_KEY } from '../internal/internals';
+import { ensureStoreMetadata, EmitterMetaData, EMITTER_META_KEY, CustomAction } from '../internal/internals';
 
 /**
  * Decorates a method with an emitter information
@@ -12,14 +12,13 @@ export function Emitter(options?: Partial<EmitterMetaData>): MethodDecorator {
             throw new TypeError(`Only static functions can be decorated with @Emitter() decorator`);
         }
 
-        const meta = ensureStoreMetadata(target);
-
         if (typeof key === 'symbol') {
             key = key.toString();
         }
 
+        const meta = ensureStoreMetadata(target);
         const type: string = (options && options.type) || `${target.name}.${key}`;
-        const action: any | undefined = options && options.action;
+        const action: CustomAction<any, any> | undefined = options && options.action;
 
         if (meta.actions[type]) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);

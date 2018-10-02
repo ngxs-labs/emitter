@@ -1,6 +1,14 @@
-import { Type } from '@angular/core';
-
 import { Observable } from 'rxjs';
+
+/**
+ * Custom action interface
+ *
+ * @property type - Static property that defines action type
+ */
+export interface CustomAction<T = any, U = any> {
+    type: string;
+    new (payload?: U): T;
+}
 
 /**
  * Static metadata for the emitter function
@@ -10,7 +18,7 @@ import { Observable } from 'rxjs';
  */
 export interface EmitterMetaData<T extends Function = any> {
     type: string;
-    action: Type<T>;
+    action: CustomAction<T>;
 }
 
 /**
@@ -23,6 +31,10 @@ export interface Emittable<T = any, U = any> {
 }
 
 export const META_KEY = 'NGXS_META';
+
+/**
+ * @const - This constant is a key for defining static metadata using `@Emitter`
+ */
 export const EMITTER_META_KEY = 'NGXS_EMITTER_META';
 
 export function ensureStoreMetadata(target: Function) {
