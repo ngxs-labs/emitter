@@ -246,7 +246,7 @@ describe('Emitter', () => {
             defaults: []
         })
         class TodosState {
-            public static api: ApiService | null = null;
+            public static api: ApiService = null!;
 
             constructor(injector: Injector) {
                 TodosState.api = injector.get<ApiService>(ApiService);
@@ -255,7 +255,7 @@ describe('Emitter', () => {
             @Emitter({ type: '@@[Todos] Set todos sync' })
             public static async setTodosSync({ setState }: StateContext<Todo[]>) {
                 setState(
-                    await TodosState.api!
+                    await TodosState.api
                         .getTodosFromServer(10)
                         .toPromise()
                 );
@@ -263,7 +263,7 @@ describe('Emitter', () => {
 
             @Emitter({ type: '@@[Todos] Set todos' })
             public static setTodos({ setState }: StateContext<Todo[]>) {
-                return TodosState.api!
+                return TodosState.api
                     .getTodosFromServer(5)
                     .pipe(
                         take(1),
