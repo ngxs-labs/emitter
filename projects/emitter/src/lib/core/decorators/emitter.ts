@@ -19,6 +19,7 @@ export function Emitter(options?: Partial<EmitterMetaData>): MethodDecorator {
         }
 
         const type: string = (options && options.type) || `${target.name}.${key}`;
+        const action: any | undefined = options && options.action;
 
         if (meta.actions[type]) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
@@ -32,7 +33,11 @@ export function Emitter(options?: Partial<EmitterMetaData>): MethodDecorator {
             }
         ];
 
-        descriptor.value[EMITTER_META_KEY] = { type };
+        descriptor.value[EMITTER_META_KEY] = {
+            type,
+            action
+        };
+
         target.prototype[key] = function() {
             return target[key].apply(target, arguments);
         };

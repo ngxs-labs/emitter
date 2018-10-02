@@ -3,10 +3,12 @@ import { Observable } from 'rxjs';
 /**
  * Static metadata for the emitter function
  *
- * @property type - Action type
+ * @property type - Action type (optional)
+ * @property action - Custom action to dispatch (optional)
  */
 export interface EmitterMetaData {
     type: string;
+    action: any;
 }
 
 /**

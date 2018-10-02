@@ -11,7 +11,7 @@ import { EmitterAction } from '../src/lib/core/actions/actions';
 import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
 
-describe('Emitter', () => {
+describe('NgxsEmitPluginModule', () => {
     interface Todo {
         text: string;
         completed: boolean;

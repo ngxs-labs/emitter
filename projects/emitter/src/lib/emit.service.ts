@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { EMITTER_META_KEY, Emittable } from './core/internal/internals';
+import { EMITTER_META_KEY, Emittable, EmitterMetaData } from './core/internal/internals';
 import { EmitterAction } from './core/actions/actions';
 
 @Injectable()
@@ -13,7 +13,7 @@ export class EmitStore extends Store {
      * @returns - A plain object with an `emit` function for calling emitter
      */
     public emitter<T = any, U = any>(emitter: Function): Emittable<T, U> {
-        const emitterEvent = emitter[EMITTER_META_KEY];
+        const emitterEvent: EmitterMetaData = emitter[EMITTER_META_KEY];
 
         if (!emitterEvent) {
             throw new Error('Emitter methods should be decorated using @Emitter() decorator');
@@ -22,7 +22,8 @@ export class EmitStore extends Store {
         return {
             emit: (payload?: T): Observable<U> => {
                 EmitterAction.type = emitterEvent.type;
-                return this.dispatch(new EmitterAction<T>(payload));
+                const Action: any | typeof EmitterAction = emitterEvent.action ? emitterEvent.action : EmitterAction;
+                return this.dispatch(new Action(payload));
             }
         };
     }
