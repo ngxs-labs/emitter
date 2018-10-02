@@ -18,9 +18,13 @@ describe('NgxsEmitPluginModule', () => {
     }
 
     it('static metadata should have `type` property same as in @Emitter() decorator', () => {
-        @State({ name: 'bar' })
+        @State({
+            name: 'bar'
+        })
         class BarState {
-            @Emitter({ type: '@@[bar]' })
+            @Emitter({
+                type: '@@[bar]'
+            })
             public static foo() {}
         }
 
@@ -29,7 +33,9 @@ describe('NgxsEmitPluginModule', () => {
     });
 
     it('static metadata should have default `type` property', () => {
-        @State({ name: 'bar' })
+        @State({
+            name: 'bar'
+        })
         class BarState {
             @Emitter()
             public static foo() {}
@@ -209,10 +215,14 @@ describe('NgxsEmitPluginModule', () => {
                 defaults: 10
             })
             class BarState {
-                @Emitter({ type: 'foo' })
+                @Emitter({
+                    type: 'foo'
+                })
                 public static foo1() {}
 
-                @Emitter({ type: 'foo' })
+                @Emitter({
+                    type: 'foo'
+                })
                 public static foo2() {}
             }
 
@@ -256,7 +266,9 @@ describe('NgxsEmitPluginModule', () => {
                 TodosState.api = injector.get<ApiService>(ApiService);
             }
 
-            @Emitter({ type: '@@[Todos] Set todos sync' })
+            @Emitter({
+                type: '@@[Todos] Set todos sync'
+            })
             public static async setTodosSync({ setState }: StateContext<Todo[]>) {
                 setState(
                     await TodosState.api
@@ -265,7 +277,9 @@ describe('NgxsEmitPluginModule', () => {
                 );
             }
 
-            @Emitter({ type: '@@[Todos] Set todos' })
+            @Emitter({
+                type: '@@[Todos] Set todos'
+            })
             public static setTodos({ setState }: StateContext<Todo[]>) {
                 return TodosState.api
                     .getTodosFromServer(5)
@@ -312,5 +326,54 @@ describe('NgxsEmitPluginModule', () => {
             const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
             expect(todoLength).toBe(5);
         });
+    });
+
+    it('should be possible to pass an action into @Emitter() decorator', () => {
+        class AddTodo {
+            public static type = '@@[Todos] Add todo';
+            constructor(public payload: Todo) {}
+        }
+
+        @State<Todo[]>({
+            name: 'todos',
+            defaults: []
+        })
+        class TodosState {
+            @Emitter({
+                action: AddTodo
+            })
+            public static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
+                setState([...getState(), payload]);
+            }
+        }
+
+        @Component({
+            template: ''
+        })
+        class MockComponent {
+            @PayloadEmitter(TodosState.addTodo)
+            public addTodoAction: Emittable<Todo> | undefined;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([TodosState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const store: Store = TestBed.get(Store);
+        const fixture = TestBed.createComponent(MockComponent);
+
+        fixture.componentInstance.addTodoAction!.emit({
+            text: 'buy coffee',
+            completed: false
+        });
+
+        const todos = store.selectSnapshot<Todo[]>(state => state.todos);
+        expect(todos.length).toBe(1);
     });
 });

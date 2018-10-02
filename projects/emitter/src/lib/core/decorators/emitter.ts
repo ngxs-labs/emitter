@@ -25,13 +25,20 @@ export function Emitter(options?: Partial<EmitterMetaData>): MethodDecorator {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
-        meta.actions[type] = [
-            {
+        // If the user passed custom action
+        if (action) {
+            meta.actions[action.type] = [{
+                fn: `${key}`,
+                options: {},
+                type: action.type
+            }];
+        } else {
+            meta.actions[type] = [{
                 fn: `${key}`,
                 options: {},
                 type
-            }
-        ];
+            }];
+        }
 
         descriptor.value[EMITTER_META_KEY] = {
             type,
