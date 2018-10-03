@@ -118,7 +118,7 @@ export class CounterState {
     @Emitter()
     public static loadData({ setState }) {
         // Some heavy function
-        return apiService.getValueFromServer().pipe(
+        return this.api.getValueFromServer().pipe(
             tap((value: number) => setState({ value }))
         );
     }
