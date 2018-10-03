@@ -32,6 +32,10 @@ export function PayloadEmitter(emitter: Function): PropertyDecorator {
     return (target: Object, key: string | symbol) => {
         Object.defineProperty(target, key, {
             get: () => {
+                if (PayloadEmitterFactory.injector === null) {
+                    throw new Error(`You've forgotten to import \`NgxsEmitPluginModule\``);
+                }
+
                 const store = PayloadEmitterFactory.injector!.get<EmitStore>(EmitStore);
                 return store.emitter(emitter);
             }
