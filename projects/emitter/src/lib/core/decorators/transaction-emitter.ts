@@ -7,7 +7,7 @@ import { InjectorAccessor } from '../services/injector-accessor.service';
  * @param emitters - Array that contains references to static functions
  * @returns - Factory function for decorating properties
  */
-export function TransactionEmittable(emitters: Function[]): PropertyDecorator {
+export function TransactionEmitter(emitters: Function[]): PropertyDecorator {
     return (target: any, key: string | symbol) => {
         Object.defineProperty(target, key, {
             get: () => {
