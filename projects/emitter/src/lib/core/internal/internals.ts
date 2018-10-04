@@ -22,6 +22,15 @@ export interface Emittable<T = any, U = any> {
     emit(payload?: T): Observable<U>;
 }
 
+/**
+ * Plain object that contains `emit` function that dispatches multiple payloads
+ *
+ * @property payloads - Any function arguments
+ */
+export interface TransactionEmittable<T = any, U = any> {
+    emit(...payloads: T[]): Observable<U>;
+}
+
 export const META_KEY = 'NGXS_META';
 
 /**
