@@ -3,8 +3,8 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { EMITTER_META_KEY, Emittable, EmitterMetaData } from './core/internal/internals';
-import { EmitterAction } from './core/actions/actions';
+import { EMITTER_META_KEY, Emittable, EmitterMetaData } from '../internal/internals';
+import { EmitterAction } from '../actions/actions';
 
 @Injectable()
 export class EmitStore extends Store {
