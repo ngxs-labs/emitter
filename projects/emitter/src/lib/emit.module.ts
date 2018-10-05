@@ -1,16 +1,16 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { PayloadEmitterFactory } from './core/decorators/payload-emitter';
-import { EmitStore } from './emit.service';
+import { EmitStore } from './core/services/emit-store.service';
+import { InjectorAccessor } from './core/services/injector-accessor.service';
 
 @NgModule({
     providers: [
-        PayloadEmitterFactory,
-        EmitStore
+        EmitStore,
+        InjectorAccessor
     ]
 })
 export class NgxsEmitPluginModule {
-    constructor(payloadEmitterFactory: PayloadEmitterFactory) {}
+    constructor(injectorAccessor: InjectorAccessor) {}
 
     /**
      * @returns - A wrapper around `NgModule`
