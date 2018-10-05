@@ -6,6 +6,43 @@ import { Observable } from 'rxjs';
 import { EMITTER_META_KEY, Emittable, EmitterMetaData, TransactionEmittable } from '../internal/internals';
 import { EmitterAction } from '../actions/actions';
 
+function mergeActions(emitters: Function[]): any[] {
+    const actions: any[] = [];
+
+    for (let i = 0, length = emitters.length; i < length; i++) {
+        const emitter = emitters[i];
+        const emitterEvent = emitter[EMITTER_META_KEY];
+
+        if (!emitterEvent) {
+            throw new Error('Emitter methods should be decorated using @Emitter() decorator');
+        }
+
+        EmitterAction.type = emitterEvent.type;
+
+        actions.push(
+            emitterEvent.action ? emitterEvent.action : EmitterAction
+        );
+    }
+
+    return actions;
+}
+
+function getActionInstances<T>(actions: any[], ...payloads: T[]): any[] {
+    const instances: any[] = [];
+
+    for (let i = 0, length = actions.length; i < length; i++) {
+        const payload = payloads[i];
+
+        if (payload) {
+            instances.push(new actions[i](payload));
+        } else {
+            instances.push(new actions[i]);
+        }
+    }
+
+    return instances;
+}
+
 @Injectable()
 export class EmitStore extends Store {
     /**
@@ -39,41 +76,12 @@ export class EmitStore extends Store {
 
         return {
             emit: (...payloads: T[]): Observable<U> => {
+                if (!payloads.length) {
+                    return this.dispatch(getActionInstances(actions));
+                }
+
                 return this.dispatch(getActionInstances(actions, payloads));
             }
         };
     }
-}
-
-export function mergeActions(emitters: Function[]): (any | typeof EmitterAction)[] {
-    const actions: (any | typeof EmitterAction)[] = [];
-
-    for (let i = 0; i < emitters.length; i++) {
-        const emitter = emitters[i];
-        const emitterEvent = emitter[EMITTER_META_KEY];
-
-        if (!emitterEvent) {
-            throw new Error('Emitter methods should be decorated using @Emitter() decorator');
-        }
-
-        EmitterAction.type = emitterEvent.type;
-
-        actions.push(
-            emitterEvent.action ? emitterEvent.action : EmitterAction
-        );
-    }
-
-    return actions;
-}
-
-export function getActionInstances<T>(actions: (any | typeof EmitterAction)[], ...payloads: T[]): any[] {
-    return actions.map((Action, index: number) => {
-        const payload = payloads[index];
-
-        if (payload) {
-            return new Action(payload);
-        }
-
-        return new Action();
-    });
 }

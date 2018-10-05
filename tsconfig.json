@@ -15,6 +15,7 @@
         "allowJs": false,
         "sourceMap": true,
         "declaration": false,
+        "downlevelIteration": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "suppressImplicitAnyIndexErrors": true

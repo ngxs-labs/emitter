@@ -6,10 +6,11 @@ import { Observable, of } from 'rxjs';
 import { delay, take, tap } from 'rxjs/operators';
 
 import { Emitter } from '../src/lib/core/decorators/emitter';
-import { EMITTER_META_KEY, Emittable } from '../src/lib/core/internal/internals';
+import { EMITTER_META_KEY, Emittable, TransactionEmittable } from '../src/lib/core/internal/internals';
 import { EmitterAction } from '../src/lib/core/actions/actions';
 import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
+import { TransactionEmitter } from '../src/lib/core/decorators/transaction-emitter';
 
 describe('NgxsEmitPluginModule', () => {
     interface Todo {
@@ -375,5 +376,49 @@ describe('NgxsEmitPluginModule', () => {
 
         const todos = store.selectSnapshot<Todo[]>(state => state.todos);
         expect(todos.length).toBe(1);
+    });
+
+    it('', () => {
+        @State<Todo[]>({
+            name: 'todos',
+            defaults: []
+        })
+        class TodosState {
+            @Emitter()
+            public static addTodo() {
+                console.log('addTodo')
+            }
+
+            @Emitter()
+            public static addTodo1() {
+                console.log('addTodo1')
+            }
+        }
+
+        @Component({
+            template: ''
+        })
+        class MockComponent {
+            @TransactionEmitter([
+                TodosState.addTodo,
+                TodosState.addTodo1
+            ])
+            public addTodoAction: TransactionEmittable<Todo> | undefined;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([TodosState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const store: Store = TestBed.get(Store);
+        const fixture = TestBed.createComponent(MockComponent);
+
+        fixture.componentInstance.addTodoAction!.emit()
     });
 });
