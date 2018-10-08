@@ -56,7 +56,7 @@ export function ofEmittable(types: string[], status: ActionStatus): OperatorFunc
     return (source: Observable<ActionContext>) => {
         return source.pipe(
             filter((ctx) => {
-                return types.indexOf(getActionTypeFromInstance(ctx.action)) !== -1 && ctx.status === status;
+                return types.includes(getActionTypeFromInstance(ctx.action)) && ctx.status === status;
             }),
             map((ctx) => {
                 return {
