@@ -13,7 +13,19 @@ import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext
  * @returns - An array with types of those static functions
  */
 function getEmittersTypes(emitters: Function[]): string[] {
-    return emitters.reduce((accumulator: string[], ctor) => [...accumulator, ctor[EMITTER_META_KEY].type], []);
+    return emitters.reduce((accumulator: string[], emitter) => {
+        if (typeof emitter !== 'function') {
+            throw new TypeError(`Emitter should be a function, got ${emitter}`);
+        }
+
+        const meta = emitter[EMITTER_META_KEY];
+
+        if (!meta || !meta.type) {
+            throw new Error(`${emitter.name} should be decorated using @Emitter() decorator`);
+        }
+
+        return [...accumulator, meta.type];
+    }, []);
 }
 
 /**
