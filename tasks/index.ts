@@ -19,16 +19,17 @@ const enum Codes {
 
 const branch: string = argv.branch;
 const commit: string = argv.commit;
+const match = commit.match(/major|minor|patch/);
+
+if (!branch || !commit) {
+    console.log(chalk.bgRedBright(
+        'You should specify branch name and commit log message using `--branch` and `--commit` arguments'
+    ));
+
+    process.exit(Codes.ERROR);
+}
 
 gulp.task('bump', async () => {
-    if (!branch || !commit) {
-        return console.log(chalk.bgRedBright(
-            'You should specify branch name and commit log message using `--branch` and `--commit` arguments'
-        )) && process.exit(Codes.ERROR);
-    }
-
-    const match = commit.match(/major|minor|patch/);
-
     if (!match) {
         return;
     }
@@ -60,4 +61,20 @@ gulp.task('push', async () => {
     await exec(`git push origin ${branch}`);
 });
 
-gulp.task('default', gulp.series('bump', 'checkout', 'commit', 'push'));
+gulp.task('build', async () => {
+    if (!match) {
+        return;
+    }
+
+    await exec('yarn build emitter --prod=true');
+});
+
+gulp.task('publish', async () => {
+    if (!match) {
+        return;
+    }
+
+    await exec('npm publish dist/emitter --access=public')
+});
+
+gulp.task('default', gulp.series('bump', 'checkout', 'commit', 'push', 'build', 'publish'));
