@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Actions, NgxsModule, State, StateContext, ofActionDispatched } from '@ngxs/store';
+import { Actions, NgxsModule, State, StateContext } from '@ngxs/store';
 
 import { throwError } from 'rxjs';
 
@@ -8,9 +8,7 @@ import { Emitter } from '../src/lib/core/decorators/emitter';
 import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
 import { Emittable, OfEmittableActionContext } from '../src/lib/core/internal/internals';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
-import {
-    ofEmittableDispatched, ofEmittableErrored
-} from '../src/lib/core/operators/of-emittable';
+import { ofEmittableDispatched, ofEmittableErrored } from '../src/lib/core/operators/of-emittable';
 
 describe('Actions', () => {
     it('should intercept only CounterState.increment emitter', () => {
@@ -84,6 +82,16 @@ describe('Actions', () => {
             public static increment() {
                 return throwError(new Error('Whoops!'));
             }
+
+            @Emitter()
+            public static decrement({ setState, getState }: StateContext<number>) {
+                setState(getState() - 1);
+            }
+
+            @Emitter()
+            public static multiplyBy2({ setState, getState }: StateContext<number>) {
+                setState(getState() * 2);
+            }
         }
 
         @Component({
@@ -92,6 +100,12 @@ describe('Actions', () => {
         class MockComponent {
             @PayloadEmitter(CounterState.increment)
             public increment: Emittable<void> | undefined;
+
+            @PayloadEmitter(CounterState.decrement)
+            public decrement: Emittable<void> | undefined;
+
+            @PayloadEmitter(CounterState.multiplyBy2)
+            public multiplyBy2: Emittable<void> | undefined;
         }
 
         TestBed.configureTestingModule({
@@ -115,5 +129,7 @@ describe('Actions', () => {
         });
 
         fixture.componentInstance.increment!.emit();
+        fixture.componentInstance.decrement!.emit();
+        fixture.componentInstance.multiplyBy2!.emit();
     });
 });

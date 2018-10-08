@@ -16,27 +16,43 @@ function getEmittersTypes(emitters: Function[]): string[] {
     return emitters.reduce((accumulator: string[], ctor) => [...accumulator, ctor[EMITTER_META_KEY].type], []);
 }
 
-export function ofEmittableDispatched(...emitters: Function[]): (o: Observable<any>) => Observable<any> {
+/**
+ * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ */
+export function ofEmittableDispatched(...emitters: Function[]) {
     const types = getEmittersTypes(emitters);
     return ofEmittable(types, ActionStatus.Dispatched);
 }
 
-export function ofEmittableSuccessful(...emitters: Function[]): (o: Observable<any>) => Observable<any> {
+/**
+ * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ */
+export function ofEmittableSuccessful(...emitters: Function[]) {
     const types = getEmittersTypes(emitters);
     return ofEmittable(types, ActionStatus.Successful);
 }
 
-export function ofEmittableCanceled(...emitters: Function[]): (o: Observable<any>) => Observable<any> {
+/**
+ * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ */
+export function ofEmittableCanceled(...emitters: Function[]) {
     const types = getEmittersTypes(emitters);
     return ofEmittable(types, ActionStatus.Canceled);
 }
 
-export function ofEmittableErrored(...emitters: Function[]): (o: Observable<any>) => Observable<any> {
+/**
+ * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ */
+export function ofEmittableErrored(...emitters: Function[]) {
     const types = getEmittersTypes(emitters);
     return ofEmittable(types, ActionStatus.Errored);
 }
 
-export function ofEmittable<T = any>(types: string[], status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<T>> {
+/**
+ * @param types - Array that contains action types
+ * @param status - Status of the dispatched action
+ */
+export function ofEmittable(types: string[], status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
     return (source: Observable<ActionContext>) => {
         return source.pipe(
             filter((ctx) => {
