@@ -40,7 +40,7 @@ export function ofEmittable<T = any>(types: string[], status: ActionStatus): Ope
     return (source: Observable<ActionContext>) => {
         return source.pipe(
             filter((ctx) => {
-                return types.includes(getActionTypeFromInstance(ctx.action)) && ctx.status === status;
+                return types.indexOf(getActionTypeFromInstance(ctx.action)) !== -1 && ctx.status === status;
             }),
             map((ctx) => {
                 return {
