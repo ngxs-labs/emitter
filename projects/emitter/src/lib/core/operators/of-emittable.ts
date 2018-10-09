@@ -7,10 +7,10 @@ import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext
 
 /**
  * `getEmittersTypes([CounterState.increment, CounterState.decrement])`
- * will return an array of strings => `['CounterState.increment', 'CounterState.decrement']`
+ * will return a hashmap => `{ 'CounterState.increment': true, 'CounterState.decrement': true }`
  *
  * @param emitters - Array with references to the static functions
- * @returns - An array with types of those static functions
+ * @returns - A key-value map where a key is a type
  */
 function getEmittersTypes(emitters: Function[]): object {
     return emitters.reduce((accumulator, emitter) => {
