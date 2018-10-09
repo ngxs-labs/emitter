@@ -12,8 +12,8 @@ import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext
  * @param emitters - Array with references to the static functions
  * @returns - An array with types of those static functions
  */
-function getEmittersTypes(emitters: Function[]): string[] {
-    return emitters.reduce((accumulator: string[], emitter) => {
+function getEmittersTypes(emitters: Function[]): object {
+    return emitters.reduce((accumulator, emitter) => {
         if (typeof emitter !== 'function') {
             throw new TypeError(`Emitter should be a function, got ${emitter}`);
         }
@@ -24,51 +24,47 @@ function getEmittersTypes(emitters: Function[]): string[] {
             throw new Error(`${emitter.name} should be decorated using @Emitter() decorator`);
         }
 
-        return [...accumulator, meta.type];
-    }, []);
+        return accumulator[meta.type] = true && accumulator;
+    }, {});
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
 export function ofEmittableDispatched(...emitters: Function[]) {
-    const types = getEmittersTypes(emitters);
-    return ofEmittable(types, ActionStatus.Dispatched);
+    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Dispatched);
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
 export function ofEmittableSuccessful(...emitters: Function[]) {
-    const types = getEmittersTypes(emitters);
-    return ofEmittable(types, ActionStatus.Successful);
+    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Successful);
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
 export function ofEmittableCanceled(...emitters: Function[]) {
-    const types = getEmittersTypes(emitters);
-    return ofEmittable(types, ActionStatus.Canceled);
+    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Canceled);
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
 export function ofEmittableErrored(...emitters: Function[]) {
-    const types = getEmittersTypes(emitters);
-    return ofEmittable(types, ActionStatus.Errored);
+    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Errored);
 }
 
 /**
  * @param types - Array that contains action types
  * @param status - Status of the dispatched action
  */
-export function ofEmittable(types: string[], status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
+export function ofEmittable(types: object, status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
     return (source: Observable<ActionContext>) => {
         return source.pipe(
             filter((ctx) => {
-                return types.includes(getActionTypeFromInstance(ctx.action)) && ctx.status === status;
+                return types[getActionTypeFromInstance(ctx.action)] && ctx.status === status;
             }),
             map((ctx) => {
                 return {
