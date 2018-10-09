@@ -54,6 +54,15 @@ export interface OfEmittableActionContext<T = any> {
     payload: T;
 }
 
+/**
+ * Hash map that contains types to filter using `ofEmittable` operator
+ *
+ * @property key - Any string key
+ */
+export interface Types {
+    [key: string]: boolean;
+}
+
 export const META_KEY = 'NGXS_META';
 
 /**

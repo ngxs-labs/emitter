@@ -3,7 +3,7 @@ import { getActionTypeFromInstance } from '@ngxs/store';
 import { Observable, OperatorFunction } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext } from '../internal/internals';
+import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext, EmitterMetaData, Types } from '../internal/internals';
 
 /**
  * `getEmittersTypes([CounterState.increment, CounterState.decrement])`
@@ -12,20 +12,27 @@ import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext
  * @param emitters - Array with references to the static functions
  * @returns - A key-value map where a key is a type
  */
-function getEmittersTypes(emitters: Function[]): object {
-    return emitters.reduce((accumulator, emitter) => {
+function getEmittersTypes(emitters: Function[]): Types {
+    const types: Types = {};
+
+    let i = emitters.length;
+    while (i--) {
+        const emitter = emitters[i];
+
         if (typeof emitter !== 'function') {
             throw new TypeError(`Emitter should be a function, got ${emitter}`);
         }
 
-        const meta = emitter[EMITTER_META_KEY];
+        const meta: EmitterMetaData = emitter[EMITTER_META_KEY];
 
         if (!meta || !meta.type) {
             throw new Error(`${emitter.name} should be decorated using @Emitter() decorator`);
         }
 
-        return accumulator[meta.type] = true && accumulator;
-    }, {});
+        types[meta.type] = true;
+    }
+
+    return types;
 }
 
 /**
@@ -57,21 +64,21 @@ export function ofEmittableErrored(...emitters: Function[]) {
 }
 
 /**
- * @param types - Array that contains action types
+ * @param types - Hash map that contains action types
  * @param status - Status of the dispatched action
  */
-export function ofEmittable(types: object, status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
+export function ofEmittable(types: Types, status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
     return (source: Observable<ActionContext>) => {
         return source.pipe(
-            filter((ctx) => {
-                return types[getActionTypeFromInstance(ctx.action)] && ctx.status === status;
+            filter((ctx: ActionContext) => {
+                const hashMapHasType = types[getActionTypeFromInstance(ctx.action)];
+                const contextHasTransmittedStatus = ctx.status === status;
+                return hashMapHasType && contextHasTransmittedStatus;
             }),
-            map((ctx) => {
-                return {
-                    type: getActionTypeFromInstance(ctx.action),
-                    payload: ctx.action.payload
-                };
-            })
+            map((ctx: ActionContext) => ({
+                type: getActionTypeFromInstance(ctx.action),
+                payload: ctx.action.payload
+            }))
         );
     };
 }
