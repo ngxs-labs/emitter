@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Actions, NgxsModule, State, StateContext, ofActionDispatched } from '@ngxs/store';
+import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } from '@ngxs/store';
 
 import { throwError } from 'rxjs';
 
@@ -51,31 +51,14 @@ describe('Actions', () => {
             }
         }
 
-        @Component({
-            template: ''
-        })
-        class MockComponent {
-            @PayloadEmitter(CounterState.increment)
-            public increment: Emittable<void> | undefined;
-
-            @PayloadEmitter(CounterState.decrement)
-            public decrement: Emittable<void> | undefined;
-
-            @PayloadEmitter(CounterState.multiplyBy2)
-            public multiplyBy2: Emittable<void> | undefined;
-        }
-
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([CounterState]),
                 NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
             ]
         });
 
-        const fixture = TestBed.createComponent(MockComponent);
+        const store: Store = TestBed.get(Store);
         const actions$: Actions = TestBed.get(Actions);
 
         actions$.pipe(
@@ -84,9 +67,9 @@ describe('Actions', () => {
             expect(action.constructor).toBe(Increment);
         });
 
-        fixture.componentInstance.decrement!.emit();
-        fixture.componentInstance.increment!.emit();
-        fixture.componentInstance.multiplyBy2!.emit();
+        store.dispatch(new Increment());
+        store.dispatch(new Decrement());
+        store.dispatch(new MultiplyBy2());
     });
 
     it('should intercept only CounterState.increment emitter', () => {
