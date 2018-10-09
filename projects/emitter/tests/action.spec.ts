@@ -71,7 +71,7 @@ describe('Actions', () => {
             name: 'counter',
             defaults: 0
         })
-        class CounterState {
+        class CounterStateWithCustomActions {
             @Emitter({
                 action: Increment
             })
@@ -96,7 +96,7 @@ describe('Actions', () => {
 
         TestBed.configureTestingModule({
             imports: [
-                NgxsModule.forRoot([CounterState]),
+                NgxsModule.forRoot([CounterStateWithCustomActions]),
                 NgxsEmitPluginModule.forRoot()
             ]
         });
