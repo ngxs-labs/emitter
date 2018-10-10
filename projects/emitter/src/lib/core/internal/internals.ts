@@ -78,7 +78,7 @@ export const EMITTER_META_KEY = 'NGXS_EMITTER_META';
  * This is an internal `@ngxs/store` function and not accessable from outside, even using theta symbol
  *
  * @param target - Target to apply static metadata to
- * @returns - Static metedata
+ * @returns - Static metadata
  */
 export function ensureStoreMetadata(target: Function): any {
     if (!target.hasOwnProperty(META_KEY)) {
