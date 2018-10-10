@@ -192,7 +192,7 @@ describe('Actions', () => {
                 expect(types).toContain('CounterState.increment');
                 expect(types).toContain('CounterState.decrement');
             })
-        ).subscribe(({ type }) => {
+        ).subscribe(({ type }: OfEmittableActionContext<void>) => {
             types.push(type);
         });
 
