@@ -18,14 +18,16 @@ function getEmittersTypes(emitters: Function[]): Types {
     let i = emitters.length;
     while (i--) {
         const emitter = emitters[i];
+        const isNotFunction = typeof emitter !== 'function';
 
-        if (typeof emitter !== 'function') {
+        if (isNotFunction) {
             throw new TypeError(`Emitter should be a function, got ${emitter}`);
         }
 
         const meta: EmitterMetaData = emitter[EMITTER_META_KEY];
+        const isNotAnnotated = !meta || !meta.type;
 
-        if (!meta || !meta.type) {
+        if (isNotAnnotated) {
             throw new Error(`${emitter.name} should be decorated using @Emitter() decorator`);
         }
 
@@ -76,10 +78,10 @@ export function ofEmittable(types: Types, status: ActionStatus): OperatorFunctio
                 const contextHasTransmittedStatus = ctx.status === status;
                 return hashMapHasType && contextHasTransmittedStatus;
             }),
-            map((ctx: ActionContext) => ({
-                type: getActionTypeFromInstance(ctx.action),
-                payload: ctx.action.payload,
-                error: ctx.error
+            map(({ action, error }: ActionContext) => ({
+                type: getActionTypeFromInstance(action),
+                payload: action.payload,
+                error
             }))
         );
     };
