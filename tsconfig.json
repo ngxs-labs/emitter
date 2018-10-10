@@ -17,9 +17,9 @@
         "noUnusedLocals": true,
         "noImplicitReturns": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
         "suppressImplicitAnyIndexErrors": true
     }
 }
