@@ -55,7 +55,7 @@ export interface ActionContext {
 export interface OfEmittableActionContext<T = any> {
     type: string;
     payload: T;
-    error?: Error | undefined;
+    error: Error | undefined;
 }
 
 /**
