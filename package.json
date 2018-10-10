@@ -8,7 +8,7 @@
         "test": "ng test",
         "lint": "ng lint",
         "e2e": "ng e2e",
-        "commit": "gulp"
+        "run:sonar": "ts-node sonar.ts"
     },
     "private": true,
     "dependencies": {
@@ -32,15 +32,10 @@
         "@angular/cli": "6.1.1",
         "@angular/compiler-cli": "6.1.0",
         "@angular/language-service": "6.1.0",
-        "@types/gulp": "4.0.5",
         "@types/jasmine": "2.8.6",
         "@types/jasminewd2": "2.0.3",
         "@types/node": "8.9.4",
-        "@types/semver": "5.5.0",
-        "@types/yargs": "12.0.1",
-        "chalk": "2.4.1",
         "codelyzer": "4.2.1",
-        "gulp": "4.0.0",
         "jasmine-core": "2.99.1",
         "jasmine-spec-reporter": "4.2.1",
         "karma": "1.7.1",
@@ -50,6 +45,7 @@
         "karma-jasmine-html-reporter": "0.2.2",
         "ng-packagr": "3.0.0",
         "protractor": "5.3.0",
+        "sonarjs": "1.0.0",
         "rollup": "0.66.4",
         "rollup-plugin-node-resolve": "3.4.0",
         "rollup-plugin-sourcemaps": "0.4.2",
@@ -58,7 +54,6 @@
         "tsickle": "0.29.0",
         "tslib": "1.9.0",
         "tslint": "5.9.1",
-        "typescript": "2.7.2",
-        "yargs": "12.0.2"
+        "typescript": "2.7.2"
     }
 }
