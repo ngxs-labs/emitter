@@ -46,12 +46,16 @@ export interface ActionContext {
 }
 
 /**
+ * Action context that maps `ofEmittable` operator
+ *
  * @property type - Action type
  * @property payload - Dispatched data
+ * @property error - Error that has been throwed or undefined
  */
 export interface OfEmittableActionContext<T = any> {
     type: string;
     payload: T;
+    error?: Error | undefined;
 }
 
 /**
@@ -70,7 +74,13 @@ export const META_KEY = 'NGXS_META';
  */
 export const EMITTER_META_KEY = 'NGXS_EMITTER_META';
 
-export function ensureStoreMetadata(target: Function) {
+/**
+ * This is internal `@ngxs/store` function and not accessable from outside, even using theta symbol
+ *
+ * @param target - Target to apply static metadata to
+ * @returns - Static metedata
+ */
+export function ensureStoreMetadata(target: Function): any {
     if (!target.hasOwnProperty(META_KEY)) {
         const defaultMetadata = {
             name: null,
@@ -85,6 +95,10 @@ export function ensureStoreMetadata(target: Function) {
     return getStoreMetadata(target);
 }
 
-function getStoreMetadata(target: Function) {
+/**
+ * @param target - Target to get static metadata from
+ * @returns - Static metadata
+ */
+function getStoreMetadata(target: Function): any | undefined {
     return target[META_KEY];
 }

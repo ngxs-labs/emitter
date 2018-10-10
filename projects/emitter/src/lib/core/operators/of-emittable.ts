@@ -38,34 +38,35 @@ function getEmittersTypes(emitters: Function[]): Types {
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
-export function ofEmittableDispatched(...emitters: Function[]) {
+export function ofEmittableDispatched(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
     return ofEmittable(getEmittersTypes(emitters), ActionStatus.Dispatched);
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
-export function ofEmittableSuccessful(...emitters: Function[]) {
+export function ofEmittableSuccessful(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
     return ofEmittable(getEmittersTypes(emitters), ActionStatus.Successful);
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
-export function ofEmittableCanceled(...emitters: Function[]) {
+export function ofEmittableCanceled(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
     return ofEmittable(getEmittersTypes(emitters), ActionStatus.Canceled);
 }
 
 /**
  * @param emitters - Array with references to the static functions decorated with `@Emitter()`
  */
-export function ofEmittableErrored(...emitters: Function[]) {
+export function ofEmittableErrored(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
     return ofEmittable(getEmittersTypes(emitters), ActionStatus.Errored);
 }
 
 /**
- * @param types - Hash map that contains action types
+ * @param types - Hashmap that contains action types
  * @param status - Status of the dispatched action
+ * @returns - RxJS factory operator function
  */
 export function ofEmittable(types: Types, status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
     return (source: Observable<ActionContext>) => {
@@ -77,7 +78,8 @@ export function ofEmittable(types: Types, status: ActionStatus): OperatorFunctio
             }),
             map((ctx: ActionContext) => ({
                 type: getActionTypeFromInstance(ctx.action),
-                payload: ctx.action.payload
+                payload: ctx.action.payload,
+                error: ctx.error
             }))
         );
     };
