@@ -21,7 +21,7 @@ export const enum ActionStatus {
 export interface ReceiverMetaData<T extends Function = any> {
     type: string;
     action: Type<T> & {
-        type: string;
+        type?: string;
     };
 }
 

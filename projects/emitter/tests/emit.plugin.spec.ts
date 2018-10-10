@@ -10,12 +10,28 @@ import { RECEIVER_META_KEY, Emittable } from '../src/lib/core/internal/internals
 import { EmitterAction } from '../src/lib/core/actions/actions';
 import { Emitter } from '../src/lib/core/decorators/emitter';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
+import { EmitStore } from '../src/lib/core/services/emit-store.service';
 
 describe('NgxsEmitPluginModule', () => {
     interface Todo {
         text: string;
         completed: boolean;
     }
+
+    it('should throw an error if decorated property is not a function', () => {
+        try {
+            @State({
+                name: 'bar'
+            })
+            class BarState {
+                // @ts-ignore
+                @Receiver()
+                public a = null;
+            }
+        } catch ({ message }) {
+            expect(message).toBe('Only static functions can be decorated with @Receiver() decorator');
+        }
+    });
 
     it('static metadata should have `type` property same as in @Receiver() decorator', () => {
         @State({
@@ -235,6 +251,60 @@ describe('NgxsEmitPluginModule', () => {
         } catch ({ message }) {
             expect(message).toBe('Method decorated with such type `foo` already exists');
         }
+    });
+
+    it('should throw an error if an action passed to the @Receiver() does not have static `type` property', () => {
+        class FooAction {}
+
+        try {
+            @State({
+                name: 'bar'
+            })
+            class BarState {
+                @Receiver({
+                    action: FooAction
+                })
+                public static foo() {}
+            }
+        } catch ({ message }) {
+            expect(message).toBe('Action type should be defined as a static property `type`');
+        }
+    });
+
+    it('should be able to use @Receiver() with symbol-key methods', () => {
+        const symbol = Symbol.for('foo');
+
+        @State({
+            name: 'bar'
+        })
+        class BarState {
+            @Receiver()
+            public static [symbol]() {}
+        }
+
+        expect(BarState[symbol][RECEIVER_META_KEY].type).toBe('BarState.Symbol(foo)');
+    });
+
+    it('EmitStore.prototype.emitter should return an emittable object', () => {
+        @State({
+            name: 'bar'
+        })
+        class BarState {
+            @Receiver()
+            public static foo() {}
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([BarState]),
+                NgxsEmitPluginModule.forRoot()
+            ]
+        });
+
+        const store: EmitStore = TestBed.get(EmitStore);
+
+        expect(typeof store.emitter(BarState.foo)).toBe('object');
+        expect(typeof store.emitter(BarState.foo).emit).toBe('function');
     });
 
     it('should dispatch an action using @Receiver() after delay', () => {

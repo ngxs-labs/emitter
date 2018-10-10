@@ -3,12 +3,18 @@ import { TestBed } from '@angular/core/testing';
 import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } from '@ngxs/store';
 
 import { throwError } from 'rxjs';
+import { take, finalize } from 'rxjs/operators';
 
 import { Receiver } from '../src/lib/core/decorators/receiver';
 import { Emitter } from '../src/lib/core/decorators/emitter';
 import { Emittable, OfEmittableActionContext } from '../src/lib/core/internal/internals';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
-import { ofEmittableDispatched, ofEmittableErrored } from '../src/lib/core/operators/of-emittable';
+import {
+    ofEmittableDispatched,
+    ofEmittableErrored,
+    ofEmittableSuccessful,
+    ofEmittableCanceled
+} from '../src/lib/core/operators/of-emittable';
 
 describe('Actions', () => {
     @State<number>({
@@ -45,14 +51,25 @@ describe('Actions', () => {
         public increment?: Emittable<void | number>;
 
         @Emitter(CounterState.decrement)
-        public decrement?: Emittable<void>;
+        public decrement?: Emittable<void | number>;
 
         @Emitter(CounterState.multiplyBy2)
-        public multiplyBy2?: Emittable<void>;
+        public multiplyBy2?: Emittable<void | number>;
 
         @Emitter(CounterState.throwError)
         public throwError?: Emittable<void>;
     }
+
+    it('ofEmittable operators should return factories', () => {
+        [
+            ofEmittableDispatched(),
+            ofEmittableSuccessful(),
+            ofEmittableErrored(),
+            ofEmittableCanceled()
+        ].forEach((factory) => {
+            expect(factory.length).toBe(1);
+        });
+    });
 
     it('should intercept custom action that is defined in the @Receiver() decorator', () => {
         class Increment {
@@ -115,7 +132,7 @@ describe('Actions', () => {
         store.dispatch(new MultiplyBy2());
     });
 
-    it('should intercept only CounterState.increment emitter', () => {
+    it('should intercept only CounterState.increment receiver', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([CounterState]),
@@ -141,7 +158,7 @@ describe('Actions', () => {
         fixture.componentInstance.multiplyBy2!.emit();
     });
 
-    it('should intercept errored emitter', () => {
+    it('should intercept receiver that throws an error', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([CounterState]),
@@ -157,14 +174,80 @@ describe('Actions', () => {
 
         actions$.pipe(
             ofEmittableErrored(CounterState.throwError)
-        ).subscribe(({ type, payload }: OfEmittableActionContext<void>) => {
+        ).subscribe(({ type, payload, error }: OfEmittableActionContext<void>) => {
             expect(type).toBe('CounterState.throwError');
             expect(payload).toBe(undefined);
+            expect(error!.message).toBe('Whoops!');
         });
 
         fixture.componentInstance.increment!.emit();
         fixture.componentInstance.decrement!.emit();
         fixture.componentInstance.throwError!.emit();
+        fixture.componentInstance.multiplyBy2!.emit();
+    });
+
+    it('should intercept multiple dispatched emittables', () => {
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([CounterState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const fixture = TestBed.createComponent(MockComponent);
+        const actions$: Actions = TestBed.get(Actions);
+        const types: string[] = [];
+
+        actions$.pipe(
+            ofEmittableDispatched(CounterState.increment, CounterState.decrement),
+            take(4),
+            finalize(() => {
+                expect(types).toContain('CounterState.increment');
+                expect(types).toContain('CounterState.decrement');
+            })
+        ).subscribe(({ type }: OfEmittableActionContext<void>) => {
+            types.push(type);
+        });
+
+        fixture.componentInstance.increment!.emit();
+        fixture.componentInstance.decrement!.emit();
+        fixture.componentInstance.multiplyBy2!.emit();
+        fixture.componentInstance.throwError!.emit();
+    });
+
+    it('should intercept multiple successful emittables', () => {
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([CounterState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const fixture = TestBed.createComponent(MockComponent);
+        const actions$: Actions = TestBed.get(Actions);
+        const types: string[] = [];
+
+        actions$.pipe(
+            ofEmittableSuccessful(CounterState.increment, CounterState.decrement, CounterState.multiplyBy2),
+            take(3),
+            finalize(() => {
+                expect(types).toContain('CounterState.increment');
+                expect(types).toContain('CounterState.decrement');
+                expect(types).toContain('CounterState.multiplyBy2');
+            })
+        ).subscribe(({ type }: OfEmittableActionContext<void>) => {
+            types.push(type);
+        });
+
+        fixture.componentInstance.throwError!.emit();
+        fixture.componentInstance.increment!.emit();
+        fixture.componentInstance.decrement!.emit();
         fixture.componentInstance.multiplyBy2!.emit();
     });
 });

@@ -1,14 +1,14 @@
 import { analyze, Issue } from 'sonarjs';
 import { join } from 'path';
 
-const path = join(__dirname, 'projects');
+const path = join(__dirname, '..', 'projects');
 
 const enum Codes {
     Success = 0,
     Error = 1
 }
 
-(async () => {
+async function run(): Promise<Codes> {
     const issues: Issue[] = await analyze(path, {
         log(message: string) {
             console.log(`Log => message => ${message}`);
@@ -16,12 +16,16 @@ const enum Codes {
     });
 
     if (!issues.length) {
-        process.exit(Codes.Success);
+        return console.log('No issues found!') || Codes.Success;
     }
 
     issues.forEach((issue) => {
         console.log('Issue => ', issue);
     });
 
-    process.exit(Codes.Error);
+    return Codes.Error;
+}
+
+(async () => {
+    process.exit(await run());
 })();

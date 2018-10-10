@@ -14,8 +14,11 @@
         "allowJs": false,
         "sourceMap": true,
         "declaration": false,
+        "noImplicitReturns": true,
+        "noUnusedParameters": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+        "noFallthroughCasesInSwitch": true,
         "suppressImplicitAnyIndexErrors": true
     }
 }
