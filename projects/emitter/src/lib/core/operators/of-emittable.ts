@@ -3,16 +3,16 @@ import { getActionTypeFromInstance } from '@ngxs/store';
 import { Observable, OperatorFunction } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { EMITTER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext, EmitterMetaData, Types } from '../internal/internals';
+import { RECEIVER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext, ReceiverMetaData, Types } from '../internal/internals';
 
 /**
- * `getEmittersTypes([CounterState.increment, CounterState.decrement])`
+ * `getReceiverTypes([CounterState.increment, CounterState.decrement])`
  * will return a hashmap => `{ 'CounterState.increment': true, 'CounterState.decrement': true }`
  *
- * @param emitters - Array with references to the static functions
+ * @param receivers - Array with references to the static functions
  * @returns - A key-value map where a key is a type
  */
-function getEmittersTypes(emitters: Function[]): Types {
+function getReceiverTypes(emitters: Function[]): Types {
     const types: Types = {};
 
     let i = emitters.length;
@@ -24,11 +24,11 @@ function getEmittersTypes(emitters: Function[]): Types {
             throw new TypeError(`Emitter should be a function, got ${emitter}`);
         }
 
-        const meta: EmitterMetaData = emitter[EMITTER_META_KEY];
+        const meta: ReceiverMetaData = emitter[RECEIVER_META_KEY];
         const isNotAnnotated = !meta || !meta.type;
 
         if (isNotAnnotated) {
-            throw new Error(`${emitter.name} should be decorated using @Emitter() decorator`);
+            throw new Error(`${emitter.name} should be decorated using @Receiver() decorator`);
         }
 
         types[meta.type] = true;
@@ -38,31 +38,31 @@ function getEmittersTypes(emitters: Function[]): Types {
 }
 
 /**
- * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableDispatched(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Dispatched);
+export function ofEmittableDispatched(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Dispatched);
 }
 
 /**
- * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableSuccessful(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Successful);
+export function ofEmittableSuccessful(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Successful);
 }
 
 /**
- * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableCanceled(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Canceled);
+export function ofEmittableCanceled(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Canceled);
 }
 
 /**
- * @param emitters - Array with references to the static functions decorated with `@Emitter()`
+ * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableErrored(...emitters: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getEmittersTypes(emitters), ActionStatus.Errored);
+export function ofEmittableErrored(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Errored);
 }
 
 /**

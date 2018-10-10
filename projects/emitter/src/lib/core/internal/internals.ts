@@ -13,12 +13,12 @@ export const enum ActionStatus {
 }
 
 /**
- * Static metadata for the emitter function
+ * Static metadata for the receiver function
  *
  * @property type - Action type (optional)
  * @property action - Custom action to dispatch (optional)
  */
-export interface EmitterMetaData<T extends Function = any> {
+export interface ReceiverMetaData<T extends Function = any> {
     type: string;
     action: Type<T>;
 }
@@ -70,9 +70,9 @@ export interface Types {
 export const META_KEY = 'NGXS_META';
 
 /**
- * @const - This constant is a key for defining static metadata using `@Emitter`
+ * @const - This constant is a key for defining static metadata using `@Receiver`
  */
-export const EMITTER_META_KEY = 'NGXS_EMITTER_META';
+export const RECEIVER_META_KEY = 'NGXS_RECEIVER_META';
 
 /**
  * This is an internal `@ngxs/store` function and not accessable from outside, even using theta symbol
