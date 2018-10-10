@@ -24,4 +24,4 @@ jobs:
 
             - run:
                 name: Run CI
-                command: yarn test:ci
+                command: yarn ci:pipelines
