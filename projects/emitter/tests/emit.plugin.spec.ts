@@ -18,37 +18,6 @@ describe('NgxsEmitPluginModule', () => {
         completed: boolean;
     }
 
-    it('should throw an error if NgxsEmitPluginModule is not imported', () => {
-        @State({
-            name: 'bar'
-        })
-        class BarState {
-            @Receiver()
-            public static foo() {}
-        }
-
-        @Component({
-            template: ''
-        })
-        class MockComponent {
-            @Emitter(BarState.foo)
-            public foo?: Emittable<void>;
-        }
-
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([BarState])
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
-
-        const fixture = TestBed.createComponent(MockComponent);
-
-        fixture.componentInstance.foo!.emit();
-    });
-
     it('should throw an error if decorated property is not a function', () => {
         try {
             @State({
