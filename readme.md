@@ -38,8 +38,7 @@ import { NgxsEmitPluginModule } from '@ngxs-contrib/emitter';
 export class AppModule {}
 ```
 
-### Receiver
----
+## Receiver
 
 Receiver is a basic building block. `@Receiver()` is a function that allows you to decorate static methods in your states for further passing this method to the emitter:
 
@@ -67,8 +66,7 @@ export class CounterState {
 }
 ```
 
-### Emitter
----
+## Emitter
 
 Emitter is basically a bridge between your component and receivers. `@Emitter()` is a function that decorates properties defining new getter and gives you an access to the emittable interface:
 
@@ -100,8 +98,7 @@ export class CounterComponent {
 }
 ```
 
-### Custom types
----
+## Custom types
 
 You can define custom type for debbuing purposes (works with `@ngxs/logger-plugin`)
 
@@ -130,8 +127,7 @@ export class CounterState {
 }
 ```
 
-### Actions
----
+## Actions
 
 If you still need actions - it is possible to pass an action as an argument into `@Receiver()` decorator:
 
@@ -168,8 +164,7 @@ export class CounterState {
 }
 ```
 
-### Dependency injection
----
+## Dependency injection
 
 Assume you have to make some API request and load some data from your server, it is very easy to use services with static methods, Angular provides an `Injector` class for getting instances by reference:
 
