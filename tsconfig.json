@@ -14,6 +14,10 @@
         "allowJs": false,
         "sourceMap": true,
         "declaration": false,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "suppressImplicitAnyIndexErrors": true

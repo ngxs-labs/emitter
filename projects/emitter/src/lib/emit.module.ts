@@ -12,7 +12,7 @@ import { InjectorAccessor } from './core/services/injector-accessor.service';
 export class NgxsEmitPluginModule {
     constructor(
         @Self()
-        injectorAccessor: InjectorAccessor
+        public injectorAccessor: InjectorAccessor
     ) {}
 
     /**
