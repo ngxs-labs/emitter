@@ -19,7 +19,7 @@ const output = {
     exports: 'named'
 };
 
-export default {
+module.exports = {
     input,
     output,
     plugins: [

@@ -30,7 +30,7 @@
         "emitter:lint": "ng lint emitter",
         "emitter:test": "ng test --watch=false --code-coverage=true --progress=false emitter",
         "emitter:build": "ng build emitter --prod=true",
-        "emitter:rollup": "rollup -c rollup.config.ts",
+        "emitter:rollup": "rollup -c rollup.config.js",
         "// - CI": "CI testing",
         "test:ci": "npm-run-all emitter:*"
     },
