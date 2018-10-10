@@ -8,7 +8,9 @@ import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../int
  */
 export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
     return <T>(target: any, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => {
-        if (typeof descriptor.value !== 'function' || typeof target[key] !== 'function') {
+        const isNotFunctionOrNotStatic = typeof descriptor.value !== 'function' || typeof target[key] !== 'function';
+
+        if (isNotFunctionOrNotStatic) {
             throw new TypeError(`Only static functions can be decorated with @Receiver() decorator`);
         }
 
@@ -17,9 +19,10 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const meta = ensureStoreMetadata(target);
-        const action: any | undefined = options && options.action;
+        const action = options && options.action;
+        const typeIsNotString = action && typeof action.type !== 'string';
 
-        if (action && typeof action.type !== 'string') {
+        if (typeIsNotString) {
             throw new Error('Action type should be defined as a static property `type`');
         }
 
@@ -35,7 +38,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
             type
         }];
 
-        descriptor.value[RECEIVER_META_KEY] = {
+        descriptor.value![RECEIVER_META_KEY] = {
             type,
             action
         };
