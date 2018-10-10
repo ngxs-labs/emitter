@@ -75,7 +75,7 @@ export const META_KEY = 'NGXS_META';
 export const EMITTER_META_KEY = 'NGXS_EMITTER_META';
 
 /**
- * This is internal `@ngxs/store` function and not accessable from outside, even using theta symbol
+ * This is an internal `@ngxs/store` function and not accessable from outside, even using theta symbol
  *
  * @param target - Target to apply static metadata to
  * @returns - Static metedata
