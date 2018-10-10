@@ -1,7 +1,7 @@
 import { analyze, Issue } from 'sonarjs';
 import { join } from 'path';
 
-const path = join(__dirname, 'projects');
+const path = join(__dirname, '..', 'projects');
 
 const enum Codes {
     Success = 0,

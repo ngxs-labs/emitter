@@ -26,7 +26,7 @@
         "build": "ng build",
         "e2e": "ng e2e",
         "// - UTILS": "Utility scripts",
-        "emitter:sonar": "ts-node sonar.ts",
+        "emitter:sonar": "ts-node ./tools/sonar.ts",
         "emitter:lint": "ng lint emitter",
         "emitter:test": "ng test --watch=false --code-coverage=true --progress=false emitter",
         "emitter:build": "ng build emitter --prod=true",
