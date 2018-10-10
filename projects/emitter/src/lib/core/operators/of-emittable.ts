@@ -10,7 +10,7 @@ import { RECEIVER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContex
  * will return a hashmap => `{ 'CounterState.increment': true, 'CounterState.decrement': true }`
  *
  * @param receivers - Array with references to the static functions
- * @returns - A key-value map where a key is a type
+ * @returns - A key-value map where a key is a type and value is `true`
  */
 function getReceiverTypes(emitters: Function[]): Types {
     const types: Types = {};

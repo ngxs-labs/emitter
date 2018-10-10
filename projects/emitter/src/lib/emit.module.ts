@@ -1,4 +1,4 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { NgModule, ModuleWithProviders, Self } from '@angular/core';
 
 import { EmitStore } from './core/services/emit-store.service';
 import { InjectorAccessor } from './core/services/injector-accessor.service';
@@ -10,7 +10,10 @@ import { InjectorAccessor } from './core/services/injector-accessor.service';
     ]
 })
 export class NgxsEmitPluginModule {
-    constructor(injectorAccessor: InjectorAccessor) {}
+    constructor(
+        @Self()
+        injectorAccessor: InjectorAccessor
+    ) {}
 
     /**
      * @returns - A wrapper around `NgModule`

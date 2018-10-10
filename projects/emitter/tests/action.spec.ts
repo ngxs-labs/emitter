@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } from '@ngxs/store';
 
 import { throwError } from 'rxjs';
+import { take, finalize } from 'rxjs/operators';
 
 import { Receiver } from '../src/lib/core/decorators/receiver';
 import { Emitter } from '../src/lib/core/decorators/emitter';
@@ -45,10 +46,10 @@ describe('Actions', () => {
         public increment?: Emittable<void | number>;
 
         @Emitter(CounterState.decrement)
-        public decrement?: Emittable<void>;
+        public decrement?: Emittable<void | number>;
 
         @Emitter(CounterState.multiplyBy2)
-        public multiplyBy2?: Emittable<void>;
+        public multiplyBy2?: Emittable<void | number>;
 
         @Emitter(CounterState.throwError)
         public throwError?: Emittable<void>;
@@ -115,7 +116,7 @@ describe('Actions', () => {
         store.dispatch(new MultiplyBy2());
     });
 
-    it('should intercept only CounterState.increment emitter', () => {
+    it('should intercept only CounterState.increment receiver', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([CounterState]),
@@ -141,7 +142,7 @@ describe('Actions', () => {
         fixture.componentInstance.multiplyBy2!.emit();
     });
 
-    it('should intercept errored emitter', () => {
+    it('should intercept receiver that throws an error', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([CounterState]),
@@ -157,14 +158,45 @@ describe('Actions', () => {
 
         actions$.pipe(
             ofEmittableErrored(CounterState.throwError)
-        ).subscribe(({ type, payload }: OfEmittableActionContext<void>) => {
+        ).subscribe(({ type, payload, error }: OfEmittableActionContext<void>) => {
             expect(type).toBe('CounterState.throwError');
             expect(payload).toBe(undefined);
+            expect(error!.message).toBe('Whoops!');
         });
 
         fixture.componentInstance.increment!.emit();
         fixture.componentInstance.decrement!.emit();
         fixture.componentInstance.throwError!.emit();
         fixture.componentInstance.multiplyBy2!.emit();
+    });
+
+    it('should intercept multiple receivers', () => {
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([CounterState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const fixture = TestBed.createComponent(MockComponent);
+        const actions$: Actions = TestBed.get(Actions);
+        const types: string[] = [];
+
+        actions$.pipe(
+            ofEmittableDispatched(CounterState.increment, CounterState.decrement),
+            take(2),
+            finalize(() => {
+                expect(types).toContain('CounterState.increment');
+                expect(types).toContain('CounterState.decrement');
+            })
+        ).subscribe(({ type }) => {
+            types.push(type);
+        });
+
+        fixture.componentInstance.increment!.emit();
+        fixture.componentInstance.decrement!.emit();
     });
 });
