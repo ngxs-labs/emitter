@@ -59,7 +59,7 @@ export interface OfEmittableActionContext<T = any> {
 }
 
 /**
- * Hash map that contains types to filter using `ofEmittable` operator
+ * Hashmap that contains types to filter using `ofEmittable` operator
  *
  * @property key - Any string key
  */
