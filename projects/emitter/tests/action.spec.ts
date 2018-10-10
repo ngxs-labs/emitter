@@ -4,8 +4,8 @@ import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } f
 
 import { throwError } from 'rxjs';
 
+import { Receiver } from '../src/lib/core/decorators/receiver';
 import { Emitter } from '../src/lib/core/decorators/emitter';
-import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
 import { Emittable, OfEmittableActionContext } from '../src/lib/core/internal/internals';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
 import { ofEmittableDispatched, ofEmittableErrored } from '../src/lib/core/operators/of-emittable';
@@ -16,22 +16,22 @@ describe('Actions', () => {
         defaults: 0
     })
     class CounterState {
-        @Emitter()
+        @Receiver()
         public static increment({ setState, getState }: StateContext<number>) {
             setState(getState() + 1);
         }
 
-        @Emitter()
+        @Receiver()
         public static decrement({ setState, getState }: StateContext<number>) {
             setState(getState() - 1);
         }
 
-        @Emitter()
+        @Receiver()
         public static multiplyBy2({ setState, getState }: StateContext<number>) {
             setState(getState() * 2);
         }
 
-        @Emitter()
+        @Receiver()
         public static throwError() {
             return throwError(new Error('Whoops!'));
         }
@@ -41,20 +41,20 @@ describe('Actions', () => {
         template: ''
     })
     class MockComponent {
-        @PayloadEmitter(CounterState.increment)
+        @Emitter(CounterState.increment)
         public increment?: Emittable<void | number>;
 
-        @PayloadEmitter(CounterState.decrement)
+        @Emitter(CounterState.decrement)
         public decrement?: Emittable<void>;
 
-        @PayloadEmitter(CounterState.multiplyBy2)
+        @Emitter(CounterState.multiplyBy2)
         public multiplyBy2?: Emittable<void>;
 
-        @PayloadEmitter(CounterState.throwError)
+        @Emitter(CounterState.throwError)
         public throwError?: Emittable<void>;
     }
 
-    it('should intercept custom action that is defined in the @Emitter() decorator', () => {
+    it('should intercept custom action that is defined in the @Receiver() decorator', () => {
         class Increment {
             public static type = '[Counter] Increment';
         }
@@ -72,21 +72,21 @@ describe('Actions', () => {
             defaults: 0
         })
         class CounterStateWithCustomActions {
-            @Emitter({
+            @Receiver({
                 action: Increment
             })
             public static increment({ setState, getState }: StateContext<number>) {
                 setState(getState() + 1);
             }
 
-            @Emitter({
+            @Receiver({
                 action: Decrement
             })
             public static decrement({ setState, getState }: StateContext<number>) {
                 setState(getState() - 1);
             }
 
-            @Emitter({
+            @Receiver({
                 action: MultiplyBy2
             })
             public static multiplyBy2({ setState, getState }: StateContext<number>) {

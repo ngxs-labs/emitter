@@ -5,10 +5,10 @@ import { State, Store, NgxsModule, StateContext } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { delay, take, tap } from 'rxjs/operators';
 
-import { Emitter } from '../src/lib/core/decorators/emitter';
-import { EMITTER_META_KEY, Emittable } from '../src/lib/core/internal/internals';
+import { Receiver } from '../src/lib/core/decorators/receiver';
+import { RECEIVER_META_KEY, Emittable } from '../src/lib/core/internal/internals';
 import { EmitterAction } from '../src/lib/core/actions/actions';
-import { PayloadEmitter } from '../src/lib/core/decorators/payload-emitter';
+import { Emitter } from '../src/lib/core/decorators/emitter';
 import { NgxsEmitPluginModule } from '../src/lib/emit.module';
 
 describe('NgxsEmitPluginModule', () => {
@@ -17,18 +17,18 @@ describe('NgxsEmitPluginModule', () => {
         completed: boolean;
     }
 
-    it('static metadata should have `type` property same as in @Emitter() decorator', () => {
+    it('static metadata should have `type` property same as in @Receiver() decorator', () => {
         @State({
             name: 'bar'
         })
         class BarState {
-            @Emitter({
+            @Receiver({
                 type: '@@[bar]'
             })
             public static foo() {}
         }
 
-        const BarFooMeta = BarState.foo[EMITTER_META_KEY];
+        const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
         expect(BarFooMeta.type).toBe('@@[bar]');
     });
 
@@ -37,21 +37,21 @@ describe('NgxsEmitPluginModule', () => {
             name: 'bar'
         })
         class BarState {
-            @Emitter()
+            @Receiver()
             public static foo() {}
         }
 
-        const BarFooMeta = BarState.foo[EMITTER_META_KEY];
+        const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
         expect(BarFooMeta.type).toBe('BarState.foo');
     });
 
-    it('should decorate property with @PayloadEmitter() decorator', () => {
+    it('should decorate property with @Emitter() decorator', () => {
         @State<Todo[]>({
             name: 'todos',
             defaults: []
         })
         class TodosState {
-            @Emitter()
+            @Receiver()
             public static addTodo() {}
         }
 
@@ -59,7 +59,7 @@ describe('NgxsEmitPluginModule', () => {
             template: ''
         })
         class MockComponent {
-            @PayloadEmitter(TodosState.addTodo)
+            @Emitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
         }
 
@@ -78,13 +78,13 @@ describe('NgxsEmitPluginModule', () => {
         expect(typeof fixture.componentInstance.addTodoAction!.emit).toBe('function');
     });
 
-    it('should dispatch an action using property decorated with @PayloadEmitter()', () => {
+    it('should dispatch an action using property decorated with @Emitter()', () => {
         @State<Todo[]>({
             name: 'todos',
             defaults: []
         })
         class TodosState {
-            @Emitter({ type: '@@[Todos] Add todo' })
+            @Receiver({ type: '@@[Todos] Add todo' })
             public static addTodo(ctx: StateContext<Todo[]>, action: EmitterAction<Todo>) {
                 ctx.setState([...ctx.getState(), action.payload!]);
             }
@@ -94,7 +94,7 @@ describe('NgxsEmitPluginModule', () => {
             template: ''
         })
         class MockComponent {
-            @PayloadEmitter(TodosState.addTodo)
+            @Emitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
         }
 
@@ -120,13 +120,13 @@ describe('NgxsEmitPluginModule', () => {
         expect(todoLength).toBe(1);
     });
 
-    it('should add todo using @Emitter() decorator', () => {
+    it('should add todo using @Receiver() decorator', () => {
         @State<Todo[]>({
             name: 'todos',
             defaults: []
         })
         class TodosState {
-            @Emitter()
+            @Receiver()
             public static addTodo(ctx: StateContext<Todo[]>, action: EmitterAction<Todo>) {
                 ctx.setState([...ctx.getState(), action.payload!]);
             }
@@ -136,7 +136,7 @@ describe('NgxsEmitPluginModule', () => {
             template: ''
         })
         class MockComponent {
-            @PayloadEmitter(TodosState.addTodo)
+            @Emitter(TodosState.addTodo)
             public addTodo: Emittable<Todo> | undefined;
         }
 
@@ -168,7 +168,7 @@ describe('NgxsEmitPluginModule', () => {
             defaults: 10
         })
         class Bar2State {
-            @Emitter()
+            @Receiver()
             public static foo2({ setState }: StateContext<number>) {
                 setState(20);
             }
@@ -185,7 +185,7 @@ describe('NgxsEmitPluginModule', () => {
             template: ''
         })
         class MockComponent {
-            @PayloadEmitter(Bar2State.foo2)
+            @Emitter(Bar2State.foo2)
             public foo2: Emittable<void> | undefined;
         }
 
@@ -215,12 +215,12 @@ describe('NgxsEmitPluginModule', () => {
                 defaults: 10
             })
             class BarState {
-                @Emitter({
+                @Receiver({
                     type: 'foo'
                 })
                 public static foo1() {}
 
-                @Emitter({
+                @Receiver({
                     type: 'foo'
                 })
                 public static foo2() {}
@@ -237,7 +237,7 @@ describe('NgxsEmitPluginModule', () => {
         }
     });
 
-    it('should dispatch an action using @Emitter() after delay', () => {
+    it('should dispatch an action using @Receiver() after delay', () => {
         @Injectable()
         class ApiService {
             private size = 10;
@@ -266,7 +266,7 @@ describe('NgxsEmitPluginModule', () => {
                 TodosState.api = injector.get<ApiService>(ApiService);
             }
 
-            @Emitter({
+            @Receiver({
                 type: '@@[Todos] Set todos sync'
             })
             public static async setTodosSync({ setState }: StateContext<Todo[]>) {
@@ -277,7 +277,7 @@ describe('NgxsEmitPluginModule', () => {
                 );
             }
 
-            @Emitter({
+            @Receiver({
                 type: '@@[Todos] Set todos'
             })
             public static setTodos({ setState }: StateContext<Todo[]>) {
@@ -294,10 +294,10 @@ describe('NgxsEmitPluginModule', () => {
             template: ''
         })
         class MockComponent {
-            @PayloadEmitter(TodosState.setTodosSync)
+            @Emitter(TodosState.setTodosSync)
             public setTodosSync: Emittable<Todo[]> | undefined;
 
-            @PayloadEmitter(TodosState.setTodos)
+            @Emitter(TodosState.setTodos)
             public setTodos: Emittable<Todo[]> | undefined;
         }
 
@@ -328,7 +328,7 @@ describe('NgxsEmitPluginModule', () => {
         });
     });
 
-    it('should be possible to pass an action into @Emitter() decorator', () => {
+    it('should be possible to pass an action into @Receiver() decorator', () => {
         class AddTodo {
             public static type = '@@[Todos] Add todo';
             constructor(public payload: Todo) {}
@@ -339,7 +339,7 @@ describe('NgxsEmitPluginModule', () => {
             defaults: []
         })
         class TodosState {
-            @Emitter({
+            @Receiver({
                 action: AddTodo
             })
             public static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
@@ -351,7 +351,7 @@ describe('NgxsEmitPluginModule', () => {
             template: ''
         })
         class MockComponent {
-            @PayloadEmitter(TodosState.addTodo)
+            @Emitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
         }
 
