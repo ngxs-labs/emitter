@@ -12,23 +12,23 @@ import { RECEIVER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContex
  * @param receivers - Array with references to the static functions
  * @returns - A key-value map where a key is a type and value is `true`
  */
-function getReceiverTypes(emitters: Function[]): Types {
+function getReceiverTypes(receivers: Function[]): Types {
     const types: Types = {};
 
-    let i = emitters.length;
+    let i = receivers.length;
     while (i--) {
-        const emitter = emitters[i];
-        const isNotFunction = typeof emitter !== 'function';
+        const receiver = receivers[i];
+        const isNotFunction = typeof receiver !== 'function';
 
         if (isNotFunction) {
-            throw new TypeError(`Emitter should be a function, got ${emitter}`);
+            throw new TypeError(`Receiver should be a function, got ${receiver}`);
         }
 
-        const meta: ReceiverMetaData = emitter[RECEIVER_META_KEY];
+        const meta: ReceiverMetaData = receiver[RECEIVER_META_KEY];
         const isNotAnnotated = !meta || !meta.type;
 
         if (isNotAnnotated) {
-            throw new Error(`${emitter.name} should be decorated using @Receiver() decorator`);
+            throw new Error(`${receiver.name} should be decorated using @Receiver() decorator`);
         }
 
         types[meta.type] = true;
