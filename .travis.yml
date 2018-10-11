@@ -14,6 +14,4 @@ addons:
   chrome: stable
 
 script:
-  - yarn lint emitter
-  - yarn test emitter --watch=false
-  - yarn build emitter --prod=true
+  - yarn ci:pipelines
