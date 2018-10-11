@@ -10,11 +10,11 @@ This package allows you to get rid of actions. You can use decorators to registe
 
 ## Concepts
 
-<img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/redux-flow.png">
+<kbd><img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/redux-flow.png"></kbd>
 
 We've simplified this flow and threw out unnecessary mediators:
 
-<img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/er-flow.png">
+<kbd><img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/er-flow.png"></kbd>
 
 ## :package: Install
 
