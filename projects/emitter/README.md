@@ -1,20 +1,20 @@
 <p align="center">
-    <img src="https://github.com/ngxs-contrib/emit-plugin/blob/master/docs/assets/logo.png">
+    <img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/logo.png">
 </p>
 
 ---
 
-> ER is a new pattern that let's you feel free from actions
+> ER is a new pattern that provides the opportunity to feel free from actions
 
 This package allows you to get rid of actions. You can use decorators to register actions directly in your state, you don't have to create any actions in your project (until you really need them), as they don't give any profit, only bring extra boilerplate files.
 
 ## Concepts
 
-<img src="https://github.com/ngxs-contrib/emit-plugin/blob/master/docs/assets/redux-flow.png">
+<img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/redux-flow.png">
 
 We've simplified this flow and threw out unnecessary mediators:
 
-<img src="https://github.com/ngxs-contrib/emit-plugin/blob/master/docs/assets/er-flow.png">
+<img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/er-flow.png">
 
 ## :package: Install
 
@@ -105,7 +105,7 @@ export class CounterComponent {
 
 ## Custom types
 
-You can define custom type for debbuing purposes (works with `@ngxs/logger-plugin`)
+You can define custom types for debbuing purposes (works with `@ngxs/logger-plugin`):
 
 ```typescript
 import { State, StateContext } from '@ngxs/store';
