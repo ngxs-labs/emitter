@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="../../docs/assets/logo.png">
+    <img src="https://github.com/ngxs-contrib/emit-plugin/blob/master/docs/assets/logo.png">
 </p>
 
 ---
@@ -10,11 +10,11 @@ This package allows you to get rid of actions. You can use decorators to registe
 
 ## Concepts
 
-<img src="../../docs/assets/redux-flow.png">
+<img src="https://github.com/ngxs-contrib/emit-plugin/blob/master/docs/assets/redux-flow.png">
 
 We've simplified this flow and threw out unnecessary mediators:
 
-<img src="../../docs/assets/er-flow.png">
+<img src="https://github.com/ngxs-contrib/emit-plugin/blob/master/docs/assets/er-flow.png">
 
 ## :package: Install
 
