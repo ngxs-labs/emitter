@@ -11,6 +11,14 @@
 
 This package allows you to get rid of actions. You can use decorators to register actions directly in your state, you don't have to create any actions in your project (until you really need them), as they don't give any profit, only bring extra boilerplate files.
 
+## Concepts
+
+<img src="docs/assets/redux-flow.png">
+
+We've simplified this flow and threw out unnecessary mediators:
+
+<img src="docs/assets/er-flow.png">
+
 ## :package: Install
 
 To install `@ngxs-contrib/emitter` run the following command:
