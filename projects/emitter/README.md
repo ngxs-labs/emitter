@@ -6,6 +6,8 @@
 
 > ER is a new pattern that provides the opportunity to feel free from actions
 
+[🚀 See it in action on Stackblitz](https://stackblitz.com/edit/ngxs-emitter-simple)
+
 This package allows you to get rid of actions. You can use decorators to register actions directly in your state, you don't have to create any actions in your project (until you really need them), as they don't give any profit, only bring extra boilerplate files.
 
 ## Concepts
@@ -86,7 +88,7 @@ import { CounterStateModel, CounterState } from './counter.state';
     template: `
         <ng-container *ngIf="count$ | async as count">
             <h3>Count is {{ count.value }}</h3>
-            <div class="add-counter">
+            <div>
                 <button (click)="counterValue.emit(count.value + 1)">Increment (+1)</button>
                 <button (click)="counterValue.emit(count.value - 1)">Decrement (-1)</button>
             </div>
@@ -94,7 +96,7 @@ import { CounterStateModel, CounterState } from './counter.state';
     `
 })
 export class CounterComponent {
-    @Select((state) => state.counter)
+    @Select(CounterState)
     public count$: Observable<CounterStateModel>;
 
     // Use in components to emit asynchronously payload
