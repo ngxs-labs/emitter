@@ -23,7 +23,7 @@ export class InjectorAccessor {
      * @returns - Error if `NgxsEmitPluginModule` is not imported or injector instance
      */
     public static getInjector(): never | Injector {
-        if (this.injector === null) {
+        if (!this.injector) {
             throw new Error(`You've forgotten to import \`NgxsEmitPluginModule\``);
         }
 
