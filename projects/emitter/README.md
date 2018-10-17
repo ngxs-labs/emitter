@@ -249,3 +249,84 @@ export class AppInformationState {
     }
 }
 ```
+
+## Lifecycle
+
+As you may know - actions in NGXS have own lifecycle. We also provide RxJS operators that give you the ability to react to actions at different points in their existence:
+
+- `ofEmittableDispatched`: triggers when an emittable target has been dispatched
+- `ofEmittableSuccessful`: triggers when an emittable target has been completed successfully
+- `ofEmittableCanceled`: triggers when an emittable target has been canceled
+- `ofEmittableErrored`: triggers when an emittable target has caused an error to be thrown
+
+Below is just a simple example that uses those operators:
+
+```typescript
+import { State } from '@ngxs/store';
+import { Receiver } from '@ngxs-labs/emitter';
+
+@State<number>({
+    name: 'counter',
+    defaults: 0
+})
+class CounterState {
+    @Receiver()
+    public static increment({ setState, getState }: StateContext<number>) {
+        setState(getState() + 1);
+    }
+
+    @Receiver()
+    public static decrement({ setState, getState }: StateContext<number>) {
+        setState(getState() - 1);
+    }
+
+    @Receiver()
+    public static multiplyBy2({ setState, getState }: StateContext<number>) {
+        setState(getState() * 2);
+    }
+
+    @Receiver()
+    public static throwError() {
+        return throwError(new Error('Whoops!'));
+    }
+}
+```
+
+Import operators in component and pipe `Actions` service:
+
+```typescript
+import { Actions } from '@ngxs/store';
+import {
+    Emitter,
+    Emittable,
+    ofEmittableDispatched,
+    OfEmittableActionContext
+} from '@ngxs-labs/emitter';
+
+import { CounterState } from './counter.state';
+
+@Component({
+    selector: 'app-root',
+    template: ''
+})
+export class AppComponent {
+    @Emitter(CounterState.increment)
+    private increment: Emittable<void>;
+
+    @Emitter(CounterState.decrement)
+    private decrement: Emittable<void>;
+
+    constructor(private actions$: Actions) {
+        this.actions$.pipe(
+            ofEmittableDispatched(CounterState.increment)
+        ).subscribe(({ type }: OfEmittableActionContext<void>) => {
+            console.log(type === 'CounterState.increment'); // true
+        });
+
+        setInterval(() => {
+            this.increment.emit();
+            this.decrement.emit();
+        }, 1000);
+    }
+}
+```
