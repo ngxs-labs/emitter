@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ngxs-labs/labs/master/docs/assets/logo.png">
+    <img src="https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/logo.png">
 </p>
 
 ---
@@ -12,11 +12,11 @@ This package allows you to get rid of actions. You can use decorators to registe
 
 ## Concepts
 
-<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/labs/master/docs/assets/redux-flow.png"></kbd>
+<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/redux-flow.png"></kbd>
 
 We've simplified this flow and threw out unnecessary mediators:
 
-<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/labs/master/docs/assets/er-flow.png"></kbd>
+<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/er-flow.png"></kbd>
 
 ## :package: Install
 
