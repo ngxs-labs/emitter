@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/logo.png">
+    <img src="https://raw.githubusercontent.com/ngxs-labs/labs/master/docs/assets/logo.png">
 </p>
 
 ---
@@ -12,20 +12,20 @@ This package allows you to get rid of actions. You can use decorators to registe
 
 ## Concepts
 
-<kbd><img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/redux-flow.png"></kbd>
+<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/labs/master/docs/assets/redux-flow.png"></kbd>
 
 We've simplified this flow and threw out unnecessary mediators:
 
-<kbd><img src="https://raw.githubusercontent.com/ngxs-contrib/emit-plugin/master/docs/assets/er-flow.png"></kbd>
+<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/labs/master/docs/assets/er-flow.png"></kbd>
 
 ## :package: Install
 
-To install `@ngxs-contrib/emitter` run the following command:
+To install `@ngxs-labs/emitter` run the following command:
 
 ```console
-npm install @ngxs-contrib/emitter
+npm install @ngxs-labs/emitter
 # or if you use yarn
-yarn add @ngxs-contrib/emitter
+yarn add @ngxs-labs/emitter
 ```
 
 ## :hammer: Usage
@@ -34,7 +34,7 @@ Import the module into your root application module:
 
 ```typescript
 import { NgModule } from '@angular/core';
-import { NgxsEmitPluginModule } from '@ngxs-contrib/emitter';
+import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
 
 @NgModule({
     imports: [
@@ -51,7 +51,7 @@ Receiver is a basic building block. `@Receiver()` is a function that allows you 
 
 ```typescript
 import { State, StateContext } from '@ngxs/store';
-import { Receiver, EmitterAction } from '@ngxs-contrib/emitter';
+import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
 
 export interface CounterStateModel {
     value: number;
@@ -79,7 +79,7 @@ Emitter is basically a bridge between your component and receivers. `@Emitter()`
 
 ```typescript
 import { Select } from '@ngxs/store';
-import { Emitter, Emittable } from '@ngxs-contrib/emitter';
+import { Emitter, Emittable } from '@ngxs-labs/emitter';
 
 import { CounterStateModel, CounterState } from './counter.state';
 
@@ -111,7 +111,7 @@ You can define custom types for debbuing purposes (works with `@ngxs/logger-plug
 
 ```typescript
 import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-contrib/emitter';
+import { Receiver } from '@ngxs-labs/emitter';
 
 @State<number>({
     name: 'counter',
@@ -140,7 +140,7 @@ If you still need actions - it is possible to pass an action as an argument into
 
 ```typescript
 import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-contrib/emitter';
+import { Receiver } from '@ngxs-labs/emitter';
 
 export class Increment {
     public static type = '[Counter] Increment value';
@@ -179,7 +179,9 @@ Assume you have to make some API request and load some data from your server, it
 import { Injector } from '@angular/core';
 
 import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-contrib/emitter';
+import { Receiver } from '@ngxs-labs/emitter';
+
+import { tap } from 'rxjs/operators/tap';
 
 interface Todo {
     userId: number;
@@ -209,6 +211,41 @@ export class TodosState {
 
         // If `ApiService.prototype.getTodos` returns a Promise - just use `then`
         return this.api.getTodos().then((todos) => setState(todos));
+    }
+}
+```
+
+If you work with promises - we advice you to use `async/await` approach, because method marked with `async` keyword will automatically return a `Promise`, you will not get confused if you missed `return` keyword somewhere:
+
+```typescript
+import { Injector } from '@angular/core';
+
+import { State, StateContext } from '@ngxs/store';
+import { Receiver } from '@ngxs-labs/emitter';
+
+export interface AppInformationStateModel {
+    version: string;
+    shouldUseGraphql: boolean;
+}
+
+@State<AppInformationStateModel>({
+    name: 'information',
+    defaults: null
+})
+export class AppInformationState {
+    public static appService: AppService;
+
+    constructor(injector: Injector) {
+        AppInformationState.appService = injector.get<AppService>(AppService);
+    }
+
+    @Receiver({
+        type: '[App information] Get app information'
+    })
+    public static async getAppInformation({ setState }: StateContext<AppInformationStateModel>) {
+        setState(
+            await this.appService.getAppInformation()
+        );
     }
 }
 ```
