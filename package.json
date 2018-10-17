@@ -1,9 +1,9 @@
 {
-    "name": "ngxs-contrib-src",
-    "version": "1.0.5",
+    "name": "ngxs-labs-src",
+    "version": "1.0.0",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ngxs-contrib/emitter.git"
+        "url": "git+https://github.com/ngxs-labs/tools.git"
     },
     "keywords": [
         "ngxs",
