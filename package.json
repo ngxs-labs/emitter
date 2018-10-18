@@ -6,6 +6,10 @@
         "url": "git+https://github.com/ngxs-labs/tools.git"
     },
     "license": "MIT",
+    "homepage": "https://github.com/ngxs-labs/tools",
+    "bugs": {
+        "url": "https://github.com/ngxs-labs/tools/issues"
+    },
     "keywords": [
         "ngxs",
         "redux",
