@@ -32,7 +32,7 @@ module.exports = (config) => {
 
         autoWatch: true,
 
-        browsers: ['Chrome', 'ChromeCanary'],
+        browsers: ['Chrome'],
 
         singleRun: false,
 
