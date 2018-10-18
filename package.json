@@ -5,6 +5,7 @@
         "type": "git",
         "url": "git+https://github.com/ngxs-labs/tools.git"
     },
+    "license": "MIT",
     "keywords": [
         "ngxs",
         "redux",
