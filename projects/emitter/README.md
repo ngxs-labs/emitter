@@ -11,12 +11,9 @@
 This package allows you to get rid of actions. You can use decorators to register actions directly in your state, you don't have to create any actions in your project (until you really need them), as they don't give any profit, only bring extra boilerplate files.
 
 ## Concepts
+Compare these diagrams, we've simplified Redux flow and threw out unnecessary middleware:
 
-<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/redux-flow.png"></kbd>
-
-We've simplified this flow and threw out unnecessary mediators:
-
-<kbd><img src="https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/er-flow.png"></kbd>
+![ER Flow](../../docs/assets/redux-er.png)
 
 ## :package: Install
 
