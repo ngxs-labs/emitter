@@ -10,4 +10,4 @@
 
 | Project | Package | Versions | Links |
 |---|---|---|---|
-**ngxs-labs** | [`@ngxs-labs/emitter`](https://npmjs.com/package/@ngxs-labs/emitter) | [![NPM](https://badge.fury.io/js/%40ngxs-labs%2Femitter.svg)](https://www.npmjs.com/package/@ngxs-labs/emitter) | [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/ngxs-labs/tools/blob/master/projects/emitter/README.md)
+**emitter** | [`@ngxs-labs/emitter`](https://npmjs.com/package/@ngxs-labs/emitter) | [![NPM](https://badge.fury.io/js/%40ngxs-labs%2Femitter.svg)](https://www.npmjs.com/package/@ngxs-labs/emitter) | [![README](https://img.shields.io/badge/README--green.svg)](https://github.com/ngxs-labs/tools/blob/master/projects/emitter/README.md)
