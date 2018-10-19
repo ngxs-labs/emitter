@@ -13,7 +13,7 @@ This package allows you to get rid of actions. You can use decorators to registe
 ## Concepts
 Compare these diagrams, we've simplified Redux flow and threw out unnecessary middleware:
 
-![ER Flow](../../docs/assets/redux-er.png)
+![ER Flow](https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/redux-er.png)
 
 ## :package: Install
 
