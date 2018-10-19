@@ -1,6 +1,21 @@
 {
     "name": "@ngxs-labs/emitter",
-    "version": "1.0.3",
+    "version": "1.0.4",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ngxs-labs/tools.git"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/ngxs-labs/tools#readme",
+    "bugs": {
+        "url": "https://github.com/ngxs-labs/tools/issues"
+    },
+    "keywords": [
+        "ngxs",
+        "redux",
+        "store"
+    ],
+    "sideEffects": true,
     "peerDependencies": {
         "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
         "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
