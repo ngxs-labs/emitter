@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/logo.png">
+    <img src="https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/logo.png">
 </p>
 
 ---
@@ -13,7 +13,7 @@ This package allows you to get rid of actions. You can use decorators to registe
 ## Concepts
 Compare these diagrams, we've simplified Redux flow and threw out unnecessary middleware:
 
-![ER Flow](https://raw.githubusercontent.com/ngxs-labs/tools/master/docs/assets/redux-er.png)
+![ER Flow](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/redux-er.png)
 
 ## :package: Install
 
@@ -29,223 +29,41 @@ yarn add @ngxs-labs/emitter
 
 Import the module into your root application module:
 
-```typescript
-import { NgModule } from '@angular/core';
-import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
-
-@NgModule({
-    imports: [
-        ...,
-        NgxsEmitPluginModule.forRoot()
-    ]
-})
-export class AppModule {}
-```
+![ER Plugin](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/module.png)
 
 ## Receiver
 
 Receiver is a basic building block. `@Receiver()` is a function that allows you to decorate static methods in your states for further passing this method to the emitter:
 
-```typescript
-import { State, StateContext } from '@ngxs/store';
-import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
-
-export interface CounterStateModel {
-    value: number;
-}
-
-@State<CounterStateModel>({
-    name: 'counter',
-    defaults: {
-        value: 0
-    }
-})
-export class CounterState {
-    @Receiver()
-    public static setValue({ setState }: StateContext<CounterStateModel>, { payload }: EmitterAction<number>) {
-        setState({
-            value: payload
-        });
-    }
-}
-```
+![Receiver](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/receiver.png)
 
 ## Emitter
 
 Emitter is basically a bridge between your component and receivers. `@Emitter()` is a function that decorates properties defining new getter and gives you an access to the emittable interface:
 
-```typescript
-import { Select } from '@ngxs/store';
-import { Emitter, Emittable } from '@ngxs-labs/emitter';
-
-import { CounterStateModel, CounterState } from './counter.state';
-
-@Component({
-    selector: 'app-counter',
-    template: `
-        <ng-container *ngIf="count$ | async as count">
-            <h3>Count is {{ count.value }}</h3>
-            <div>
-                <button (click)="counterValue.emit(count.value + 1)">Increment (+1)</button>
-                <button (click)="counterValue.emit(count.value - 1)">Decrement (-1)</button>
-            </div>
-        </ng-container>  
-    `
-})
-export class CounterComponent {
-    @Select(CounterState)
-    public count$: Observable<CounterStateModel>;
-
-    // Use in components to emit asynchronously payload
-    @Emitter(CounterState.setValue)
-    public counterValue: Emittable<number>;
-}
-```
+![Emitter](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/emitter.png)
 
 ## Custom types
 
 You can define custom types for debbuing purposes (works with `@ngxs/logger-plugin`):
 
-```typescript
-import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-labs/emitter';
-
-@State<number>({
-    name: 'counter',
-    defaults: 0
-})
-export class CounterState {
-    @Receiver({
-        type: '[Counter] Increment value'
-    })
-    public static increment({ setState, getState }: StateContext<number>) {
-        setState(getState() + 1);
-    }
-
-    @Receiver({
-        type: '[Counter] Decrement value'
-    })
-    public static decrement({ setState, getState }: StateContext<number>) {
-        setState(getState() - 1);
-    }
-}
-```
+![Types](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/types.png)
 
 ## Actions
 
 If you still need actions - it is possible to pass an action as an argument into `@Receiver()` decorator:
 
-```typescript
-import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-labs/emitter';
-
-export class Increment {
-    public static type = '[Counter] Increment value';
-}
-
-export class Decrement {
-    public static type = '[Counter] Decrement value';
-}
-
-@State<number>({
-    name: 'counter',
-    defaults: 0
-})
-export class CounterState {
-    @Receiver({
-        action: Increment
-    })
-    public static increment({ setState, getState }: StateContext<number>) {
-        setState(getState() + 1);
-    }
-
-    @Receiver({
-        action: Decrement
-    })
-    public static decrement({ setState, getState }: StateContext<number>) {
-        setState(getState() - 1);
-    }
-}
-```
+![Actions](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/actions.png)
 
 ## Dependency injection
 
 Assume you have to make some API request and load some data from your server, it is very easy to use services with static methods, Angular provides an `Injector` class for getting instances by reference:
 
-```typescript
-import { Injector } from '@angular/core';
-
-import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-labs/emitter';
-
-import { tap } from 'rxjs/operators/tap';
-
-interface Todo {
-    userId: number;
-    id: number;
-    title: string;
-    completed: boolean;
-}
-
-@State<Todo[]>({
-    name: 'counter',
-    defaults: []
-})
-export class TodosState {
-    // ApiService is a class that is defined somewhere...
-    public static api: ApiService;
-
-    constructor(injector: Injector) {
-        TodosState.api = injector.get<ApiService>(ApiService);
-    }
-
-    @Receiver()
-    public static getTodos({ setState }: StateContext<Todo[]>) {
-        // If `ApiService.prototype.getTodos` returns an Observable - just use `tap` operator
-        return this.api.getTodos().pipe(
-            tap((todos) => setState(todos))
-        );
-
-        // If `ApiService.prototype.getTodos` returns a Promise - just use `then`
-        return this.api.getTodos().then((todos) => setState(todos));
-    }
-}
-```
+![Depedency injection](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/di.png)
 
 If you work with promises - we advice you to use `async/await` approach, because method marked with `async` keyword will automatically return a `Promise`, you will not get confused if you missed `return` keyword somewhere:
 
-```typescript
-import { Injector } from '@angular/core';
-
-import { State, StateContext } from '@ngxs/store';
-import { Receiver } from '@ngxs-labs/emitter';
-
-export interface AppInformationStateModel {
-    version: string;
-    shouldUseGraphql: boolean;
-}
-
-@State<AppInformationStateModel>({
-    name: 'information',
-    defaults: null
-})
-export class AppInformationState {
-    public static appService: AppService;
-
-    constructor(injector: Injector) {
-        AppInformationState.appService = injector.get<AppService>(AppService);
-    }
-
-    @Receiver({
-        type: '[App information] Get app information'
-    })
-    public static async getAppInformation({ setState }: StateContext<AppInformationStateModel>) {
-        setState(
-            await this.appService.getAppInformation()
-        );
-    }
-}
-```
+![Async/await approach](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/async-await.png)
 
 ## Lifecycle
 
@@ -258,72 +76,8 @@ As you may know - actions in NGXS have own lifecycle. We also provide RxJS opera
 
 Below is just a simple example that uses those operators:
 
-```typescript
-import { State } from '@ngxs/store';
-import { Receiver } from '@ngxs-labs/emitter';
-
-@State<number>({
-    name: 'counter',
-    defaults: 0
-})
-class CounterState {
-    @Receiver()
-    public static increment({ setState, getState }: StateContext<number>) {
-        setState(getState() + 1);
-    }
-
-    @Receiver()
-    public static decrement({ setState, getState }: StateContext<number>) {
-        setState(getState() - 1);
-    }
-
-    @Receiver()
-    public static multiplyBy2({ setState, getState }: StateContext<number>) {
-        setState(getState() * 2);
-    }
-
-    @Receiver()
-    public static throwError() {
-        return throwError(new Error('Whoops!'));
-    }
-}
-```
+![Lifecycle](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/lifecycle.png)
 
 Import operators in component and pipe `Actions` service:
 
-```typescript
-import { Actions } from '@ngxs/store';
-import {
-    Emitter,
-    Emittable,
-    ofEmittableDispatched,
-    OfEmittableActionContext
-} from '@ngxs-labs/emitter';
-
-import { CounterState } from './counter.state';
-
-@Component({
-    selector: 'app-root',
-    template: ''
-})
-export class AppComponent {
-    @Emitter(CounterState.increment)
-    private increment: Emittable<void>;
-
-    @Emitter(CounterState.decrement)
-    private decrement: Emittable<void>;
-
-    constructor(private actions$: Actions) {
-        this.actions$.pipe(
-            ofEmittableDispatched(CounterState.increment)
-        ).subscribe(({ type }: OfEmittableActionContext<void>) => {
-            console.log(type === 'CounterState.increment'); // true
-        });
-
-        setInterval(() => {
-            this.increment.emit();
-            this.decrement.emit();
-        }, 1000);
-    }
-}
-```
+![Lifecycle operators](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/lifecycle-operators.png)

@@ -148,8 +148,7 @@ describe('Actions', () => {
 
         actions$.pipe(
             ofEmittableDispatched(CounterState.increment)
-        ).subscribe(({ type, payload }: OfEmittableActionContext<number>) => {
-            expect(type).toBe('CounterState.increment');
+        ).subscribe(({ payload }: OfEmittableActionContext<number>) => {
             expect(payload).toBe(20);
         });
 
@@ -174,8 +173,7 @@ describe('Actions', () => {
 
         actions$.pipe(
             ofEmittableErrored(CounterState.throwError)
-        ).subscribe(({ type, payload, error }: OfEmittableActionContext<void>) => {
-            expect(type).toBe('CounterState.throwError');
+        ).subscribe(({ payload, error }: OfEmittableActionContext<void>) => {
             expect(payload).toBe(undefined);
             expect(error!.message).toBe('Whoops!');
         });
