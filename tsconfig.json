@@ -3,8 +3,8 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths": {
-            "emitter": ["dist/emitter"],
-            "emitter/*": ["dist/emitter/*"]
+            "emitter": ["src"],
+            "emitter/*": ["src/*"]
         },
         "target": "es5",
         "typeRoots": ["node_modules/@types"],

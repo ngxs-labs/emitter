@@ -3,12 +3,12 @@
     "version": "1.0.4",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ngxs-labs/tools.git"
+        "url": "git+https://github.com/ngxs-labs/emitter.git"
     },
     "license": "MIT",
-    "homepage": "https://github.com/ngxs-labs/tools#readme",
+    "homepage": "https://github.com/ngxs-labs/emitter#readme",
     "bugs": {
-        "url": "https://github.com/ngxs-labs/tools/issues"
+        "url": "https://github.com/ngxs-labs/emitter/issues"
     },
     "keywords": [
         "ngxs",
