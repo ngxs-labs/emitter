@@ -1,7 +1,7 @@
 import { analyze, Issue } from 'sonarjs';
 import { join } from 'path';
 
-const path = join(__dirname, '..', 'projects');
+const path = join(__dirname, '..', 'src');
 
 const enum Codes {
     Success = 0,
@@ -16,7 +16,8 @@ async function run(): Promise<Codes> {
     });
 
     if (!issues.length) {
-        return console.log('No issues found!') || Codes.Success;
+        console.log('No issues found!');
+        return Codes.Success;
     }
 
     issues.forEach((issue) => {

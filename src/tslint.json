@@ -4,14 +4,15 @@
         "directive-selector": [
             true,
             "attribute",
-            "app",
+            "dispatcher",
             "camelCase"
         ],
         "component-selector": [
             true,
             "element",
-            "app",
+            "dispatcher",
             "kebab-case"
-        ]
+        ],
+        "no-non-null-assertion": false
     }
 }

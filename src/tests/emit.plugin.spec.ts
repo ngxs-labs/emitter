@@ -5,12 +5,12 @@ import { State, Store, NgxsModule, StateContext } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { delay, take, tap } from 'rxjs/operators';
 
-import { Receiver } from '../src/lib/core/decorators/receiver';
-import { RECEIVER_META_KEY, Emittable } from '../src/lib/core/internal/internals';
-import { EmitterAction } from '../src/lib/core/actions/actions';
-import { Emitter } from '../src/lib/core/decorators/emitter';
-import { NgxsEmitPluginModule } from '../src/lib/emit.module';
-import { EmitStore } from '../src/lib/core/services/emit-store.service';
+import { Receiver } from '../lib/core/decorators/receiver';
+import { RECEIVER_META_KEY, Emittable } from '../lib/core/internal/internals';
+import { EmitterAction } from '../lib/core/actions/actions';
+import { Emitter } from '../lib/core/decorators/emitter';
+import { NgxsEmitPluginModule } from '../lib/emit.module';
+import { EmitStore } from '../lib/core/services/emit-store.service';
 
 describe('NgxsEmitPluginModule', () => {
     interface Todo {

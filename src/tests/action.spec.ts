@@ -5,16 +5,16 @@ import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } f
 import { throwError } from 'rxjs';
 import { take, finalize } from 'rxjs/operators';
 
-import { Receiver } from '../src/lib/core/decorators/receiver';
-import { Emitter } from '../src/lib/core/decorators/emitter';
-import { Emittable, OfEmittableActionContext } from '../src/lib/core/internal/internals';
-import { NgxsEmitPluginModule } from '../src/lib/emit.module';
+import { Receiver } from '../lib/core/decorators/receiver';
+import { Emitter } from '../lib/core/decorators/emitter';
+import { Emittable, OfEmittableActionContext } from '../lib/core/internal/internals';
+import { NgxsEmitPluginModule } from '../lib/emit.module';
 import {
     ofEmittableDispatched,
     ofEmittableErrored,
     ofEmittableSuccessful,
     ofEmittableCanceled
-} from '../src/lib/core/operators/of-emittable';
+} from '../lib/core/operators/of-emittable';
 
 describe('Actions', () => {
     @State<number>({
