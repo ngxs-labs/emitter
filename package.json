@@ -34,7 +34,7 @@
         "emitter:sonar": "ts-node ./tools/sonar.ts",
         "emitter:lint": "ng lint emitter",
         "emitter:test": "ng test --watch=false --code-coverage=true --progress=false emitter",
-        "emitter:build": "ng build emitter --prod=true && ts-node ./tools/copy-readme.md",
+        "emitter:build": "ng build emitter --prod=true && ts-node ./tools/copy-readme.ts",
         "emitter:rollup": "rollup -c rollup.config.js",
         "// - CI": "CI pipelines",
         "ci:pipelines": "npm-run-all emitter:*"
