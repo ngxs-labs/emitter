@@ -14,7 +14,7 @@ function getPackage(path: string) {
 }
 
 function writePackage(path: string, json: any) {
-    return writeFile(path, JSON.stringify(json, null, 4));
+    return writeFile(path, `${JSON.stringify(json, null, 4)}\n`);
 }
 
 async function bump(): Promise<void> {
