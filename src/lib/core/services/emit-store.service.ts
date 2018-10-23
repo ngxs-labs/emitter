@@ -16,7 +16,7 @@ export class EmitStore extends Store {
         const receiverEvent: ReceiverMetaData = receiver[RECEIVER_META_KEY];
 
         if (!receiverEvent) {
-            throw new Error(`I can't seem to find static metadata. Have you decorated ${receiver.name} with @Emitter()?`);
+            throw new Error(`I can't seem to find static metadata. Have you decorated ${receiver.name} with @Receiver()?`);
         }
 
         return {
