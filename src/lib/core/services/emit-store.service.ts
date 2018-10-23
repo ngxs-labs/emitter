@@ -23,7 +23,7 @@ export class EmitStore extends Store {
             emit: (payload?: T): Observable<U> => {
                 EmitterAction.type = metadata.type;
 
-                if (typeof payload === 'undefined' && metadata.payload) {
+                if (typeof payload === 'undefined' && metadata.payload !== undefined) {
                     payload = metadata.payload;
                 }
 
