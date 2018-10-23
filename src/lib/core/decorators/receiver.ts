@@ -8,7 +8,7 @@ import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../int
  */
 export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
     return <T>(target: any, key: string | symbol, descriptor: TypedPropertyDescriptor<T>) => {
-        const isNotFunctionOrNotStatic = !descriptor || typeof descriptor.value !== 'function' || typeof target[key] !== 'function';
+        const isNotFunctionOrNotStatic = typeof target.prototype === 'undefined' || !descriptor || typeof target[key] !== 'function';
 
         if (isNotFunctionOrNotStatic) {
             throw new TypeError(`Only static functions can be decorated with @Receiver() decorator`);
