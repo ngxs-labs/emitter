@@ -7,6 +7,7 @@
 > ER is a new pattern that provides the opportunity to feel free from actions
 
 [![Build Status](https://travis-ci.org/ngxs-labs/emitter.svg?branch=master)](https://travis-ci.org/ngxs-labs/emitter)
+[![Build status](https://ci.appveyor.com/api/projects/status/o6g3tjxmprr2qef9/branch/master?svg=true)](https://ci.appveyor.com/project/arturovt/emitter/branch/master)
 [![NPM](https://badge.fury.io/js/%40ngxs-labs%2Femitter.svg)](https://www.npmjs.com/package/@ngxs-labs/emitter)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/ngxs-labs/tools/blob/master/license)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/079272acc4104332b904dc6818929d06)](https://www.codacy.com/app/arturovt/emitter?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ngxs-contrib/emitter&amp;utm_campaign=Badge_Grade)
