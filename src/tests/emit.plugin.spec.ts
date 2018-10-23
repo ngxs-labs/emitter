@@ -363,6 +363,40 @@ describe('NgxsEmitPluginModule', () => {
         });
     });
 
+    it('should throw an error if the function passed to @Emitter() is not decorated with @Receiver()', () => {
+        @State({
+            name: 'todos',
+            defaults: []
+        })
+        class TodosState {
+            public static addTodo() {}
+        }
+
+        @Component({ template: '' })
+        class MockComponent {
+            @Emitter(TodosState.addTodo)
+            public addTodo!: Emittable<void>;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([TodosState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const fixture = TestBed.createComponent(MockComponent);
+
+        try {
+            fixture.componentInstance.addTodo.emit();
+        } catch ({ message }) {
+            expect(message.indexOf(`I can't seem to find static metadata`) > -1).toBeTruthy();
+        }
+    });
+
     it('should be possible to pass an action into @Receiver() decorator', () => {
         class AddTodo {
             public static type = '@@[Todos] Add todo';
