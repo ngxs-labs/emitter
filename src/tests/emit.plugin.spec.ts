@@ -18,15 +18,14 @@ describe('NgxsEmitPluginModule', () => {
         completed: boolean;
     }
 
-    it('should throw an error if decorated property is not a function', () => {
+    it('should throw an error if a decorated method is not static', () => {
         try {
             @State({
                 name: 'bar'
             })
             class BarState {
-                // @ts-ignore
                 @Receiver()
-                public a = null;
+                public foo() {}
             }
         } catch ({ message }) {
             expect(message).toBe('Only static functions can be decorated with @Receiver() decorator');
