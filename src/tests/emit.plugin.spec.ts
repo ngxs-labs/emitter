@@ -20,9 +20,7 @@ describe('NgxsEmitPluginModule', () => {
 
     it('should throw an error if a decorated method is not static', () => {
         try {
-            @State({
-                name: 'bar'
-            })
+            @State({ name: 'bar' })
             class BarState {
                 @Receiver()
                 public foo() {}
@@ -33,13 +31,9 @@ describe('NgxsEmitPluginModule', () => {
     });
 
     it('static metadata should have `type` property same as in @Receiver() decorator', () => {
-        @State({
-            name: 'bar'
-        })
+        @State({ name: 'bar' })
         class BarState {
-            @Receiver({
-                type: '@@[bar]'
-            })
+            @Receiver({ type: '@@[bar]' })
             public static foo() {}
         }
 
@@ -48,9 +42,7 @@ describe('NgxsEmitPluginModule', () => {
     });
 
     it('static metadata should have default `type` property', () => {
-        @State({
-            name: 'bar'
-        })
+        @State({ name: 'bar' })
         class BarState {
             @Receiver()
             public static foo() {}
@@ -70,9 +62,7 @@ describe('NgxsEmitPluginModule', () => {
             public static addTodo() {}
         }
 
-        @Component({
-            template: ''
-        })
+        @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
@@ -105,9 +95,7 @@ describe('NgxsEmitPluginModule', () => {
             }
         }
 
-        @Component({
-            template: ''
-        })
+        @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
@@ -147,9 +135,7 @@ describe('NgxsEmitPluginModule', () => {
             }
         }
 
-        @Component({
-            template: ''
-        })
+        @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
             public addTodo: Emittable<Todo> | undefined;
@@ -196,9 +182,7 @@ describe('NgxsEmitPluginModule', () => {
         })
         class BarState {}
 
-        @Component({
-            template: ''
-        })
+        @Component({ template: '' })
         class MockComponent {
             @Emitter(Bar2State.foo2)
             public foo2: Emittable<void> | undefined;
@@ -230,14 +214,10 @@ describe('NgxsEmitPluginModule', () => {
                 defaults: 10
             })
             class BarState {
-                @Receiver({
-                    type: 'foo'
-                })
+                @Receiver({ type: 'foo' })
                 public static foo1() {}
 
-                @Receiver({
-                    type: 'foo'
-                })
+                @Receiver({ type: 'foo' })
                 public static foo2() {}
             }
 
@@ -256,13 +236,9 @@ describe('NgxsEmitPluginModule', () => {
         class FooAction {}
 
         try {
-            @State({
-                name: 'bar'
-            })
+            @State({ name: 'bar' })
             class BarState {
-                @Receiver({
-                    action: FooAction
-                })
+                @Receiver({ action: FooAction })
                 public static foo() {}
             }
         } catch ({ message }) {
@@ -273,9 +249,7 @@ describe('NgxsEmitPluginModule', () => {
     it('should be able to use @Receiver() with symbol-key methods', () => {
         const symbol = Symbol.for('foo');
 
-        @State({
-            name: 'bar'
-        })
+        @State({ name: 'bar' })
         class BarState {
             @Receiver()
             public static [symbol]() {}
@@ -285,9 +259,7 @@ describe('NgxsEmitPluginModule', () => {
     });
 
     it('EmitStore.prototype.emitter should return an emittable object', () => {
-        @State({
-            name: 'bar'
-        })
+        @State({ name: 'bar' })
         class BarState {
             @Receiver()
             public static foo() {}
@@ -335,9 +307,7 @@ describe('NgxsEmitPluginModule', () => {
                 TodosState.api = injector.get<ApiService>(ApiService);
             }
 
-            @Receiver({
-                type: '@@[Todos] Set todos sync'
-            })
+            @Receiver({ type: '@@[Todos] Set todos sync' })
             public static async setTodosSync({ setState }: StateContext<Todo[]>) {
                 setState(
                     await TodosState.api
@@ -346,9 +316,7 @@ describe('NgxsEmitPluginModule', () => {
                 );
             }
 
-            @Receiver({
-                type: '@@[Todos] Set todos'
-            })
+            @Receiver({ type: '@@[Todos] Set todos' })
             public static setTodos({ setState }: StateContext<Todo[]>) {
                 return TodosState.api
                     .getTodosFromServer(5)
@@ -359,9 +327,7 @@ describe('NgxsEmitPluginModule', () => {
             }
         }
 
-        @Component({
-            template: ''
-        })
+        @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.setTodosSync)
             public setTodosSync: Emittable<Todo[]> | undefined;
@@ -408,17 +374,13 @@ describe('NgxsEmitPluginModule', () => {
             defaults: []
         })
         class TodosState {
-            @Receiver({
-                action: AddTodo
-            })
+            @Receiver({ action: AddTodo })
             public static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
                 setState([...getState(), payload]);
             }
         }
 
-        @Component({
-            template: ''
-        })
+        @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
             public addTodoAction: Emittable<Todo> | undefined;
@@ -444,5 +406,44 @@ describe('NgxsEmitPluginModule', () => {
 
         const todos = store.selectSnapshot<Todo[]>(state => state.todos);
         expect(todos.length).toBe(1);
+    });
+
+    it('should emit with a default payload', () => {
+        type TodosStateModel = Todo[] | null;
+
+        @State<TodosStateModel>({
+            name: 'todos',
+            defaults: null
+        })
+        class TodosState {
+            @Receiver({ payload: [] })
+            public static setInitialTodos({ setState }: StateContext<Todo[]>, { payload }: EmitterAction<Todo[]>) {
+                setState(payload!);
+            }
+        }
+
+        @Component({ template: '' })
+        class MockComponent {
+            @Emitter(TodosState.setInitialTodos)
+            public addTodoAction!: Emittable<void>;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([TodosState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const fixture = TestBed.createComponent(MockComponent);
+        const store: Store = TestBed.get(Store);
+
+        fixture.componentInstance.addTodoAction.emit();
+
+        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        expect(Array.isArray(todos)).toBeTruthy();
     });
 });

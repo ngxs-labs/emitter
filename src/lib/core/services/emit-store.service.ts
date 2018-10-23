@@ -13,16 +13,21 @@ export class EmitStore extends Store {
      * @returns - A plain object with an `emit` function for calling emitter
      */
     public emitter<T = any, U = any>(receiver: Function): Emittable<T, U> {
-        const receiverEvent: ReceiverMetaData = receiver[RECEIVER_META_KEY];
+        const metadata: ReceiverMetaData = receiver[RECEIVER_META_KEY];
 
-        if (!receiverEvent) {
+        if (!metadata) {
             throw new Error('Emitter methods should be decorated using @Emitter() decorator');
         }
 
         return {
             emit: (payload?: T): Observable<U> => {
-                EmitterAction.type = receiverEvent.type;
-                const Action: any | typeof EmitterAction = receiverEvent.action ? receiverEvent.action : EmitterAction;
+                EmitterAction.type = metadata.type;
+
+                if (typeof payload === 'undefined' && metadata.payload) {
+                    payload = metadata.payload;
+                }
+
+                const Action: any = metadata.action ? metadata.action : EmitterAction;
                 return this.dispatch(new Action(payload));
             }
         };
