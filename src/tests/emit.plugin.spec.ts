@@ -65,7 +65,7 @@ describe('NgxsEmitPluginModule', () => {
         @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
-            public addTodoAction: Emittable<Todo> | undefined;
+            public addTodoAction!: Emittable<Todo>;
         }
 
         TestBed.configureTestingModule({
@@ -80,7 +80,7 @@ describe('NgxsEmitPluginModule', () => {
 
         const fixture = TestBed.createComponent(MockComponent);
         expect(typeof fixture.componentInstance.addTodoAction).toBe('object');
-        expect(typeof fixture.componentInstance.addTodoAction!.emit).toBe('function');
+        expect(typeof fixture.componentInstance.addTodoAction.emit).toBe('function');
     });
 
     it('should dispatch an action using property decorated with @Emitter()', () => {
@@ -98,7 +98,7 @@ describe('NgxsEmitPluginModule', () => {
         @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
-            public addTodoAction: Emittable<Todo> | undefined;
+            public addTodoAction!: Emittable<Todo>;
         }
 
         TestBed.configureTestingModule({
@@ -114,7 +114,7 @@ describe('NgxsEmitPluginModule', () => {
         const store: Store = TestBed.get(Store);
         const fixture = TestBed.createComponent(MockComponent);
 
-        fixture.componentInstance.addTodoAction!.emit({
+        fixture.componentInstance.addTodoAction.emit({
             text: 'buy some coffee',
             completed: false
         });
@@ -138,7 +138,7 @@ describe('NgxsEmitPluginModule', () => {
         @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
-            public addTodo: Emittable<Todo> | undefined;
+            public addTodo!: Emittable<Todo>;
         }
 
         TestBed.configureTestingModule({
@@ -154,7 +154,7 @@ describe('NgxsEmitPluginModule', () => {
         const store: Store = TestBed.get(Store);
         const fixture = TestBed.createComponent(MockComponent);
 
-        fixture.componentInstance.addTodo!.emit({
+        fixture.componentInstance.addTodo.emit({
             text: 'buy coffee',
             completed: false
         });
@@ -185,7 +185,7 @@ describe('NgxsEmitPluginModule', () => {
         @Component({ template: '' })
         class MockComponent {
             @Emitter(Bar2State.foo2)
-            public foo2: Emittable<void> | undefined;
+            public foo2!: Emittable<void>;
         }
 
         TestBed.configureTestingModule({
@@ -201,7 +201,7 @@ describe('NgxsEmitPluginModule', () => {
         const store: Store = TestBed.get(Store);
         const fixture = TestBed.createComponent(MockComponent);
 
-        fixture.componentInstance.foo2!.emit();
+        fixture.componentInstance.foo2.emit();
 
         const bar2Value = store.selectSnapshot(state => state.bar).bar2;
         expect(bar2Value).toBe(20);
@@ -330,10 +330,10 @@ describe('NgxsEmitPluginModule', () => {
         @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.setTodosSync)
-            public setTodosSync: Emittable<Todo[]> | undefined;
+            public setTodosSync!: Emittable<Todo[]>;
 
             @Emitter(TodosState.setTodos)
-            public setTodos: Emittable<Todo[]> | undefined;
+            public setTodos!: Emittable<Todo[]>;
         }
 
         TestBed.configureTestingModule({
@@ -352,12 +352,12 @@ describe('NgxsEmitPluginModule', () => {
         const store: Store = TestBed.get(Store);
         const fixture = TestBed.createComponent(MockComponent);
 
-        fixture.componentInstance.setTodosSync!.emit().subscribe(() => {
+        fixture.componentInstance.setTodosSync.emit().subscribe(() => {
             const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
             expect(todoLength).toBe(10);
         });
 
-        fixture.componentInstance.setTodos!.emit().subscribe(() => {
+        fixture.componentInstance.setTodos.emit().subscribe(() => {
             const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
             expect(todoLength).toBe(5);
         });
@@ -383,7 +383,7 @@ describe('NgxsEmitPluginModule', () => {
         @Component({ template: '' })
         class MockComponent {
             @Emitter(TodosState.addTodo)
-            public addTodoAction: Emittable<Todo> | undefined;
+            public addTodoAction!: Emittable<Todo>;
         }
 
         TestBed.configureTestingModule({
@@ -399,7 +399,7 @@ describe('NgxsEmitPluginModule', () => {
         const store: Store = TestBed.get(Store);
         const fixture = TestBed.createComponent(MockComponent);
 
-        fixture.componentInstance.addTodoAction!.emit({
+        fixture.componentInstance.addTodoAction.emit({
             text: 'buy coffee',
             completed: false
         });
