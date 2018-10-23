@@ -1,7 +1,7 @@
 {
     "$schema": "../node_modules/ng-packagr/package.schema.json",
     "name": "@ngxs-labs/emitter",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ngxs-labs/emitter.git"
