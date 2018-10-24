@@ -20,8 +20,8 @@ export class EmitStore extends Store {
         }
 
         return {
-            emit: (payload?: T) => this.constructEmit<T, U>(metadata, payload),
-            emitMany: (payloads?: T[]) => this.constructEmitMany<T, U>(metadata, payloads)
+            emit: (payload?: T) => this.dispatchSingle<T, U>(metadata, payload),
+            emitMany: (payloads?: T[]) => this.dispatchMany<T, U>(metadata, payloads)
         };
     }
 
@@ -30,7 +30,7 @@ export class EmitStore extends Store {
      * @param payload - Data to dispatch
      * @returns - An observable that emits events after dispatch
      */
-    private constructEmit<T, U>(metadata: ReceiverMetaData, payload?: T): Observable<U> {
+    private dispatchSingle<T, U>(metadata: ReceiverMetaData, payload?: T): Observable<U> {
         EmitterAction.type = metadata.type;
 
         const shouldApplyDefaultPayload = typeof payload === 'undefined' && metadata.payload !== undefined;
@@ -47,7 +47,7 @@ export class EmitStore extends Store {
      * @param payloads - Array with data to dispatch
      * @returns - An observable that emits events after dispatch
      */
-    private constructEmitMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
+    private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
         EmitterAction.type = metadata.type;
 
         const actions: Type<any>[] = [];
