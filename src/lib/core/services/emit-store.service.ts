@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
@@ -23,11 +23,12 @@ export class EmitStore extends Store {
             emit: (payload?: T): Observable<U> => {
                 EmitterAction.type = metadata.type;
 
-                if (typeof payload === 'undefined' && metadata.payload !== undefined) {
+                const shouldApplyDefaultPayload = typeof payload === 'undefined' && metadata.payload !== undefined;
+                if (shouldApplyDefaultPayload) {
                     payload = metadata.payload;
                 }
 
-                const Action: any = metadata.action ? metadata.action : EmitterAction;
+                const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
                 return this.dispatch(new Action(payload));
             }
         };
