@@ -27,6 +27,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const type: string = action ? action.type! : ((options && options.type) || `${target.name}.${key}`);
+        const payload = options && options.payload;
 
         if (meta.actions[type]) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
@@ -40,7 +41,8 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
 
         descriptor.value![RECEIVER_META_KEY] = {
             type,
-            action
+            action,
+            payload
         };
 
         target.prototype[key] = function() {
