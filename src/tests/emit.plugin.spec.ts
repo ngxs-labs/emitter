@@ -480,4 +480,47 @@ describe('NgxsEmitPluginModule', () => {
         const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
         expect(Array.isArray(todos)).toBeTruthy();
     });
+
+    it('should add multiple animals using `emitMany`', () => {
+        @State<string[]>({
+            name: 'animals',
+            defaults: []
+        })
+        class AnimalsState {
+            @Receiver()
+            public static addAnimal({ getState, setState }: StateContext<string[]>, { payload }: EmitterAction<string>) {
+                setState([
+                    ...getState(),
+                    payload!
+                ]);
+            }
+        }
+
+        @Component({ template: '' })
+        class MockComponent {
+            @Emitter(AnimalsState.addAnimal)
+            public addAnimal!: Emittable<string>;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([AnimalsState]),
+                NgxsEmitPluginModule
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const fixture = TestBed.createComponent(MockComponent);
+        const store: Store = TestBed.get(Store);
+
+        fixture.componentInstance.addAnimal.emitMany(['Zebra', 'Panda']);
+
+        const animals = store.selectSnapshot<string[]>((state) => state.animals);
+
+        expect(animals.length).toBe(2);
+        expect(animals).toContain('Zebra');
+        expect(animals).toContain('Panda');
+    });
 });

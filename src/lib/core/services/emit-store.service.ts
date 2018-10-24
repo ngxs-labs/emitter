@@ -20,17 +20,45 @@ export class EmitStore extends Store {
         }
 
         return {
-            emit: (payload?: T): Observable<U> => {
-                EmitterAction.type = metadata.type;
-
-                const shouldApplyDefaultPayload = typeof payload === 'undefined' && metadata.payload !== undefined;
-                if (shouldApplyDefaultPayload) {
-                    payload = metadata.payload;
-                }
-
-                const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
-                return this.dispatch(new Action(payload));
-            }
+            emit: (payload?: T) => this.constructEmit<T, U>(metadata, payload),
+            emitMany: (payloads?: T[]) => this.constructEmitMany<T, U>(metadata, payloads)
         };
+    }
+
+    /**
+     * @param metadata - Receiver function metadata
+     * @param payload - Data to dispatch
+     * @returns - An observable that emits events after dispatch
+     */
+    private constructEmit<T, U>(metadata: ReceiverMetaData, payload?: T): Observable<U> {
+        EmitterAction.type = metadata.type;
+
+        const shouldApplyDefaultPayload = typeof payload === 'undefined' && metadata.payload !== undefined;
+        if (shouldApplyDefaultPayload) {
+            payload = metadata.payload;
+        }
+
+        const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
+        return this.dispatch(new Action(payload));
+    }
+
+    /**
+     * @param metadata - Receiver function metadata
+     * @param payloads - Array with data to dispatch
+     * @returns - An observable that emits events after dispatch
+     */
+    private constructEmitMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
+        EmitterAction.type = metadata.type;
+
+        const actions: Type<any>[] = [];
+
+        if (Array.isArray(payloads)) {
+            const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
+            payloads.forEach((payload: T) => {
+                actions.push(new Action(payload));
+            });
+        }
+
+        return this.dispatch(actions);
     }
 }
