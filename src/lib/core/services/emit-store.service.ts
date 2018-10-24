@@ -50,7 +50,7 @@ export class EmitStore extends Store {
     private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
         EmitterAction.type = metadata.type;
 
-        const actions: Type<any>[] = [];
+        const actions: object[] = [];
 
         if (Array.isArray(payloads)) {
             const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;

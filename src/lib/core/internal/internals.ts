@@ -34,7 +34,7 @@ export interface ReceiverMetaData<T extends Function = any> {
  */
 export interface Emittable<T = any, U = any> {
     emit(payload?: T): Observable<U>;
-    emitMany(payloads: T[]): Observable<U>;
+    emitMany(payloads?: T[]): Observable<U>;
 }
 
 /**
