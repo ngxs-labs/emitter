@@ -27,12 +27,14 @@ export interface ReceiverMetaData<T extends Function = any> {
 }
 
 /**
- * Plain object that contains `emit` function that dispatches payload
+ * Plain object that contains helpers that dispatch payload
  *
  * @property emit - Function that dispatches payload under the hood
+ * @property emitMany - Function that makes multiple dispatching under the hood
  */
 export interface Emittable<T = any, U = any> {
     emit(payload?: T): Observable<U>;
+    emitMany(payloads?: T[]): Observable<U>;
 }
 
 /**
