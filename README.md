@@ -98,3 +98,8 @@ Import operators in component and pipe `Actions` service:
 
 ![Lifecycle operators](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/lifecycle-operators.png)
 
+## Testing
+
+It's very easy to write unit tests using ER concept:
+
+![Testing](https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/testing.png)
