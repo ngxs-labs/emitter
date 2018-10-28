@@ -1,3 +1,5 @@
+const { join } = require('path');
+
 module.exports = (config) => {
     const configuration = {
         basePath: '',
@@ -17,7 +19,7 @@ module.exports = (config) => {
         },
 
         coverageIstanbulReporter: {
-            dir: require('path').join(__dirname, '../../coverage'),
+            dir: join(__dirname, '../coverage'),
             reports: ['html', 'lcovonly'],
             fixWebpackSourcePaths: true
         },

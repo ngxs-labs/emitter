@@ -90,8 +90,8 @@ describe('NgxsEmitPluginModule', () => {
         })
         class TodosState {
             @Receiver({ type: '@@[Todos] Add todo' })
-            public static addTodo(ctx: StateContext<Todo[]>, action: EmitterAction<Todo>) {
-                ctx.setState([...ctx.getState(), action.payload!]);
+            public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
+                setState([...getState(), action.payload!]);
             }
         }
 
@@ -119,8 +119,8 @@ describe('NgxsEmitPluginModule', () => {
             completed: false
         });
 
-        const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
-        expect(todoLength).toBe(1);
+        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        expect(todos.length).toBe(1);
     });
 
     it('should add todo using @Receiver() decorator', () => {
@@ -130,8 +130,8 @@ describe('NgxsEmitPluginModule', () => {
         })
         class TodosState {
             @Receiver()
-            public static addTodo(ctx: StateContext<Todo[]>, action: EmitterAction<Todo>) {
-                ctx.setState([...ctx.getState(), action.payload!]);
+            public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
+                setState([...getState(), action.payload!]);
             }
         }
 
@@ -159,8 +159,8 @@ describe('NgxsEmitPluginModule', () => {
             completed: false
         });
 
-        const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
-        expect(todoLength).toBe(1);
+        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        expect(todos.length).toBe(1);
     });
 
     it('should dispatch an action from the sub state', () => {
@@ -203,7 +203,7 @@ describe('NgxsEmitPluginModule', () => {
 
         fixture.componentInstance.foo2.emit();
 
-        const bar2Value = store.selectSnapshot(state => state.bar).bar2;
+        const bar2Value = store.selectSnapshot((state) => state.bar).bar2;
         expect(bar2Value).toBe(20);
     });
 
@@ -322,7 +322,7 @@ describe('NgxsEmitPluginModule', () => {
                     .getTodosFromServer(5)
                     .pipe(
                         take(1),
-                        tap(todos => setState(todos))
+                        tap((todos) => setState(todos))
                     );
             }
         }
@@ -353,13 +353,13 @@ describe('NgxsEmitPluginModule', () => {
         const fixture = TestBed.createComponent(MockComponent);
 
         fixture.componentInstance.setTodosSync.emit().subscribe(() => {
-            const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
-            expect(todoLength).toBe(10);
+            const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+            expect(todos.length).toBe(10);
         });
 
         fixture.componentInstance.setTodos.emit().subscribe(() => {
-            const todoLength = store.selectSnapshot<Todo[]>(state => state.todos).length;
-            expect(todoLength).toBe(5);
+            const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+            expect(todos.length).toBe(5);
         });
     });
 
@@ -438,7 +438,7 @@ describe('NgxsEmitPluginModule', () => {
             completed: false
         });
 
-        const todos = store.selectSnapshot<Todo[]>(state => state.todos);
+        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
         expect(todos.length).toBe(1);
     });
 
@@ -505,7 +505,7 @@ describe('NgxsEmitPluginModule', () => {
         TestBed.configureTestingModule({
             imports: [
                 NgxsModule.forRoot([AnimalsState]),
-                NgxsEmitPluginModule
+                NgxsEmitPluginModule.forRoot()
             ],
             declarations: [
                 MockComponent

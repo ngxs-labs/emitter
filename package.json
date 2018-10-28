@@ -33,7 +33,7 @@
         "// - UTILS": "Utility scripts",
         "emitter:sonar": "ts-node ./tools/sonar",
         "emitter:lint": "ng lint emitter",
-        "emitter:test": "ng test --watch=false --progress=false --project=emitter",
+        "emitter:test": "ng test --watch=false --progress=false --sourceMap --code-coverage --project=emitter",
         "emitter:build": "ts-node ./tools/build && ts-node ./tools/copy-readme",
         "emitter:rollup": "rollup -c rollup.config.js",
         "// - CI": "CI pipelines",
