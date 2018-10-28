@@ -24,13 +24,10 @@ async function bump(): Promise<void> {
         return console.warn('Specify `--release` argument!');
     }
 
-    const paths = [join(__dirname, '../package.json'), join(__dirname, '../src/package.json')];
-    for (let i = 0; i < paths.length; i++) {
-        const path = paths[i];
-        const json = await getPackage(path);
-        json.version = inc(json.version, release);
-        await writePackage(path, json);
-    }
+    const path = join(__dirname, '../src/package.json');
+    const json = await getPackage(path);
+    json.version = inc(json.version, release);
+    await writePackage(path, json);
 }
 
 bump();
