@@ -49,7 +49,8 @@ describe('NgxsEmitPluginModule', () => {
         }
 
         const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
-        expect(BarFooMeta.type).toBe('BarState.foo');
+        const typeContainsClassName = BarFooMeta.type.indexOf('BarState.foo') > -1;
+        expect(typeContainsClassName).toBeTruthy();
     });
 
     it('should decorate property with @Emitter() decorator', () => {
@@ -255,7 +256,8 @@ describe('NgxsEmitPluginModule', () => {
             public static [symbol]() {}
         }
 
-        expect(BarState[symbol][RECEIVER_META_KEY].type).toBe('BarState.Symbol(foo)');
+        const typeContainsClassName = BarState[symbol][RECEIVER_META_KEY].type.indexOf('BarState.Symbol(foo)') > -1;
+        expect(typeContainsClassName).toBeTruthy();
     });
 
     it('EmitStore.prototype.emitter should return an emittable object', () => {

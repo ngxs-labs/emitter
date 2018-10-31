@@ -235,9 +235,10 @@ describe('Actions', () => {
             ofEmittableSuccessful(CounterState.increment, CounterState.decrement, CounterState.multiplyBy2),
             take(3),
             finalize(() => {
-                expect(types).toContain('CounterState.increment');
-                expect(types).toContain('CounterState.decrement');
-                expect(types).toContain('CounterState.multiplyBy2');
+                ['CounterState.increment', 'CounterState.decrement', 'CounterState.multiplyBy2'].forEach((type, index) => {
+                    const typeContainsClassName = types[index].indexOf(type) > -1;
+                    expect(typeContainsClassName).toBeTruthy();
+                });
             })
         ).subscribe(({ type }: OfEmittableActionContext<void>) => {
             types.push(type);
