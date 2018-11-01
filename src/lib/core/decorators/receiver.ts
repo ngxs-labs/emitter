@@ -1,3 +1,5 @@
+const generate = require('nanoid/generate');
+
 import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
 
 /**
@@ -26,7 +28,8 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
             throw new Error('Action type should be defined as a static property `type`');
         }
 
-        const type: string = action ? action.type! : ((options && options.type) || `${target.name}.${key}`);
+        const actionId: string = generate('1234567890abcdef', 10);
+        const type: string = action ? action.type! : ((options && options.type) || `[ID:${actionId}] ${target.name}.${key}`);
         const payload = options && options.payload;
 
         if (meta.actions[type]) {
