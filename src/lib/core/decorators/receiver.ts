@@ -28,9 +28,17 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
             throw new Error('Action type should be defined as a static property `type`');
         }
 
-        const actionId: string = generate('1234567890abcdef', 10);
-        const type: string = action ? action.type! : ((options && options.type) || `[ID:${actionId}] ${target.name}.${key}`);
         const payload = options && options.payload;
+        const actionId: string = generate('1234567890abcdef', 10);
+
+        let type: string = null!;
+        if (action) {
+            type = action.type!;
+        } else {
+            const defaultType = options && options.type;
+            const customType = `[ID:${actionId}] ${target.name}.${key}`;
+            type = defaultType || customType;
+        }
 
         if (meta.actions[type]) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
