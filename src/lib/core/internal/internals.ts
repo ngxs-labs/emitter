@@ -108,10 +108,10 @@ function getStoreMetadata(target: Function): any | undefined {
 }
 
 /**
- * Returns a random string consisting of digits
+ * Returns a random string
  *
  * @returns - random string
  */
 export function generateRandomString(): string {
-    return crypto.getRandomValues(new Uint8Array(5)).join('');
+    return (Math.random() * Date.now()).toString(36).slice(0,8);
 }
