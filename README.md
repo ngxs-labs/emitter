@@ -31,6 +31,13 @@ npm install @ngxs-labs/emitter
 yarn add @ngxs-labs/emitter
 ```
 
+To install `nanoid` dependency (required)
+```console
+npm install nanoid
+# or if you use yarn
+yarn add nanoid
+```
+
 ## 🔨 Usage
 
 Import the module into your root application module:
