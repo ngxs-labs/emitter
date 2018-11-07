@@ -1,5 +1,4 @@
 import { Type } from '@angular/core';
-
 import { Observable } from 'rxjs';
 
 /**
@@ -106,4 +105,13 @@ export function ensureStoreMetadata(target: Function): any {
  */
 function getStoreMetadata(target: Function): any | undefined {
     return target[META_KEY];
+}
+
+/**
+ * Returns a random string consisting of digits
+ *
+ * @returns - random string
+ */
+export function generateRandomString(): string {
+    return crypto.getRandomValues(new Uint8Array(5)).join('');
 }

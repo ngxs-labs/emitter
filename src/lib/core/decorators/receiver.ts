@@ -1,6 +1,4 @@
-const generate = require('nanoid/generate');
-
-import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
+import { ensureStoreMetadata, generateRandomString, RECEIVER_META_KEY, ReceiverMetaData } from '../internal/internals';
 
 /**
  * Decorates a method with a receiver information
@@ -29,7 +27,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const payload = options && options.payload;
-        const actionId: string = generate('1234567890abcdef', 10);
+        const actionId: string = generateRandomString();
 
         let type: string = null!;
         if (action) {

@@ -19,8 +19,7 @@
     "sideEffects": true,
     "peerDependencies": {
         "@angular/core": "^7.0.0",
-        "@ngxs/store": "^0.0.0",
-        "nanoid": "^0.0.0"
+        "@ngxs/store": "^0.0.0"
     },
     "ngPackage": {
         "lib": {
