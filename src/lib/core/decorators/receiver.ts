@@ -1,6 +1,12 @@
-const generate = require('nanoid/generate');
-
 import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
+
+/**
+ * @internal
+ * @returns - Generated hash w/o collisions because it's time-based
+ */
+function generate(): string {
+    return (Math.random() * Date.now()).toString(36).slice(0, 8);
+}
 
 /**
  * Decorates a method with a receiver information
@@ -29,7 +35,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const payload = options && options.payload;
-        const actionId: string = generate('1234567890abcdef', 10);
+        const actionId: string = generate();
 
         let type: string = null!;
         if (action) {
