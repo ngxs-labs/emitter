@@ -65,7 +65,6 @@
         "@angular/language-service": "7.0.0",
         "@types/jasmine": "2.8.6",
         "@types/jasminewd2": "2.0.3",
-        "@types/nanoid": "1.2.0",
         "@types/node": "8.9.4",
         "@types/semver": "5.5.0",
         "@types/yargs": "12.0.1",
