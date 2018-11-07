@@ -4,7 +4,7 @@ import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../int
  * @internal
  * @returns - Generated hash w/o collisions because it's time-based
  */
-function generate(): string {
+function generateHash(): string {
     return (Math.random() * Date.now()).toString(36).slice(0, 8);
 }
 
@@ -35,7 +35,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const payload = options && options.payload;
-        const actionId: string = generate();
+        const actionId: string = generateHash();
 
         let type: string = null!;
         if (action) {
