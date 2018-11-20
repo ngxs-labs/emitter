@@ -13,6 +13,13 @@ export const enum ActionStatus {
 }
 
 /**
+ * Action class contract
+ */
+export type Action<T> = Type<T> & {
+    type?: string;
+};
+
+/**
  * Static metadata for the receiver function
  *
  * @property type - Action type (optional)
@@ -21,9 +28,7 @@ export const enum ActionStatus {
 export interface ReceiverMetaData<T extends Function = any> {
     type: string;
     payload: any;
-    action: Type<T> & {
-        type?: string;
-    };
+    action: Action<T>;
     cancelUncompleted: boolean;
 }
 

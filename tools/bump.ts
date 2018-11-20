@@ -10,7 +10,7 @@ const writeFile = promisify(fs.writeFile);
 function getPackage(path: string) {
     return readFile(path, {
         encoding: 'utf-8'
-    }).then((data) => JSON.parse(data));
+    }).then(JSON.parse);
 }
 
 function writePackage(path: string, json: any) {

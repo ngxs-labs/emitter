@@ -1,4 +1,4 @@
-import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
+import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY, Action } from '../internal/internals';
 
 /**
  * @internal
@@ -6,6 +6,48 @@ import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../int
  */
 function generateHash(): string {
     return (Math.random() * Date.now()).toString(36).slice(0, 8);
+}
+
+/**
+ * @internal
+ * @param options - Options passed to the `@Receiver()` decorator
+ * @param target - Decorated class
+ * @param key - Decorated property name
+ * @returns - Action type
+ */
+function getType(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string): string {
+    const optionsNotDefinedOrTypeIsNotPassed = !options || typeof options.type !== 'string';
+    if (optionsNotDefinedOrTypeIsNotPassed) {
+        return `[ID:${generateHash()}] ${target.name}.${key}`;
+    }
+
+    const { action } = options!;
+    if (action) {
+        const typeIsNotString = typeof action.type !== 'string';
+        if (typeIsNotString) {
+            throw new Error('Action type should be defined as a static property `type`');
+        }
+
+        return action.type!;
+    }
+
+    return options!.type!;
+}
+
+/**
+ * @internal
+ * @param options - Options passed to the `@Receiver()` decorator
+ */
+function getParameters(options: Partial<ReceiverMetaData> | undefined): Partial<ReceiverMetaData> {
+    const action = options && options.action;
+    const payload = options && options.payload;
+    let cancelUncompleted = true;
+
+    if (options && typeof options.cancelUncompleted === 'boolean') {
+        cancelUncompleted = options.cancelUncompleted;
+    }
+
+    return { action, payload, cancelUncompleted };
 }
 
 /**
@@ -27,33 +69,18 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const meta = ensureStoreMetadata(target);
-        const action = options && options.action;
-        const typeIsNotString = action && typeof action.type !== 'string';
-
-        if (typeIsNotString) {
-            throw new Error('Action type should be defined as a static property `type`');
-        }
-
-        const payload = options && options.payload;
-        const actionId = generateHash();
-
-        let type: string = null!;
-        if (action) {
-            type = action.type!;
-        } else {
-            const defaultType = `[ID:${actionId}] ${target.name}.${key}`;
-            const customType = options && options.type;
-            type = customType || defaultType;
-        }
+        const type = getType(options, target, key);
 
         if (meta.actions[type]) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
+        const { action, payload, cancelUncompleted } = getParameters(options);
+
         meta.actions[type] = [{
             fn: `${key}`,
             options: {
-                cancelUncompleted: Boolean(options && options.cancelUncompleted)
+                cancelUncompleted
             },
             type
         }];
