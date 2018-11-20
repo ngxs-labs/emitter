@@ -35,15 +35,15 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const payload = options && options.payload;
-        const actionId: string = generateHash();
+        const actionId = generateHash();
 
         let type: string = null!;
         if (action) {
             type = action.type!;
         } else {
-            const defaultType = options && options.type;
-            const customType = `[ID:${actionId}] ${target.name}.${key}`;
-            type = defaultType || customType;
+            const defaultType = `[ID:${actionId}] ${target.name}.${key}`;
+            const customType = options && options.type;
+            type = customType || defaultType;
         }
 
         if (meta.actions[type]) {
@@ -52,7 +52,9 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
 
         meta.actions[type] = [{
             fn: `${key}`,
-            options: {},
+            options: {
+                cancelUncompleted: Boolean(options && options.cancelUncompleted)
+            },
             type
         }];
 

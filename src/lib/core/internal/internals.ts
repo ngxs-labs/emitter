@@ -24,6 +24,7 @@ export interface ReceiverMetaData<T extends Function = any> {
     action: Type<T> & {
         type?: string;
     };
+    cancelUncompleted: boolean;
 }
 
 /**

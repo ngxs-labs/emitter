@@ -120,7 +120,7 @@ describe('NgxsEmitPluginModule', () => {
             completed: false
         });
 
-        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
         expect(todos.length).toBe(1);
     });
 
@@ -160,8 +160,55 @@ describe('NgxsEmitPluginModule', () => {
             completed: false
         });
 
-        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
         expect(todos.length).toBe(1);
+    });
+
+    it('should cancel uncompleted action', (done: DoneFn) => {
+        @State<number>({
+            name: 'counter',
+            defaults: 0
+        })
+        class CounterState {
+            @Receiver({ cancelUncompleted: true })
+            public static increment({ setState, getState }: StateContext<number>): Observable<null> {
+                return of(null).pipe(
+                    delay(1000),
+                    tap(() => {
+                        setState(getState() + 1);
+                    })
+                );
+            }
+        }
+
+        @Component({ template: '' })
+        class MockComponent {
+            @Emitter(CounterState.increment)
+            public increment!: Emittable<void>;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([CounterState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const store: Store = TestBed.get(Store);
+        const fixture = TestBed.createComponent(MockComponent);
+
+        Promise.all([
+            fixture.componentInstance.increment.emit().toPromise(),
+            fixture.componentInstance.increment.emit().toPromise()
+        ]).then(() => {
+            const counter = store.selectSnapshot<number>(({ counter }) => counter);
+            expect(counter).toBe(1);
+
+            done();
+        });
     });
 
     it('should dispatch an action from the sub state', () => {
@@ -355,12 +402,12 @@ describe('NgxsEmitPluginModule', () => {
         const fixture = TestBed.createComponent(MockComponent);
 
         fixture.componentInstance.setTodosSync.emit().subscribe(() => {
-            const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+            const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
             expect(todos.length).toBe(10);
         });
 
         fixture.componentInstance.setTodos.emit().subscribe(() => {
-            const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+            const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
             expect(todos.length).toBe(5);
         });
     });
@@ -440,7 +487,7 @@ describe('NgxsEmitPluginModule', () => {
             completed: false
         });
 
-        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
         expect(todos.length).toBe(1);
     });
 
@@ -479,7 +526,7 @@ describe('NgxsEmitPluginModule', () => {
 
         fixture.componentInstance.addTodoAction.emit();
 
-        const todos = store.selectSnapshot<Todo[]>((state) => state.todos);
+        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
         expect(Array.isArray(todos)).toBeTruthy();
     });
 
@@ -519,7 +566,7 @@ describe('NgxsEmitPluginModule', () => {
 
         fixture.componentInstance.addAnimal.emitMany(['Zebra', 'Panda']);
 
-        const animals = store.selectSnapshot<string[]>((state) => state.animals);
+        const animals = store.selectSnapshot<string[]>(({ animals }) => animals);
 
         expect(animals.length).toBe(2);
         expect(animals).toContain('Zebra');
