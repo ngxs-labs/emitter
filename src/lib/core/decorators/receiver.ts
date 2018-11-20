@@ -21,14 +21,14 @@ function getType(options: Partial<ReceiverMetaData> | undefined, target: Functio
         return `[ID:${generateHash()}] ${target.name}.${key}`;
     }
 
-    const { action } = options!;
-    if (action) {
-        const typeIsNotString = typeof action.type !== 'string';
+    if (options!.action) {
+        const { action } = options!;
+        const typeIsNotString = typeof action!.type !== 'string';
         if (typeIsNotString) {
             throw new Error('Action type should be defined as a static property `type`');
         }
 
-        return action.type!;
+        return action!.type!;
     }
 
     return options!.type!;
