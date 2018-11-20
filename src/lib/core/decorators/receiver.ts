@@ -39,11 +39,18 @@ function getType(options: Partial<ReceiverMetaData> | undefined, target: Functio
  * @param options - Options passed to the `@Receiver()` decorator
  */
 function getParameters(options: Partial<ReceiverMetaData> | undefined): Partial<ReceiverMetaData> {
-    const action = options && options.action;
-    const payload = options && options.payload;
-    let cancelUncompleted = true;
+    if (!options) {
+        return {
+            action: undefined,
+            payload: undefined,
+            cancelUncompleted: true
+        };
+    }
 
-    if (options && typeof options.cancelUncompleted === 'boolean') {
+    const { action, payload } = options;
+
+    let cancelUncompleted = true;
+    if (typeof options.cancelUncompleted === 'boolean') {
         cancelUncompleted = options.cancelUncompleted;
     }
 
