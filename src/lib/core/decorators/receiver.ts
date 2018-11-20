@@ -16,7 +16,7 @@ function generateHash(): string {
  * @returns - Action type
  */
 function getType(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string): string {
-    const optionsNotDefinedOrTypeIsNotPassed = !options || typeof options.type !== 'string';
+    const optionsNotDefinedOrTypeIsNotPassed = !options || typeof options.type !== 'string' || !options.action;
     if (optionsNotDefinedOrTypeIsNotPassed) {
         return `[ID:${generateHash()}] ${target.name}.${key}`;
     }
