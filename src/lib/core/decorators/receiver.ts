@@ -16,8 +16,8 @@ function generateHash(): string {
  * @returns - Action type
  */
 function getType(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string): string {
-    const optionsNotDefinedOrTypeIsNotPassed = !options || typeof options.type !== 'string' || !options.action;
-    if (optionsNotDefinedOrTypeIsNotPassed) {
+    const optionsNotDefinedOrTypeAndActionAreNotPassed = !options || (typeof options.type !== 'string' && !options.action);
+    if (optionsNotDefinedOrTypeAndActionAreNotPassed) {
         return `[ID:${generateHash()}] ${target.name}.${key}`;
     }
 
@@ -47,14 +47,12 @@ function getParameters(options: Partial<ReceiverMetaData> | undefined): Partial<
         };
     }
 
-    const { action, payload } = options;
-
     let cancelUncompleted = true;
     if (typeof options.cancelUncompleted === 'boolean') {
         cancelUncompleted = options.cancelUncompleted;
     }
 
-    return { action, payload, cancelUncompleted };
+    return { action: options.action, payload: options.payload, cancelUncompleted };
 }
 
 /**
@@ -78,7 +76,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         const meta = ensureStoreMetadata(target);
         const type = getType(options, target, key);
 
-        if (meta.actions[type]) {
+        if (meta.actions.hasOwnProperty(type)) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
@@ -86,9 +84,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
 
         meta.actions[type] = [{
             fn: `${key}`,
-            options: {
-                cancelUncompleted
-            },
+            options: { cancelUncompleted },
             type
         }];
 
