@@ -15,23 +15,22 @@ function generateHash(): string {
  * @param key - Decorated property name
  * @returns - Action type
  */
-function getType(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string): string {
-    const optionsNotDefinedOrTypeAndActionAreNotPassed = !options || (typeof options.type !== 'string' && !options.action);
-    if (optionsNotDefinedOrTypeAndActionAreNotPassed) {
+function getType(options: Partial<ReceiverMetaData>, target: Function, key: string): string {
+    const optionsNotPassedOrTypeAndActionAreNotDefined = !options || (!options.type && !options.action);
+    if (optionsNotPassedOrTypeAndActionAreNotDefined) {
         return `[ID:${generateHash()}] ${target.name}.${key}`;
     }
 
-    if (options!.action) {
-        const { action } = options!;
-        const typeIsNotString = typeof action!.type !== 'string';
-        if (typeIsNotString) {
-            throw new Error('Action type should be defined as a static property `type`');
+    if (typeof options.action === 'function') {
+        const { action } = options;
+        if (typeof action.type !== 'string') {
+            throw new Error(`${action.name}'s type should be defined as a static property \`type\``);
         }
 
-        return action!.type!;
+        return action.type;
     }
 
-    return options!.type!;
+    return options.type!;
 }
 
 /**
@@ -74,7 +73,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const meta = ensureStoreMetadata(target);
-        const type = getType(options, target, key);
+        const type = getType(options as Partial<ReceiverMetaData>, target, key);
 
         if (meta.actions.hasOwnProperty(type)) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);

@@ -290,7 +290,7 @@ describe('NgxsEmitPluginModule', () => {
                 public static foo() {}
             }
         } catch ({ message }) {
-            expect(message).toBe('Action type should be defined as a static property `type`');
+            expect(message).toBe('FooAction\'s type should be defined as a static property `type`');
         }
     });
 
