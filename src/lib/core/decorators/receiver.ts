@@ -1,4 +1,4 @@
-import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY, Action } from '../internal/internals';
+import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
 
 /**
  * @internal
