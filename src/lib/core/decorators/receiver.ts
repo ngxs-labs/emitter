@@ -15,14 +15,10 @@ function generateHash(): string {
  * @param key - Decorated property name
  * @returns - Action type
  */
-function getType(options: Partial<ReceiverMetaData>, target: Function, key: string): string {
-    const optionsNotPassedOrTypeAndActionAreNotDefined = !options || (!options.type && !options.action);
-    if (optionsNotPassedOrTypeAndActionAreNotDefined) {
-        return `[ID:${generateHash()}] ${target.name}.${key}`;
-    }
+function getActionType(options: Partial<ReceiverMetaData>, target: Function, key: string): string {
+    const action = options && options.action;
 
-    if (typeof options.action === 'function') {
-        const { action } = options;
+    if (action) {
         if (typeof action.type !== 'string') {
             throw new Error(`${action.name}'s type should be defined as a static property \`type\``);
         }
@@ -30,14 +26,14 @@ function getType(options: Partial<ReceiverMetaData>, target: Function, key: stri
         return action.type;
     }
 
-    return options.type!;
+    return (options && options.type) || `[ID:${generateHash()}] ${target.name}.${key}`;
 }
 
 /**
  * @internal
  * @param options - Options passed to the `@Receiver()` decorator
  */
-function getParameters(options: Partial<ReceiverMetaData> | undefined): Partial<ReceiverMetaData> {
+function getActionProperties(options: Partial<ReceiverMetaData> | undefined): Partial<ReceiverMetaData> {
     if (!options) {
         return {
             action: undefined,
@@ -73,13 +69,13 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const meta = ensureStoreMetadata(target);
-        const type = getType(options as Partial<ReceiverMetaData>, target, key);
+        const type = getActionType(options as Partial<ReceiverMetaData>, target, key);
 
         if (meta.actions.hasOwnProperty(type)) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
-        const { action, payload, cancelUncompleted } = getParameters(options);
+        const { action, payload, cancelUncompleted } = getActionProperties(options);
 
         meta.actions[type] = [{
             fn: `${key}`,
