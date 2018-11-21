@@ -16,10 +16,10 @@ function generateHash(): string {
  * @param key - Decorated key
  */
 export function getActionProperties(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string) {
-    const defaultProperties = {
+    const defaultProperties: ReceiverMetaData = {
         type: `[ID:${generateHash()}] ${target.name}.${key}`,
         payload: undefined,
-        action: undefined,
+        action: undefined!,
         cancelUncompleted: true,
     };
 
@@ -38,7 +38,11 @@ export function getActionProperties(options: Partial<ReceiverMetaData> | undefin
     }
 
     if (action) {
-        defaultProperties.type = action.type!;
+        defaultProperties.action = action;
+
+        if (!Array.isArray(action)) {
+            defaultProperties.type = action.type;
+        }
     }
 
     if (typeof cancelUncompleted === 'boolean') {
@@ -73,11 +77,13 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
-        meta.actions[type!] = [{
-            fn: `${key}`,
-            options: { cancelUncompleted },
-            type
-        }];
+        if (!Array.isArray(action)) {
+            meta.actions[type!] = [{
+                fn: `${key}`,
+                options: { cancelUncompleted },
+                type
+            }];
+        } else {}
 
         descriptor.value![RECEIVER_META_KEY] = {
             type,

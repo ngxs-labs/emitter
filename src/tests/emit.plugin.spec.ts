@@ -281,7 +281,9 @@ describe('NgxsEmitPluginModule', () => {
     });
 
     it('should throw an error if an action passed to the @Receiver() does not have static `type` property', () => {
-        class FooAction {}
+        class FooAction {
+            public static readonly type = 'FooAction';
+        }
 
         try {
             @State({ name: 'bar' })

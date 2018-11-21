@@ -38,8 +38,17 @@ export class EmitStore extends Store {
             payload = metadata.payload;
         }
 
-        const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
-        return this.dispatch(new Action(payload));
+        let { action } = metadata;
+
+        if (!action) {
+            return this.dispatch(new EmitterAction(payload));
+        }
+
+        if (!Array.isArray(action)) {
+            action = [action];
+        }
+
+        return this.dispatch(this.constructEventsForSingleDispatching<T>(action, payload));
     }
 
     /**
@@ -48,17 +57,50 @@ export class EmitStore extends Store {
      * @returns - An observable that emits events after dispatch
      */
     private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
-        EmitterAction.type = metadata.type;
-
-        const actions: object[] = [];
-
-        if (Array.isArray(payloads)) {
-            const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
-            payloads.forEach((payload: T) => {
-                actions.push(new Action(payload));
-            });
+        if (!Array.isArray(payloads)) {
+            return this.dispatch([]);
         }
 
-        return this.dispatch(actions);
+        EmitterAction.type = metadata.type;
+
+        let { action } = metadata;
+
+        if (!action) {
+            return this.dispatch(
+                payloads.map((payload) => new EmitterAction(payload))
+            );
+        }
+
+        if (!Array.isArray(action)) {
+            action = [action];
+        }
+
+        return this.dispatch(this.constructEventsForManyDispatching(action, payloads));
+    }
+
+    /**
+     * @param constructors - Array of classes (actions)
+     * @param payload - Payload to dispatch
+     * @returns - Actions instances
+     */
+    private constructEventsForSingleDispatching<T>(constructors: Type<any>[], payload: T | undefined): any {
+        return constructors.map((Cls) => new Cls(payload));
+    }
+
+    /**
+     * @param constructors - Array of classes (actions)
+     * @param payloads - Payloads to dispatch
+     * @returns - Actions instances
+     */
+    private constructEventsForManyDispatching<T>(constructors: Type<any>[], payloads: T[]): any {
+        const events = [];
+
+        for (const Cls of constructors) {
+            for (const payload of payloads) {
+                events.push(new Cls(payload));
+            }
+        }
+
+        return events;
     }
 }

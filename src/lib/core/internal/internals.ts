@@ -16,7 +16,7 @@ export const enum ActionStatus {
  * Action class contract
  */
 export type Action<T> = Type<T> & {
-    type?: string;
+    type: string;
 };
 
 /**
@@ -28,7 +28,7 @@ export type Action<T> = Type<T> & {
 export interface ReceiverMetaData<T extends Function = any> {
     type: string;
     payload: any;
-    action: Action<T>;
+    action: Action<T> | Action<T>[];
     cancelUncompleted: boolean;
 }
 
