@@ -1,4 +1,6 @@
-import { ensureStoreMetadata, ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
+import { ensureStoreMetadata } from '@ngxs/store';
+
+import { ReceiverMetaData, RECEIVER_META_KEY } from '../internal/internals';
 
 /**
  * @internal

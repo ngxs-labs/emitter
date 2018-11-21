@@ -78,38 +78,7 @@ export interface Types {
     [key: string]: boolean;
 }
 
-export const META_KEY = 'NGXS_META';
-
 /**
  * @const - This constant is a key for defining static metadata using `@Receiver`
  */
 export const RECEIVER_META_KEY = 'NGXS_RECEIVER_META';
-
-/**
- * This is an internal `@ngxs/store` function and not accessable from outside, even using theta symbol
- *
- * @param target - Target to apply static metadata to
- * @returns - Static metadata
- */
-export function ensureStoreMetadata(target: Function): any {
-    if (!target.hasOwnProperty(META_KEY)) {
-        const defaultMetadata = {
-            name: null,
-            actions: {},
-            defaults: {},
-            path: null,
-            children: [],
-            instance: null
-        };
-        Object.defineProperty(target, META_KEY, { value: defaultMetadata });
-    }
-    return getStoreMetadata(target);
-}
-
-/**
- * @param target - Target to get static metadata from
- * @returns - Static metadata
- */
-function getStoreMetadata(target: Function): any | undefined {
-    return target[META_KEY];
-}
