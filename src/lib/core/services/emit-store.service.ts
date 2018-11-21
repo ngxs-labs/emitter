@@ -3,8 +3,50 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { RECEIVER_META_KEY, Emittable, ReceiverMetaData } from '../internal/internals';
+import { RECEIVER_META_KEY, Emittable, ReceiverMetaData, Action } from '../internal/internals';
 import { EmitterAction } from '../actions/actions';
+
+/**
+ * @internal
+ * @param constructorOrConstructors - Single class or array of classes
+ * @returns - Array of classes (actions)
+ */
+function flattenConstructors(constructorOrConstructors: Action<any> | Action<any>[]): Action<any>[] {
+    if (Array.isArray(constructorOrConstructors)) {
+        return constructorOrConstructors;
+    }
+
+    return [constructorOrConstructors];
+}
+
+/**
+ * @internal
+ * @param constructors - Array of classes (actions)
+ * @param payload - Payload to dispatch
+ * @returns - Array of instances
+ */
+function constructEventsForSingleDispatching<T>(constructors: Type<any>[], payload: T | undefined): any {
+    return constructors.map((Cls) => new Cls(payload));
+}
+
+/**
+ * @internal
+ * @param constructors - Array of classes (actions)
+ * @param payloads - Payloads to dispatch
+ * @returns - Array of instances
+ */
+function constructEventsForManyDispatching<T>(constructors: Type<any>[], payloads: T[]): any {
+    const events = [];
+
+    for (let i = 0; i < constructors.length; i++) {
+        const Cls = constructors[i];
+        for (let j = 0; j < payloads.length; j++) {
+            events.push(new Cls(payloads[j]));
+        }
+    }
+
+    return events;
+}
 
 @Injectable()
 export class EmitStore extends Store {
@@ -38,17 +80,13 @@ export class EmitStore extends Store {
             payload = metadata.payload;
         }
 
-        let { action } = metadata;
+        const { action: constructors } = metadata;
 
-        if (!action) {
-            return this.dispatch(new EmitterAction(payload));
+        if (constructors) {
+            return this.dispatch(constructEventsForSingleDispatching<T>(flattenConstructors(constructors), payload));
         }
 
-        if (!Array.isArray(action)) {
-            action = [action];
-        }
-
-        return this.dispatch(this.constructEventsForSingleDispatching<T>(action, payload));
+        return this.dispatch(new EmitterAction(payload));
     }
 
     /**
@@ -63,44 +101,14 @@ export class EmitStore extends Store {
 
         EmitterAction.type = metadata.type;
 
-        let { action } = metadata;
+        const { action: constructors } = metadata;
 
-        if (!action) {
-            return this.dispatch(
-                payloads.map((payload) => new EmitterAction(payload))
-            );
+        if (constructors) {
+            return this.dispatch(constructEventsForManyDispatching(flattenConstructors(constructors), payloads));
         }
 
-        if (!Array.isArray(action)) {
-            action = [action];
-        }
-
-        return this.dispatch(this.constructEventsForManyDispatching(action, payloads));
-    }
-
-    /**
-     * @param constructors - Array of classes (actions)
-     * @param payload - Payload to dispatch
-     * @returns - Actions instances
-     */
-    private constructEventsForSingleDispatching<T>(constructors: Type<any>[], payload: T | undefined): any {
-        return constructors.map((Cls) => new Cls(payload));
-    }
-
-    /**
-     * @param constructors - Array of classes (actions)
-     * @param payloads - Payloads to dispatch
-     * @returns - Actions instances
-     */
-    private constructEventsForManyDispatching<T>(constructors: Type<any>[], payloads: T[]): any {
-        const events = [];
-
-        for (const Cls of constructors) {
-            for (const payload of payloads) {
-                events.push(new Cls(payload));
-            }
-        }
-
-        return events;
+        return this.dispatch(
+            payloads.map((payload) => new EmitterAction(payload))
+        );
     }
 }
