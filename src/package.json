@@ -1,7 +1,7 @@
 {
     "$schema": "../node_modules/ng-packagr/package.schema.json",
     "name": "@ngxs-labs/emitter",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ngxs-labs/emitter.git"
@@ -19,7 +19,7 @@
     "sideEffects": true,
     "peerDependencies": {
         "@angular/core": "^7.0.0",
-        "@ngxs/store": "^0.0.0"
+        "@ngxs/store": "^3.3.0"
     },
     "ngPackage": {
         "lib": {
