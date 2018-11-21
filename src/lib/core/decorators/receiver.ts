@@ -9,6 +9,44 @@ function generateHash(): string {
 }
 
 /**
+ * @param options - Options passed to the `@Receiver()` decorator
+ * @param target - Decorated target
+ * @param key - Decorated key
+ */
+export function getActionProperties(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string) {
+    const defaultProperties = {
+        type: `[ID:${generateHash()}] ${target.name}.${key}`,
+        payload: undefined,
+        action: undefined,
+        cancelUncompleted: true,
+    };
+
+    if (!options) {
+        return defaultProperties;
+    }
+
+    const { type, payload, action, cancelUncompleted } = options;
+
+    if (type) {
+        defaultProperties.type = type;
+    }
+
+    if (payload) {
+        defaultProperties.payload = payload;
+    }
+
+    if (action) {
+        defaultProperties.type = action.type!;
+    }
+
+    if (typeof cancelUncompleted === 'boolean') {
+        defaultProperties.cancelUncompleted = cancelUncompleted;
+    }
+
+    return defaultProperties;
+}
+
+/**
  * Decorates a method with a receiver information
  *
  * @param options - Options for configuring static metadata
@@ -27,32 +65,15 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         const meta = ensureStoreMetadata(target);
-        const action = options && options.action;
-        const typeIsNotString = action && typeof action.type !== 'string';
+        const { type, payload, action, cancelUncompleted } = getActionProperties(options, target, key);
 
-        if (typeIsNotString) {
-            throw new Error('Action type should be defined as a static property `type`');
-        }
-
-        const payload = options && options.payload;
-        const actionId: string = generateHash();
-
-        let type: string = null!;
-        if (action) {
-            type = action.type!;
-        } else {
-            const defaultType = options && options.type;
-            const customType = `[ID:${actionId}] ${target.name}.${key}`;
-            type = defaultType || customType;
-        }
-
-        if (meta.actions[type]) {
+        if (meta.actions.hasOwnProperty(type)) {
             throw new Error(`Method decorated with such type \`${type}\` already exists`);
         }
 
-        meta.actions[type] = [{
+        meta.actions[type!] = [{
             fn: `${key}`,
-            options: {},
+            options: { cancelUncompleted },
             type
         }];
 
