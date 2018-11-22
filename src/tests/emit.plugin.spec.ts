@@ -593,8 +593,6 @@ describe('NgxsEmitPluginModule', () => {
             public static mutate({ setState, getState }: StateContext<number>, action: Increment | Decrement): void {
                 const state = getState();
 
-                expect((action instanceof Increment) || (action instanceof Decrement)).toBeTruthy();
-
                 if (action instanceof Increment) {
                     setState(state + 1);
                 } else if (action instanceof Decrement) {
