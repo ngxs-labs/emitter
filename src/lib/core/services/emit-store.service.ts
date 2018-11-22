@@ -26,7 +26,7 @@ function flattenConstructors(constructorOrConstructors: Action<any> | Action<any
  * @returns - Array of instances
  */
 function constructEventsForSingleDispatching<T>(constructors: Type<any>[], payload: T | undefined): any {
-    return constructors.map((Cls) => new Cls(payload));
+    return constructors.map((Action) => new Action(payload));
 }
 
 /**
@@ -39,9 +39,9 @@ function constructEventsForManyDispatching<T>(constructors: Type<any>[], payload
     const events = [];
 
     for (let i = 0; i < constructors.length; i++) {
-        const Cls = constructors[i];
+        const Action = constructors[i];
         for (let j = 0; j < payloads.length; j++) {
-            events.push(new Cls(payloads[j]));
+            events.push(new Action(payloads[j]));
         }
     }
 
