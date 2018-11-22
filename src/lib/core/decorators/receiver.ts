@@ -66,8 +66,8 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
             throw new TypeError(`Only static functions can be decorated with @Receiver() decorator`);
         }
 
-        if (typeof key === 'symbol') {
-            key = key.toString();
+        if (typeof key !== 'string') {
+            key = String(key);
         }
 
         const meta = ensureStoreMetadata(target);
@@ -78,12 +78,21 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
         }
 
         if (!Array.isArray(action)) {
-            meta.actions[type!] = [{
+            meta.actions[type] = [{
                 fn: `${key}`,
                 options: { cancelUncompleted },
                 type
             }];
-        } else {}
+        } else {
+            for (let i = 0, length = action.length; i < length; i++) {
+                const { type } = action[i];
+                meta.actions[type] = [{
+                    fn: `${key}`,
+                    options: { cancelUncompleted },
+                    type
+                }];
+            }
+        }
 
         descriptor.value![RECEIVER_META_KEY] = {
             type,
