@@ -281,7 +281,9 @@ describe('NgxsEmitPluginModule', () => {
     });
 
     it('should throw an error if an action passed to the @Receiver() does not have static `type` property', () => {
-        class FooAction {}
+        class FooAction {
+            public static readonly type = 'FooAction';
+        }
 
         try {
             @State({ name: 'bar' })
@@ -571,5 +573,56 @@ describe('NgxsEmitPluginModule', () => {
         expect(animals.length).toBe(2);
         expect(animals).toContain('Zebra');
         expect(animals).toContain('Panda');
+    });
+
+    it('should be possible to pass multiple actions into @Receiver() decorator', () => {
+        class Increment {
+            public static readonly type = '[Counter] Increment';
+        }
+
+        class Decrement {
+            public static readonly type = '[Counter] Decrement';
+        }
+
+        @State({
+            name: 'counter',
+            defaults: 0
+        })
+        class CounterState {
+            @Receiver({ action: [Increment, Decrement] })
+            public static mutate({ setState, getState }: StateContext<number>, action: Increment | Decrement): void {
+                const state = getState();
+
+                if (action instanceof Increment) {
+                    setState(state + 1);
+                } else if (action instanceof Decrement) {
+                    setState(state - 1);
+                }
+            }
+        }
+
+        @Component({ template: '' })
+        class MockComponent {
+            @Emitter(CounterState.mutate)
+            public mutate!: Emittable<void>;
+        }
+
+        TestBed.configureTestingModule({
+            imports: [
+                NgxsModule.forRoot([CounterState]),
+                NgxsEmitPluginModule.forRoot()
+            ],
+            declarations: [
+                MockComponent
+            ]
+        });
+
+        const store: Store = TestBed.get(Store);
+
+        store.dispatch(new Increment());
+        store.dispatch(new Decrement());
+
+        const counter = store.selectSnapshot<number>(({ counter }) => counter);
+        expect(counter).toBe(0);
     });
 });

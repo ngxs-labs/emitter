@@ -3,8 +3,15 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { RECEIVER_META_KEY, Emittable, ReceiverMetaData } from '../internal/internals';
 import { EmitterAction } from '../actions/actions';
+import {
+    RECEIVER_META_KEY,
+    Emittable,
+    ReceiverMetaData,
+    flattenConstructors,
+    constructEventsForSingleDispatching,
+    constructEventsForManyDispatching
+} from '../internal/internals';
 
 @Injectable()
 export class EmitStore extends Store {
@@ -38,8 +45,14 @@ export class EmitStore extends Store {
             payload = metadata.payload;
         }
 
-        const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
-        return this.dispatch(new Action(payload));
+        const { action: constructors } = metadata;
+
+        if (constructors) {
+            const flattenedConstructors = flattenConstructors(constructors);
+            return this.dispatch(constructEventsForSingleDispatching<T>(flattenedConstructors, payload));
+        }
+
+        return this.dispatch(new EmitterAction(payload));
     }
 
     /**
@@ -48,17 +61,21 @@ export class EmitStore extends Store {
      * @returns - An observable that emits events after dispatch
      */
     private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
-        EmitterAction.type = metadata.type;
-
-        const actions: object[] = [];
-
-        if (Array.isArray(payloads)) {
-            const Action: Type<any> = metadata.action ? metadata.action : EmitterAction;
-            payloads.forEach((payload: T) => {
-                actions.push(new Action(payload));
-            });
+        if (!Array.isArray(payloads)) {
+            return this.dispatch([]);
         }
 
-        return this.dispatch(actions);
+        EmitterAction.type = metadata.type;
+
+        const { action: constructors } = metadata;
+
+        if (constructors) {
+            const flattenedConstructors = flattenConstructors(constructors);
+            return this.dispatch(constructEventsForManyDispatching(flattenedConstructors, payloads));
+        }
+
+        return this.dispatch(
+            payloads.map((payload) => new EmitterAction(payload))
+        );
     }
 }

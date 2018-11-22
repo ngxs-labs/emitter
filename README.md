@@ -169,6 +169,38 @@ export class CounterState {
 }
 ```
 
+Also it's possible to pass multiple actions:
+
+```typescript
+import { State, StateContext } from '@ngxs/store';
+import { Receiver } from '@ngxs-labs/emitter';
+
+export class Increment {
+    public static readonly type = '[Counter] Increment value';
+}
+
+export class Decrement {
+    public static readonly type = '[Counter] Decrement value';
+}
+
+@State<number>({
+    name: 'counter',
+    defaults: 0
+})
+export class CounterState {
+    @Receiver({ action: [Increment, Decrement] })
+    public static increment({ setState, getState }: StateContext<number>, action: Increment | Decrement) {
+        const state = getState();
+
+        if (action instanceof Increment) {
+            setState(state + 1);
+        } else if (action instanceof Decrement) {
+            setState(state - 1);
+        }
+    }
+}
+```
+
 ## Emitting multiple value
 
 It's also possible to emit multiple values, just define your state:
