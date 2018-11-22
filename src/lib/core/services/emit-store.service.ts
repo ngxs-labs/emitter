@@ -3,50 +3,15 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { RECEIVER_META_KEY, Emittable, ReceiverMetaData, Action } from '../internal/internals';
 import { EmitterAction } from '../actions/actions';
-
-/**
- * @internal
- * @param constructorOrConstructors - Single class or array of classes
- * @returns - Array of classes (actions)
- */
-function flattenConstructors(constructorOrConstructors: Action<any> | Action<any>[]): Action<any>[] {
-    if (Array.isArray(constructorOrConstructors)) {
-        return constructorOrConstructors;
-    }
-
-    return [constructorOrConstructors];
-}
-
-/**
- * @internal
- * @param constructors - Array of classes (actions)
- * @param payload - Payload to dispatch
- * @returns - Array of instances
- */
-function constructEventsForSingleDispatching<T>(constructors: Type<any>[], payload: T | undefined): any {
-    return constructors.map((Action) => new Action(payload));
-}
-
-/**
- * @internal
- * @param constructors - Array of classes (actions)
- * @param payloads - Payloads to dispatch
- * @returns - Array of instances
- */
-function constructEventsForManyDispatching<T>(constructors: Type<any>[], payloads: T[]): any {
-    const events = [];
-
-    for (let i = 0, constructorsLength = constructors.length; i < constructorsLength; i++) {
-        const Action = constructors[i];
-        for (let j = 0, payloadsLength = payloads.length; j < payloadsLength; j++) {
-            events.push(new Action(payloads[j]));
-        }
-    }
-
-    return events;
-}
+import {
+    RECEIVER_META_KEY,
+    Emittable,
+    ReceiverMetaData,
+    flattenConstructors,
+    constructEventsForSingleDispatching,
+    constructEventsForManyDispatching
+} from '../internal/internals';
 
 @Injectable()
 export class EmitStore extends Store {
