@@ -38,9 +38,9 @@ function constructEventsForSingleDispatching<T>(constructors: Type<any>[], paylo
 function constructEventsForManyDispatching<T>(constructors: Type<any>[], payloads: T[]): any {
     const events = [];
 
-    for (let i = 0; i < constructors.length; i++) {
+    for (let i = 0, constructorsLength = constructors.length; i < constructorsLength; i++) {
         const Action = constructors[i];
-        for (let j = 0; j < payloads.length; j++) {
+        for (let j = 0, payloadsLength = payloads.length; j < payloadsLength; j++) {
             events.push(new Action(payloads[j]));
         }
     }
@@ -83,7 +83,8 @@ export class EmitStore extends Store {
         const { action: constructors } = metadata;
 
         if (constructors) {
-            return this.dispatch(constructEventsForSingleDispatching<T>(flattenConstructors(constructors), payload));
+            const flattenedConstructors = flattenConstructors(constructors);
+            return this.dispatch(constructEventsForSingleDispatching<T>(flattenedConstructors, payload));
         }
 
         return this.dispatch(new EmitterAction(payload));
@@ -104,7 +105,8 @@ export class EmitStore extends Store {
         const { action: constructors } = metadata;
 
         if (constructors) {
-            return this.dispatch(constructEventsForManyDispatching(flattenConstructors(constructors), payloads));
+            const flattenedConstructors = flattenConstructors(constructors);
+            return this.dispatch(constructEventsForManyDispatching(flattenedConstructors, payloads));
         }
 
         return this.dispatch(
