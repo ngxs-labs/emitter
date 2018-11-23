@@ -84,6 +84,21 @@ describe('NgxsEmitPluginModule', () => {
         expect(typeof fixture.componentInstance.addTodoAction.emit).toBe('function');
     });
 
+    it('should throw if decorated properties with @Emitter() and @Receiver() have the same names', () => {
+        try {
+            @State({ name: 'bar' })
+            class BarState {
+                @Emitter(BarState.foo)
+                private foo!: Emittable<void>;
+
+                @Receiver({ type: '@@[bar]' })
+                public static foo() {}
+            }
+        } catch ({ message }) {
+            expect(message).toBe('Property with name `foo` already exists, please rename to avoid conflicts');
+        }
+    });
+
     it('should dispatch an action using property decorated with @Emitter()', () => {
         @State<Todo[]>({
             name: 'todos',
