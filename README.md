@@ -466,3 +466,69 @@ it('should increment state', () => {
     expect(counter).toBe(1);
 });
 ```
+
+## Interaction
+
+You can easily provide an interaction between different states using ER. Imagine such simple state that stores information if success and error messages exist:
+
+```typescript
+type AppStatusStateModel = {
+    successMessage: string | null;
+    errorMessage: string | null;
+};
+
+@State({
+    name: 'appStatusState',
+    defaults: {
+        successMessage: null,
+        errorMessage: null
+    }
+})
+export class AppStatusState {
+    @Receiver({ type: '[AppStatus] Success' })
+    public static success({ setState }: StateContext<AppStatusStateModel>, { payload }: EmitterAction<string>) {
+        setState({
+            successMessage: payload,
+            errorMessage: null
+        });
+    }
+
+    @Receiver({ type: '[AppStatus] Failure' })
+    public static failure({ setState }: StateContext<AppStatusStateModel>, { payload }: EmitterAction<string>) {
+        setState({
+            successMessage: null,
+            errorMessage: payload
+        });
+    }
+}
+```
+
+You want to emit events from another state that makes requests:
+
+```typescript
+@State({ name: 'appState' })
+class AppState {
+    private static tagService: TagService;
+
+    @Emitter(AppStatusState.success)
+    private static success: Emittable<string>;
+
+    @Emitter(AppStatusState.failure)
+    private static failure: Emittable<string>;
+
+    constructor(injector: Injector) {
+        AppState.tagService = injector.get<TagService>(TagService);
+    }
+
+    @Receiver({ type: '[AppState] Add tag to the DB' })
+    public static addTag(_, { payload }: EmitterAction<string>) {
+        return this.tagService.addOne(payload).pipe(
+            tap((response) => this.success.emit(response.message)),
+            catchError((error) => {
+                this.failure.emit(error.message);
+                return of(error);
+            })
+        );
+    }
+}
+```
