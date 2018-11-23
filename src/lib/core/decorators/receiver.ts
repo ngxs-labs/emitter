@@ -66,6 +66,11 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
             throw new TypeError(`Only static functions can be decorated with @Receiver() decorator`);
         }
 
+        const reservedKeyAlreadyExists = key in target.prototype;
+        if (reservedKeyAlreadyExists) {
+            throw new Error(`Property with name \`${key.toString()}\` already exists, please rename to avoid conflicts`);
+        }
+
         if (typeof key !== 'string') {
             key = String(key);
         }
