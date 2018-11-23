@@ -480,6 +480,7 @@ type AppStatusStateModel = {
 @State({
     name: 'appStatusState',
     defaults: {
+        successMessage: null,
         errorMessage: null
     }
 })
