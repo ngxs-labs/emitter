@@ -1,4 +1,4 @@
-import { Injectable, Type } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
@@ -45,10 +45,10 @@ export class EmitStore extends Store {
             payload = metadata.payload;
         }
 
-        const { action: constructors } = metadata;
+        const { action } = metadata;
 
-        if (constructors) {
-            const flattenedConstructors = flattenConstructors(constructors);
+        if (action) {
+            const flattenedConstructors = flattenConstructors(action);
             return this.dispatch(constructEventsForSingleDispatching<T>(flattenedConstructors, payload));
         }
 
@@ -67,10 +67,10 @@ export class EmitStore extends Store {
 
         EmitterAction.type = metadata.type;
 
-        const { action: constructors } = metadata;
+        const { action } = metadata;
 
-        if (constructors) {
-            const flattenedConstructors = flattenConstructors(constructors);
+        if (action) {
+            const flattenedConstructors = flattenConstructors(action);
             return this.dispatch(constructEventsForManyDispatching(flattenedConstructors, payloads));
         }
 
