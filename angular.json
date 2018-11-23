@@ -45,7 +45,5 @@
                 }
             }
         }
-    },
-
-    "defaultProject": "emitter-e2e"
+    }
 }
