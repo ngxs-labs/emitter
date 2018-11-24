@@ -11,11 +11,12 @@ function generateHash(): string {
 }
 
 /**
+ * @internal
  * @param options - Options passed to the `@Receiver()` decorator
  * @param target - Decorated target
  * @param key - Decorated key
  */
-export function getActionProperties(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string) {
+function getActionProperties(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string) {
     const defaultProperties: ReceiverMetaData = {
         type: `[ID:${generateHash()}] ${target.name}.${key}`,
         payload: undefined,
