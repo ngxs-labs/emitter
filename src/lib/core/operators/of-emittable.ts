@@ -15,8 +15,7 @@ import { RECEIVER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContex
 function getReceiverTypes(receivers: Function[]): Types {
     const types: Types = {};
 
-    let i = receivers.length;
-    while (i--) {
+    for (let i = receivers.length - 1; i >= 0; i--) {
         const receiver = receivers[i];
         const isNotFunction = typeof receiver !== 'function';
 
