@@ -12,7 +12,7 @@ import { Emitter } from '../lib/core/decorators/emitter';
 import { NgxsEmitPluginModule } from '../lib/emit.module';
 import { EmitStore } from '../lib/core/services/emit-store.service';
 
-describe('NgxsEmitPluginModule', () => {
+describe(NgxsEmitPluginModule.name, () => {
     interface Todo {
         text: string;
         completed: boolean;

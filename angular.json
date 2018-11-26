@@ -4,8 +4,8 @@
     "newProjectRoot": "projects",
     "projects": {
         "emitter": {
-            "root": "./",
-            "sourceRoot": "./",
+            "root": "",
+            "sourceRoot": "src",
             "projectType": "library",
             "prefix": "emitter",
             "architect": {
@@ -23,11 +23,9 @@
                 },
 
                 "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
+                    "builder": "@angular-builders/jest:run",
                     "options": {
-                        "main": "src/test.ts",
-                        "tsConfig": "src/tsconfig.spec.json",
-                        "karmaConfig": "src/karma.conf.js"
+                        "no-cache": true
                     }
                 },
 
