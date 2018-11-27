@@ -3,7 +3,7 @@
     "compilerOptions": {
         "target": "es2015",
         "module": "es2015",
-        "lib": ["dom","es2016"],
+        "lib": ["dom", "es2016"],
         "moduleResolution": "node",
         "declaration": true,
         "inlineSources": true,
