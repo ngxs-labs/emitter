@@ -10,13 +10,6 @@
     jest-preset-angular "^6.0.0"
     lodash "^4.17.10"
 
-"@angular-devkit/architect@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.11.0.tgz#25b75f5d8ca00cedd414ede12db87364c6c5aa45"
-  dependencies:
-    "@angular-devkit/core" "7.1.0"
-    rxjs "6.3.3"
-
 "@angular-devkit/architect@0.11.2":
   version "0.11.2"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.11.2.tgz#f0bcaa494c713f8648a5da2490e2b67cd0e57503"
@@ -87,12 +80,13 @@
   optionalDependencies:
     node-sass "4.10.0"
 
-"@angular-devkit/build-ng-packagr@0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-ng-packagr/-/build-ng-packagr-0.11.0.tgz#604120a3bf3f2653cfabf429e2f93aeb1cd92e0e"
+"@angular-devkit/build-ng-packagr@0.11.3":
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-ng-packagr/-/build-ng-packagr-0.11.3.tgz#3d7e885642980d61af9667bb2e7bd0799bf4ddf2"
+  integrity sha512-l4cpJRG+qFA19GxHrG2ZMU3YwFT/yvZIqCeEdHTJjNZvECkqm+2SGMIVJhHfa2EZ8D1Hrt+ANQ+fZDxQLY1f8w==
   dependencies:
-    "@angular-devkit/architect" "0.11.0"
-    "@angular-devkit/core" "7.1.0"
+    "@angular-devkit/architect" "0.11.3"
+    "@angular-devkit/core" "7.1.3"
     rxjs "6.3.3"
     semver "5.5.1"
 
@@ -114,16 +108,6 @@
     "@angular-devkit/architect" "0.11.2"
     "@angular-devkit/core" "7.1.2"
     rxjs "6.3.3"
-
-"@angular-devkit/core@7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.1.0.tgz#5374736843acc2405937ad61c2c4818fad64b72d"
-  dependencies:
-    ajv "6.5.3"
-    chokidar "2.0.4"
-    fast-json-stable-stringify "2.0.0"
-    rxjs "6.3.3"
-    source-map "0.7.3"
 
 "@angular-devkit/core@7.1.2":
   version "7.1.2"
