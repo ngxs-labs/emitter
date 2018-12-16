@@ -271,10 +271,10 @@
   version "10.12.10"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.10.tgz#4fa76e6598b7de3f0cb6ec3abacc4f59e5b3a2ce"
 
-"@types/node@10.12.13":
-  version "10.12.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.13.tgz#ce355eda06f793b42f75b23cd26d328b12649b70"
-  integrity sha512-zMxYcuQETlp8Lw9trEuKa313Zapm9w3EXZ6pT53q229VsHvo9jWDfWq3rUC8SyFfnPexn7uAuC+q3X+GmnTnDg==
+"@types/node@10.12.15":
+  version "10.12.15"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.12.15.tgz#20e85651b62fd86656e57c9c9bc771ab1570bc59"
+  integrity sha512-9kROxduaN98QghwwHmxXO2Xz3MaWf+I1sLVAA6KJDF5xix+IyXVhds0MAfdNwtcpSrzhaTsNB0/jnL86fgUhqA==
 
 "@types/semver@5.5.0":
   version "5.5.0"
