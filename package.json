@@ -60,7 +60,7 @@
         "@angular/compiler-cli": "7.1.0",
         "@types/node": "10.12.18",
         "@types/semver": "5.5.0",
-        "@types/yargs": "12.0.2",
+        "@types/yargs": "12.0.3",
         "codelyzer": "4.5.0",
         "jest": "23.6.0",
         "ng-packagr": "4.4.5",
