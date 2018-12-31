@@ -299,10 +299,10 @@
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-5.5.0.tgz#146c2a29ee7d3bae4bf2fcb274636e264c813c45"
 
-"@types/yargs@12.0.3":
-  version "12.0.3"
-  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.3.tgz#9a9fbaf6a81c9ebf5c283386162d1118274c6827"
-  integrity sha512-/3AwpLvieyVFADvpP5MHkBOhHJ7pJYZFUex5noLEn/jSQT1pZInHdB7JproJz0E65ystrap36GMKiatijI8K5g==
+"@types/yargs@12.0.5":
+  version "12.0.5"
+  resolved "https://registry.yarnpkg.com/@types/yargs/-/yargs-12.0.5.tgz#f4f85fe198e1e9cedc0bb53a8c2d30fb34299e50"
+  integrity sha512-y51XRWWg1GiW4+mV2zmFQUqJT3bX7nuUaXW4j8a2dFvT9ZlaNLjb7ZxcUSDyklt/UBWrW2+31x+hQpRzxaTFzw==
 
 "@types/yargs@^10.0.0":
   version "10.0.2"
