@@ -136,6 +136,59 @@ export class CounterState {
 }
 ```
 
+## Payload type safety 
+
+```typescript
+import { Component } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { Emitter, Emittable } from '@ngxs-labs/emitter';
+
+import { Observable } from 'rxjs';
+
+import { CustomCounter, CounterState } from './counter.state';
+
+@Component({
+    selector: 'app-root',
+    template: `
+        {{ counter$ | async | json }}
+        <button (click)="update()">update</button>
+    `
+})
+export class AppComponent {
+    @Select(CounterState)
+    public counter$: Observable<CustomCounter>;
+
+    @Emitter(CounterState.update)
+    private update: Emittable<CustomCounter>;
+
+    public update(): void {
+        this.update.emit(undefined as any);
+    }
+}
+```
+
+```typescript
+import { State, StateContext } from '@ngxs/store';
+import { Receiver, EmitterAction } from '@ngxs-labs/emitter';
+
+export interface CustomCounter {
+  value: number;
+}
+
+@State<CustomCounter>({
+    name: 'counter',
+    defaults: {
+      value: 0
+    }
+})
+export class CounterState {
+    @Receiver({ payload: { value: -1 } }) // default value if payload emitted as undefined
+    public static update({ setState }: StateContext<CustomCounter>, { payload }: EmitterAction<CustomCounter>) {
+        setState({ value: payload.value });
+    }
+}
+```
+
 ## Actions
 
 If you still need actions - it is possible to pass an action as an argument into `@Receiver()` decorator:
