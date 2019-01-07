@@ -1,7 +1,7 @@
 {
     "$schema": "../node_modules/ng-packagr/package.schema.json",
     "name": "@ngxs-labs/emitter",
-    "version": "1.6.4",
+    "version": "1.7.0",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/ngxs-labs/emitter.git"
@@ -24,7 +24,7 @@
     "ngPackage": {
         "lib": {
             "flatModuleFile": "ngxs-labs-emitter",
-            "entryFile": "index.ts",
+            "entryFile": "src/index.ts",
             "umdModuleIds": {
                 "@ngxs/store": "ngxs-store"
             }
