@@ -179,7 +179,7 @@ describe(NgxsEmitPluginModule.name, () => {
         expect(todos.length).toBe(1);
     });
 
-    it('should cancel uncompleted action', (done: DoneFn) => {
+    it('should cancel uncompleted action', (done: jest.DoneCallback) => {
         @State<number>({
             name: 'counter',
             defaults: 0
