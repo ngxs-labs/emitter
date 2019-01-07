@@ -13,6 +13,8 @@
             "dispatcher",
             "kebab-case"
         ],
+        "no-big-function": false,
+        "no-duplicate-string": false,
         "no-non-null-assertion": false
     }
 }

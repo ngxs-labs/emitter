@@ -31,9 +31,8 @@
         "build": "ng build",
         "e2e": "ng e2e",
         "// - UTILS": "Utility scripts",
-        "emitter:sonar": "ts-node ./tools/sonar",
         "emitter:lint": "ng lint emitter",
-        "emitter:test": "ng test",
+        "emitter:test": "ng test --runInBand --silent",
         "emitter:build": "ts-node ./tools/build && ts-node ./tools/copy-readme",
         "emitter:rollup": "rollup -c rollup.config.js",
         "// - CI": "CI pipelines",
@@ -69,11 +68,11 @@
         "rollup-plugin-node-resolve": "4.0.0",
         "rollup-plugin-sourcemaps": "0.4.2",
         "semver": "5.6.0",
-        "sonarjs": "1.0.0",
         "ts-node": "7.0.1",
         "tsickle": "0.34.0",
         "tslib": "1.9.3",
         "tslint": "5.11.0",
+        "tslint-sonarts": "1.8.0",
         "typescript": "3.1.6",
         "yargs": "12.0.5"
     }

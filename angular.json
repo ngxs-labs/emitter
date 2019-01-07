@@ -5,20 +5,15 @@
     "projects": {
         "emitter": {
             "root": "",
-            "sourceRoot": "src",
+            "sourceRoot": "emitter",
             "projectType": "library",
             "prefix": "emitter",
             "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-ng-packagr:build",
                     "options": {
-                        "tsConfig": "src/tsconfig.lib.json",
-                        "project": "src/ng-package.json"
-                    },
-                    "configurations": {
-                        "production": {
-                            "project": "src/ng-package.prod.json"
-                        }
+                        "tsConfig": "emitter/tsconfig.lib.json",
+                        "project": "emitter/ng-package.json"
                     }
                 },
 
@@ -33,8 +28,8 @@
                     "builder": "@angular-devkit/build-angular:tslint",
                     "options": {
                         "tsConfig": [
-                            "src/tsconfig.lib.json",
-                            "src/tsconfig.spec.json"
+                            "emitter/tsconfig.lib.json",
+                            "emitter/tsconfig.spec.json"
                         ],
                         "exclude": [
                             "**/node_modules/**"

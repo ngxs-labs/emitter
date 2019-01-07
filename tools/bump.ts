@@ -18,7 +18,7 @@ function writePackage(path: string, json: any) {
 }
 
 async function bump(): Promise<void> {
-    const release: ReleaseType = argv.release;
+    const release = argv.release as ReleaseType;
 
     if (!release) {
         return console.warn('Specify `--release` argument!');
