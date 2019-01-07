@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/logo.png">
+    <img src="https://raw.githubusercontent.com/ngxs-labs/emitter/master/docs/assets/emitter.png">
 </p>
 
 ---
@@ -477,11 +477,13 @@ export class AppComponent {
 }
 ```
 
-## Testing
+## 💡 TDD
 
-It's very easy to write unit tests using ER concept:
+It's very easy to write unit tests using ER concept, because we provide our module out of the box that makes all providers and stores available for dependency injection. So you can avoid creating mocked components with properties decorated with `@Emitter()` decorator, just use the `StoreTestBed` service to get any emittable object:
 
 ```typescript
+import { StoreTestBedModule, StoreTestBed } from '@ngxs-labs/emitter/testing';
+
 it('should increment state', () => {
     @State<number>({
         name: 'counter',
@@ -494,28 +496,18 @@ it('should increment state', () => {
         }
     }
 
-    @Component({ template: '' })
-    class MockComponent {
-        @Emitter(CounterState.increment)
-        public incremnet: Emittable<void>;
-    }
-
     TestBed.configureTestingModule({
         imports: [
-            NgxsModule.forRoot([CounterState]),
-            NgxsEmitPluginModule.forRoot()
-        ],
-        declarations: [
-            MockComponent
+            StoreTestBedModule.configureTestingModule([CounterState])
         ]
     });
 
-    const fixture = TestBed.createComponent(MockComponent);
     const store: Store = TestBed.get(Store);
+    const emitter: StoreTestBed = TestBed.get(StoreTestBed);
 
-    fixture.componentInstance.increment.emit();
+    emitter.action(CounterState.increment).emit();
 
-    const counter = store.selectSnapshot<number>((state) => state.counter);
+    const counter = store.selectSnapshot<number>(({ counter }) => counter);
     expect(counter).toBe(1);
 });
 ```
