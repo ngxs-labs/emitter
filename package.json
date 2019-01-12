@@ -62,7 +62,7 @@
         "@types/yargs": "12.0.5",
         "codelyzer": "4.5.0",
         "jest": "23.6.0",
-        "ng-packagr": "4.4.5",
+        "ng-packagr": "4.5.0",
         "npm-run-all": "4.1.5",
         "rollup": "1.1.0",
         "rollup-plugin-node-resolve": "4.0.0",
