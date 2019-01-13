@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { State, StateContext, Store } from '@ngxs/store';
-import { Receiver } from '@ngxs-labs/emitter';
+import { Receiver, EmitterService } from '@ngxs-labs/emitter';
 
 import { StoreTestBedModule } from '../lib/store-test-bed.module';
-import { StoreTestBed } from '../lib/store-test-bed.service';
 
 describe(StoreTestBedModule.name, () => {
     it('should configure easy testing module', () => {
@@ -30,7 +29,7 @@ describe(StoreTestBedModule.name, () => {
         });
 
         const store: Store = TestBed.get(Store);
-        const emitter: StoreTestBed = TestBed.get(StoreTestBed);
+        const emitter: EmitterService = TestBed.get(EmitterService);
 
         emitter.action(CounterState.increment).emit();
         emitter.action(CounterState.increment).emit();
