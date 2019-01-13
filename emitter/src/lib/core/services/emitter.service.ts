@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { EmitStore, Emittable } from '@ngxs-labs/emitter';
+
+import { EmitStore } from './emit-store.service';
+import { Emittable } from '../internal/internals';
 
 @Injectable()
-export class StoreTestBed {
+export class EmitterService {
     constructor(private emitStore: EmitStore) {}
 
     public action<T = any, U = any>(receiver: Function): Emittable<T, U> {

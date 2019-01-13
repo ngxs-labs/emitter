@@ -111,6 +111,44 @@ export class CounterComponent {
 }
 ```
 
+Alternatively you can use `EmitterService` instead of decorating properties:
+
+```typescript
+import { Component } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { EmitterService, Emittable } from '@ngxs-labs/emitter';
+
+import { Observable } from 'rxjs';
+
+import { CounterState } from './counter.state';
+
+@Component({
+    selector: 'app-counter',
+    template: `
+        <ng-container *ngIf="counter$ | async as counter">
+            <h3>Counter is {{ counter }}</h3>
+        </ng-container>
+
+        <button (click)="increment()">Increment</button>
+        <button (click)="decrement()">Decrement</button>
+    `
+})
+export class CounterComponent {
+    @Select(CounterState)
+    public counter$: Observable<number>;
+
+    constructor(private emitter: EmitterService) {}
+
+    public increment(): void {
+        this.emitter.action(CounterState.increment).emit();
+    }
+
+    public decrement(): void {
+        this.emitter.action(CounterState.decrement).emit();
+    }
+}
+```
+
 ## Custom types
 
 You can define custom types for debbuging purposes (works with `@ngxs/logger-plugin`):
@@ -482,7 +520,8 @@ export class AppComponent {
 It's very easy to write unit tests using ER concept, because we provide our module out of the box that makes all providers and stores available for dependency injection. So you can avoid creating mocked components with properties decorated with `@Emitter()` decorator, just use the `StoreTestBed` service to get any emittable object:
 
 ```typescript
-import { StoreTestBedModule, StoreTestBed } from '@ngxs-labs/emitter/testing';
+import { EmitterService } from '@ngxs-labs/emitter';
+import { StoreTestBedModule } from '@ngxs-labs/emitter/testing';
 
 it('should increment state', () => {
     @State<number>({
@@ -503,7 +542,7 @@ it('should increment state', () => {
     });
 
     const store: Store = TestBed.get(Store);
-    const emitter: StoreTestBed = TestBed.get(StoreTestBed);
+    const emitter: EmitterService = TestBed.get(EmitterService);
 
     emitter.action(CounterState.increment).emit();
 
