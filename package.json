@@ -59,7 +59,7 @@
         "@angular/compiler-cli": "7.1.0",
         "@types/node": "10.12.24",
         "@types/semver": "5.5.0",
-        "@types/yargs": "12.0.5",
+        "@types/yargs": "12.0.9",
         "codelyzer": "4.5.0",
         "jest": "23.6.0",
         "ng-packagr": "4.7.1",
