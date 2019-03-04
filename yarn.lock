@@ -248,10 +248,10 @@
     tree-kill "1.2.0"
     webpack-sources "1.2.0"
 
-"@ngxs/store@3.3.4":
-  version "3.3.4"
-  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.3.4.tgz#dced015eedf054bc651bbc1b67b590287cec7437"
-  integrity sha512-99J2/+Tg/yoq+Fs9mfC6bgGnywV85TLIBkO8DWVN6mPVh2DQ6WlsxgvJjZcp0J5Uw8v5+uKsTit6OXeDxO5VOw==
+"@ngxs/store@3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.4.1.tgz#b926d1f599ea8fb9d528fd1dc2e0f642da65e0c8"
+  integrity sha512-H+MRYC+NDhx0ysscqm8bOPYEdzeo94Oj3B3qCVTBXUsPHWyYUU565PdNcXqf1JxptS9gZBUfNnGxWzhREjWG3Q==
   dependencies:
     tslib "^1.9.0"
 
