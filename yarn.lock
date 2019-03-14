@@ -18,20 +18,20 @@
     "@angular-devkit/core" "7.1.2"
     rxjs "6.3.3"
 
-"@angular-devkit/architect@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.13.1.tgz#39597ce94f72d89bdd89ee567cb937cff4c13b98"
-  integrity sha512-QDmIbqde75ZZSEFbw6Q6kQWq4cY6C7D67yujXw6XTyubDNAs1tyXJyxTIB8vjSlEKwRizTTDd/B0ZXVcke3Mvw==
-  dependencies:
-    "@angular-devkit/core" "7.3.1"
-    rxjs "6.3.3"
-
 "@angular-devkit/architect@0.13.5":
   version "0.13.5"
   resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.13.5.tgz#ecd41e3bc37337b9b8884cebc761a367b06cb697"
   integrity sha512-ouqDu5stZA2gsWnbKMThDfOG/D6lJQaLL+oGEoM5zfnKir3ctyV5rOm73m2pDYUblByTCb+rkj5KmooUWpnV1g==
   dependencies:
     "@angular-devkit/core" "7.3.5"
+    rxjs "6.3.3"
+
+"@angular-devkit/architect@0.13.6":
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/architect/-/architect-0.13.6.tgz#7758ab9f288cfd4f64d8b88b0700bac5c4961d06"
+  integrity sha512-Cg9z4lmCvjt5uD00E/0tBRz3ESjYicmqT3NL/BIsNVNb+s1GwCCoPSOIM8Ss4nyGDtrdono1XKSOmkJnlzF3Cw==
+  dependencies:
+    "@angular-devkit/core" "7.3.6"
     rxjs "6.3.3"
 
 "@angular-devkit/build-angular@0.11.2":
@@ -88,13 +88,13 @@
   optionalDependencies:
     node-sass "4.10.0"
 
-"@angular-devkit/build-ng-packagr@0.13.1":
-  version "0.13.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/build-ng-packagr/-/build-ng-packagr-0.13.1.tgz#3508523a039f71ccff1364db553a904e4db2c8ea"
-  integrity sha512-9qvdNvtlgJ3WDppbzwD9fOQzAsVogBlDeLE5zUH1ap+zcoyZEGjS1BKluiYSJ1u5Q5Nlfb3FSI/D1r9LuDQS/A==
+"@angular-devkit/build-ng-packagr@0.13.6":
+  version "0.13.6"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/build-ng-packagr/-/build-ng-packagr-0.13.6.tgz#4c3d4825d95485a6fe457bb264b238407af9c834"
+  integrity sha512-MYcuMAFPouSWf4E697b2Qw3v5JtJoGuX2Zszy3TaDdUIy9yDKDBKmvMr6rZuMIx3pqJTTjl/g44KTfsiElAGgQ==
   dependencies:
-    "@angular-devkit/architect" "0.13.1"
-    "@angular-devkit/core" "7.3.1"
+    "@angular-devkit/architect" "0.13.6"
+    "@angular-devkit/core" "7.3.6"
     rxjs "6.3.3"
     semver "5.6.0"
 
@@ -128,21 +128,21 @@
     rxjs "6.3.3"
     source-map "0.7.3"
 
-"@angular-devkit/core@7.3.1":
-  version "7.3.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.3.1.tgz#d92f6545796579cabdcfc29579a2c977f7a96c6c"
-  integrity sha512-56XDWWfIzOAkEk69lBLgmCYybPUA4yjunhmMlCk7vVdb7gbQUyzNjFD04Uj0GjlejatAQ5F76tRwygD9C+3RXQ==
+"@angular-devkit/core@7.3.5":
+  version "7.3.5"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.3.5.tgz#2a59a913eab358e2385f52ba28132b81435e63b3"
+  integrity sha512-J/Tztq2BZ3tpwUsbiz8N61rf9lwqn85UvJsDui2SPIdzDR9KmPr5ESI2Irc/PEb9i+CBXtVuhr8AIqo7rR6ZTg==
   dependencies:
-    ajv "6.7.0"
+    ajv "6.9.1"
     chokidar "2.0.4"
     fast-json-stable-stringify "2.0.0"
     rxjs "6.3.3"
     source-map "0.7.3"
 
-"@angular-devkit/core@7.3.5":
-  version "7.3.5"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.3.5.tgz#2a59a913eab358e2385f52ba28132b81435e63b3"
-  integrity sha512-J/Tztq2BZ3tpwUsbiz8N61rf9lwqn85UvJsDui2SPIdzDR9KmPr5ESI2Irc/PEb9i+CBXtVuhr8AIqo7rR6ZTg==
+"@angular-devkit/core@7.3.6":
+  version "7.3.6"
+  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-7.3.6.tgz#bc11ca571187f0f0ce9df012332794907e0b8133"
+  integrity sha512-aoarMK0DJIdwjVA0OuQIN7b8nKPcF9n5vSMF7MFmhKpTw5/uV3SynQZbm3YCgylu/2CMuiTzKuAunnWWdli//g==
   dependencies:
     ajv "6.9.1"
     chokidar "2.0.4"
@@ -534,16 +534,6 @@ ajv-keywords@^3.1.0:
 ajv@6.5.3:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.5.3.tgz#71a569d189ecf4f4f321224fecb166f071dd90f9"
-  dependencies:
-    fast-deep-equal "^2.0.1"
-    fast-json-stable-stringify "^2.0.0"
-    json-schema-traverse "^0.4.1"
-    uri-js "^4.2.2"
-
-ajv@6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.7.0.tgz#e3ce7bb372d6577bb1839f1dfdfcbf5ad2948d96"
-  integrity sha512-RZXPviBTtfmtka9n9sy1N5M5b82CbxWIR6HIis4s3WQTXDJamc/0gpCWNGz6EWdWp4DOfjzJfhz/AS9zVPjjWg==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
