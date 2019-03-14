@@ -73,7 +73,7 @@
         "tslib": "1.9.3",
         "tslint": "5.11.0",
         "tslint-sonarts": "1.8.0",
-        "typescript": "3.1.6",
+        "typescript": "3.3.3333",
         "yargs": "13.2.2"
     }
 }
