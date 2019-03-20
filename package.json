@@ -57,7 +57,7 @@
         "@angular-devkit/build-ng-packagr": "0.13.6",
         "@angular/cli": "7.3.6",
         "@angular/compiler-cli": "7.2.9",
-        "@types/node": "11.10.0",
+        "@types/node": "11.11.4",
         "@types/semver": "5.5.0",
         "@types/yargs": "12.0.9",
         "codelyzer": "4.5.0",
