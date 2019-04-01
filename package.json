@@ -60,7 +60,7 @@
         "@types/jest": "^24.0.11",
         "@types/node": "11.10.0",
         "@types/semver": "5.5.0",
-        "@types/yargs": "12.0.10",
+        "@types/yargs": "12.0.11",
         "codelyzer": "4.5.0",
         "jest": "^24.5.0",
         "ng-packagr": "4.7.1",
