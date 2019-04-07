@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@angular-builders/jest@7.4.1":
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/@angular-builders/jest/-/jest-7.4.1.tgz#3045d9744f09896ff4da9f080af925e04a002d16"
-  integrity sha512-TjVXkTW4O6ezxXPnsJlEv+yDNMNS0D0YhMKqRDx2l/Pmy3fEOoQ/LCdIGXyfbLgixmZ1RmQPCC73qcjBQb6OJg==
+"@angular-builders/jest@7.4.2":
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/@angular-builders/jest/-/jest-7.4.2.tgz#69bffcc0ab7c0879f0ca6db6f12bd36f4017b404"
+  integrity sha512-gbg7SKkAT7LB0WBl70tKLF7YGYta8wdShc3VBF0qClL45PPuTnHT/zBAScQNblfsaavLH3B5J1GPYqQODML0WA==
   dependencies:
     jest-preset-angular "^7.0.1"
     lodash "^4.17.10"
