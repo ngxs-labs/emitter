@@ -3,7 +3,15 @@ import { getActionTypeFromInstance } from '@ngxs/store';
 import { Observable, OperatorFunction } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { RECEIVER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContext, ReceiverMetaData, Types } from '../internal/internals';
+import { is, isNotAFunction } from '../utils';
+import {
+  RECEIVER_META_KEY,
+  ActionStatus,
+  ActionContext,
+  OfEmittableActionContext,
+  ReceiverMetaData,
+  Types
+} from '../internal/internals';
 
 /**
  * `getReceiverTypes([CounterState.increment, CounterState.decrement])`
@@ -13,55 +21,51 @@ import { RECEIVER_META_KEY, ActionStatus, ActionContext, OfEmittableActionContex
  * @returns - A key-value map where a key is a type and value is `true`
  */
 function getReceiverTypes(receivers: Function[]): Types {
-    const types: Types = {};
+  const types: Types = {};
 
-    for (let i = receivers.length - 1; i >= 0; i--) {
-        const receiver = receivers[i];
-        const isNotFunction = typeof receiver !== 'function';
-
-        if (isNotFunction) {
-            throw new TypeError(`Receiver should be a function, got ${receiver}`);
-        }
-
-        const meta: ReceiverMetaData = receiver[RECEIVER_META_KEY];
-        const isNotAnnotated = !meta || !meta.type;
-
-        if (isNotAnnotated) {
-            throw new Error(`${receiver.name} should be decorated using @Receiver() decorator`);
-        }
-
-        types[meta.type] = true;
+  for (const receiver of receivers) {
+    if (isNotAFunction(receiver)) {
+      throw new TypeError(`Receiver should be a function, got ${receiver}`);
     }
 
-    return types;
+    const meta: ReceiverMetaData = receiver[RECEIVER_META_KEY];
+
+    if (is.falsy(meta) || is.falsy(meta.type)) {
+      throw new Error(`${receiver.name} should be decorated with @Receiver() decorator`);
+    }
+
+    types[meta.type] = true;
+  }
+
+  return types;
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
 export function ofEmittableDispatched(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Dispatched);
+  return ofEmittable(getReceiverTypes(receivers), ActionStatus.Dispatched);
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
 export function ofEmittableSuccessful(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Successful);
+  return ofEmittable(getReceiverTypes(receivers), ActionStatus.Successful);
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
 export function ofEmittableCanceled(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Canceled);
+  return ofEmittable(getReceiverTypes(receivers), ActionStatus.Canceled);
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
 export function ofEmittableErrored(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return ofEmittable(getReceiverTypes(receivers), ActionStatus.Errored);
+  return ofEmittable(getReceiverTypes(receivers), ActionStatus.Errored);
 }
 
 /**
@@ -70,18 +74,18 @@ export function ofEmittableErrored(...receivers: Function[]): OperatorFunction<a
  * @returns - RxJS factory operator function
  */
 export function ofEmittable(types: Types, status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
-    return (source: Observable<ActionContext>) => {
-        return source.pipe(
-            filter((ctx: ActionContext) => {
-                const hashMapHasType = types[getActionTypeFromInstance(ctx.action)];
-                const contextHasTransmittedStatus = ctx.status === status;
-                return hashMapHasType && contextHasTransmittedStatus;
-            }),
-            map(({ action, error }: ActionContext) => ({
-                type: getActionTypeFromInstance(action),
-                payload: action.payload,
-                error
-            }))
-        );
-    };
+  return (source: Observable<ActionContext>) => {
+    return source.pipe(
+      filter((ctx: ActionContext) => {
+        const hashMapHasType = types[getActionTypeFromInstance(ctx.action)];
+        const contextHasTransmittedStatus = ctx.status === status;
+        return hashMapHasType && contextHasTransmittedStatus;
+      }),
+      map(({ action, error }: ActionContext) => ({
+        type: getActionTypeFromInstance(action),
+        payload: action.payload,
+        error
+      }))
+    );
+  };
 }
