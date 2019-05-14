@@ -5,8 +5,8 @@ export { EmitterAction } from './lib/core/actions/actions';
 export { NgxsEmitPluginModule } from './lib/emit.module';
 export { EmitterService } from './lib/core/services/emitter.service';
 export {
-    ofEmittableDispatched,
-    ofEmittableSuccessful,
-    ofEmittableCanceled,
-    ofEmittableErrored
+  ofEmittableDispatched,
+  ofEmittableSuccessful,
+  ofEmittableCanceled,
+  ofEmittableErrored
 } from './lib/core/operators/of-emittable';

@@ -4,12 +4,12 @@ import { NgxsEmitPluginModule } from '@ngxs-labs/emitter';
 
 @NgModule()
 export class StoreTestBedModule {
-    /**
-     * This module provides easy-testing flow for `NgxsEmitPluginModule`
-     */
-    public static configureTestingModule(states: Type<any>[] = []): ModuleWithProviders[] {
-        return [NgxsModule.forRoot(states), NgxsEmitPluginModule.forRoot()].concat({
-            ngModule: StoreTestBedModule
-        });
-    }
+  /**
+   * This module provides easy-testing flow for `NgxsEmitPluginModule`
+   */
+  public static configureTestingModule(states: Type<any>[] = []): ModuleWithProviders[] {
+    return [NgxsModule.forRoot(states), NgxsEmitPluginModule.forRoot()].concat({
+      ngModule: StoreTestBedModule
+    });
+  }
 }

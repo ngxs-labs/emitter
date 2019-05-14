@@ -13,631 +13,559 @@ import { NgxsEmitPluginModule } from '../lib/emit.module';
 import { EmitStore } from '../lib/core/services/emit-store.service';
 
 describe(NgxsEmitPluginModule.name, () => {
-    interface Todo {
-        text: string;
-        completed: boolean;
+  interface Todo {
+    text: string;
+    completed: boolean;
+  }
+
+  it('should throw an error if a decorated method is not static', () => {
+    try {
+      @State({ name: 'bar' })
+      class BarState {
+        @Receiver()
+        public foo() {}
+      }
+    } catch ({ message }) {
+      expect(message).toBe('Only static functions can be decorated with @Receiver() decorator');
+    }
+  });
+
+  it('static metadata should have `type` property same as in @Receiver() decorator', () => {
+    @State({ name: 'bar' })
+    class BarState {
+      @Receiver({ type: '@@[bar]' })
+      public static foo() {}
     }
 
-    it('should throw an error if a decorated method is not static', () => {
-        try {
-            @State({ name: 'bar' })
-            class BarState {
-                @Receiver()
-                public foo() {}
-            }
-        } catch ({ message }) {
-            expect(message).toBe('Only static functions can be decorated with @Receiver() decorator');
-        }
+    const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
+    expect(BarFooMeta.type).toBe('@@[bar]');
+  });
+
+  it('static metadata should have default `type` property', () => {
+    @State({ name: 'bar' })
+    class BarState {
+      @Receiver()
+      public static foo() {}
+    }
+
+    const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
+    const typeContainsClassName = BarFooMeta.type.indexOf('BarState.foo') > -1;
+    expect(typeContainsClassName).toBeTruthy();
+  });
+
+  it('should decorate property with @Emitter() decorator', () => {
+    @State<Todo[]>({
+      name: 'todos',
+      defaults: []
+    })
+    class TodosState {
+      @Receiver()
+      public static addTodo() {}
+    }
+
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.addTodo)
+      public addTodoAction!: Emittable<Todo>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('static metadata should have `type` property same as in @Receiver() decorator', () => {
-        @State({ name: 'bar' })
-        class BarState {
-            @Receiver({ type: '@@[bar]' })
-            public static foo() {}
-        }
+    const fixture = TestBed.createComponent(MockComponent);
+    expect(typeof fixture.componentInstance.addTodoAction).toBe('object');
+    expect(typeof fixture.componentInstance.addTodoAction.emit).toBe('function');
+  });
 
-        const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
-        expect(BarFooMeta.type).toBe('@@[bar]');
+  it('should throw if decorated properties with @Emitter() and @Receiver() have the same names', () => {
+    try {
+      @State({ name: 'bar' })
+      class BarState {
+        @Emitter(BarState.foo)
+        private foo!: Emittable<void>;
+
+        @Receiver({ type: '@@[bar]' })
+        public static foo() {}
+      }
+    } catch ({ message }) {
+      expect(message).toBe('Property with name `foo` already exists, please rename to avoid conflicts');
+    }
+  });
+
+  it('should dispatch an action using property decorated with @Emitter()', () => {
+    @State<Todo[]>({
+      name: 'todos',
+      defaults: []
+    })
+    class TodosState {
+      @Receiver({ type: '@@[Todos] Add todo' })
+      public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
+        setState([...getState(), action.payload!]);
+      }
+    }
+
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.addTodo)
+      public addTodoAction!: Emittable<Todo>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('static metadata should have default `type` property', () => {
-        @State({ name: 'bar' })
-        class BarState {
-            @Receiver()
-            public static foo() {}
-        }
+    const store: Store = TestBed.get(Store);
+    const fixture = TestBed.createComponent(MockComponent);
 
-        const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
-        const typeContainsClassName = BarFooMeta.type.indexOf('BarState.foo') > -1;
-        expect(typeContainsClassName).toBeTruthy();
+    fixture.componentInstance.addTodoAction.emit({
+      text: 'buy some coffee',
+      completed: false
     });
 
-    it('should decorate property with @Emitter() decorator', () => {
-        @State<Todo[]>({
-            name: 'todos',
-            defaults: []
-        })
-        class TodosState {
-            @Receiver()
-            public static addTodo() {}
-        }
+    const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
+    expect(todos.length).toBe(1);
+  });
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.addTodo)
-            public addTodoAction!: Emittable<Todo>;
-        }
+  it('should add todo using @Receiver() decorator', () => {
+    @State<Todo[]>({
+      name: 'todos',
+      defaults: []
+    })
+    class TodosState {
+      @Receiver()
+      public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
+        setState([...getState(), action.payload!]);
+      }
+    }
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.addTodo)
+      public addTodo!: Emittable<Todo>;
+    }
 
-        const fixture = TestBed.createComponent(MockComponent);
-        expect(typeof fixture.componentInstance.addTodoAction).toBe('object');
-        expect(typeof fixture.componentInstance.addTodoAction.emit).toBe('function');
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should throw if decorated properties with @Emitter() and @Receiver() have the same names', () => {
-        try {
-            @State({ name: 'bar' })
-            class BarState {
-                @Emitter(BarState.foo)
-                private foo!: Emittable<void>;
+    const store: Store = TestBed.get(Store);
+    const fixture = TestBed.createComponent(MockComponent);
 
-                @Receiver({ type: '@@[bar]' })
-                public static foo() {}
-            }
-        } catch ({ message }) {
-            expect(message).toBe('Property with name `foo` already exists, please rename to avoid conflicts');
-        }
+    fixture.componentInstance.addTodo.emit({
+      text: 'buy coffee',
+      completed: false
     });
 
-    it('should dispatch an action using property decorated with @Emitter()', () => {
-        @State<Todo[]>({
-            name: 'todos',
-            defaults: []
-        })
-        class TodosState {
-            @Receiver({ type: '@@[Todos] Add todo' })
-            public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
-                setState([...getState(), action.payload!]);
-            }
-        }
+    const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
+    expect(todos.length).toBe(1);
+  });
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.addTodo)
-            public addTodoAction!: Emittable<Todo>;
-        }
+  it('should cancel uncompleted action', (done: jest.DoneCallback) => {
+    @State<number>({
+      name: 'counter',
+      defaults: 0
+    })
+    class CounterState {
+      @Receiver({ cancelUncompleted: true })
+      public static increment({ setState, getState }: StateContext<number>): Observable<null> {
+        return of(null).pipe(
+          delay(1000),
+          tap(() => {
+            setState(getState() + 1);
+          })
+        );
+      }
+    }
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(CounterState.increment)
+      public increment!: Emittable<void>;
+    }
 
-        const store: Store = TestBed.get(Store);
-        const fixture = TestBed.createComponent(MockComponent);
-
-        fixture.componentInstance.addTodoAction.emit({
-            text: 'buy some coffee',
-            completed: false
-        });
-
-        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
-        expect(todos.length).toBe(1);
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should add todo using @Receiver() decorator', () => {
-        @State<Todo[]>({
-            name: 'todos',
-            defaults: []
-        })
-        class TodosState {
-            @Receiver()
-            public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
-                setState([...getState(), action.payload!]);
-            }
-        }
+    const store: Store = TestBed.get(Store);
+    const fixture = TestBed.createComponent(MockComponent);
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.addTodo)
-            public addTodo!: Emittable<Todo>;
-        }
+    Promise.all([
+      fixture.componentInstance.increment.emit().toPromise(),
+      fixture.componentInstance.increment.emit().toPromise()
+    ]).then(() => {
+      const counter = store.selectSnapshot<number>(({ counter }) => counter);
+      expect(counter).toBe(1);
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
+      done();
+    });
+  });
 
-        const store: Store = TestBed.get(Store);
-        const fixture = TestBed.createComponent(MockComponent);
+  it('should dispatch an action from the sub state', () => {
+    @State({
+      name: 'bar2',
+      defaults: 10
+    })
+    class Bar2State {
+      @Receiver()
+      public static foo2({ setState }: StateContext<number>) {
+        setState(20);
+      }
+    }
 
-        fixture.componentInstance.addTodo.emit({
-            text: 'buy coffee',
-            completed: false
-        });
+    @State({
+      name: 'bar',
+      defaults: {},
+      children: [Bar2State]
+    })
+    class BarState {}
 
-        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
-        expect(todos.length).toBe(1);
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(Bar2State.foo2)
+      public foo2!: Emittable<void>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([BarState, Bar2State]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should cancel uncompleted action', (done: jest.DoneCallback) => {
-        @State<number>({
-            name: 'counter',
-            defaults: 0
-        })
-        class CounterState {
-            @Receiver({ cancelUncompleted: true })
-            public static increment({ setState, getState }: StateContext<number>): Observable<null> {
-                return of(null).pipe(
-                    delay(1000),
-                    tap(() => {
-                        setState(getState() + 1);
-                    })
-                );
-            }
-        }
+    const store: Store = TestBed.get(Store);
+    const fixture = TestBed.createComponent(MockComponent);
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(CounterState.increment)
-            public increment!: Emittable<void>;
-        }
+    fixture.componentInstance.foo2.emit();
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([CounterState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
+    const bar2Value = store.selectSnapshot((state) => state.bar).bar2;
+    expect(bar2Value).toBe(20);
+  });
 
-        const store: Store = TestBed.get(Store);
-        const fixture = TestBed.createComponent(MockComponent);
+  it('should throw an error that such `type` already exists', () => {
+    try {
+      @State({
+        name: 'bar',
+        defaults: 10
+      })
+      class BarState {
+        @Receiver({ type: 'foo' })
+        public static foo1() {}
 
-        Promise.all([
-            fixture.componentInstance.increment.emit().toPromise(),
-            fixture.componentInstance.increment.emit().toPromise()
-        ]).then(() => {
-            const counter = store.selectSnapshot<number>(({ counter }) => counter);
-            expect(counter).toBe(1);
+        @Receiver({ type: 'foo' })
+        public static foo2() {}
+      }
 
-            done();
-        });
+      TestBed.configureTestingModule({
+        imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()]
+      });
+    } catch ({ message }) {
+      expect(message).toBe('Method decorated with such type `foo` already exists');
+    }
+  });
+
+  it('should throw an error if an action passed to the @Receiver() does not have static `type` property', () => {
+    class FooAction {
+      public static readonly type = 'FooAction';
+    }
+
+    try {
+      @State({ name: 'bar' })
+      class BarState {
+        @Receiver({ action: FooAction })
+        public static foo() {}
+      }
+    } catch ({ message }) {
+      expect(message).toBe("FooAction's type should be defined as a static property `type`");
+    }
+  });
+
+  it('should be able to use @Receiver() with symbol-key methods', () => {
+    const symbol = Symbol.for('foo');
+
+    @State({ name: 'bar' })
+    class BarState {
+      @Receiver()
+      public static [symbol]() {}
+    }
+
+    const typeContainsClassName = BarState[symbol][RECEIVER_META_KEY].type.indexOf('BarState.Symbol(foo)') > -1;
+    expect(typeContainsClassName).toBeTruthy();
+  });
+
+  it('EmitStore.prototype.emitter should return an emittable object', () => {
+    @State({ name: 'bar' })
+    class BarState {
+      @Receiver()
+      public static foo() {}
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()]
     });
 
-    it('should dispatch an action from the sub state', () => {
-        @State({
-            name: 'bar2',
-            defaults: 10
-        })
-        class Bar2State {
-            @Receiver()
-            public static foo2({ setState }: StateContext<number>) {
-                setState(20);
-            }
-        }
+    const store: EmitStore = TestBed.get(EmitStore);
 
-        @State({
-            name: 'bar',
-            defaults: {},
-            children: [Bar2State]
-        })
-        class BarState {}
+    expect(typeof store.emitter(BarState.foo)).toBe('object');
+    expect(typeof store.emitter(BarState.foo).emit).toBe('function');
+  });
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(Bar2State.foo2)
-            public foo2!: Emittable<void>;
-        }
+  it('should dispatch an action using @Receiver() after delay', () => {
+    @Injectable()
+    class ApiService {
+      private size = 10;
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([BarState, Bar2State]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
+      public getTodosFromServer(length: number): Observable<Todo[]> {
+        return of(this.generateTodoMock(length)).pipe(delay(1000));
+      }
 
-        const store: Store = TestBed.get(Store);
-        const fixture = TestBed.createComponent(MockComponent);
+      private generateTodoMock(size?: number): Todo[] {
+        const length = size || this.size;
+        return Array.from({ length }).map(() => ({
+          text: 'buy some coffee',
+          completed: false
+        }));
+      }
+    }
 
-        fixture.componentInstance.foo2.emit();
+    @State<Todo[]>({
+      name: 'todos',
+      defaults: []
+    })
+    class TodosState {
+      public static api: ApiService = null!;
 
-        const bar2Value = store.selectSnapshot((state) => state.bar).bar2;
-        expect(bar2Value).toBe(20);
+      constructor(injector: Injector) {
+        TodosState.api = injector.get<ApiService>(ApiService);
+      }
+
+      @Receiver({ type: '@@[Todos] Set todos sync' })
+      public static async setTodosSync({ setState }: StateContext<Todo[]>) {
+        setState(await TodosState.api.getTodosFromServer(10).toPromise());
+      }
+
+      @Receiver({ type: '@@[Todos] Set todos' })
+      public static setTodos({ setState }: StateContext<Todo[]>) {
+        return TodosState.api.getTodosFromServer(5).pipe(
+          take(1),
+          tap((todos) => setState(todos))
+        );
+      }
+    }
+
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.setTodosSync)
+      public setTodosSync!: Emittable<Todo[]>;
+
+      @Emitter(TodosState.setTodos)
+      public setTodos!: Emittable<Todo[]>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent],
+      providers: [ApiService]
     });
 
-    it('should throw an error that such `type` already exists', () => {
-        try {
-            @State({
-                name: 'bar',
-                defaults: 10
-            })
-            class BarState {
-                @Receiver({ type: 'foo' })
-                public static foo1() {}
+    const store: Store = TestBed.get(Store);
+    const fixture = TestBed.createComponent(MockComponent);
 
-                @Receiver({ type: 'foo' })
-                public static foo2() {}
-            }
-
-            TestBed.configureTestingModule({
-                imports: [
-                    NgxsModule.forRoot([BarState]),
-                    NgxsEmitPluginModule.forRoot()
-                ]
-            });
-        } catch ({ message }) {
-            expect(message).toBe('Method decorated with such type `foo` already exists');
-        }
+    fixture.componentInstance.setTodosSync.emit().subscribe(() => {
+      const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
+      expect(todos.length).toBe(10);
     });
 
-    it('should throw an error if an action passed to the @Receiver() does not have static `type` property', () => {
-        class FooAction {
-            public static readonly type = 'FooAction';
-        }
+    fixture.componentInstance.setTodos.emit().subscribe(() => {
+      const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
+      expect(todos.length).toBe(5);
+    });
+  });
 
-        try {
-            @State({ name: 'bar' })
-            class BarState {
-                @Receiver({ action: FooAction })
-                public static foo() {}
-            }
-        } catch ({ message }) {
-            expect(message).toBe('FooAction\'s type should be defined as a static property `type`');
-        }
+  it('should throw an error if the function passed to @Emitter() is not decorated with @Receiver()', () => {
+    @State({
+      name: 'todos',
+      defaults: []
+    })
+    class TodosState {
+      public static addTodo() {}
+    }
+
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.addTodo)
+      public addTodo!: Emittable<void>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should be able to use @Receiver() with symbol-key methods', () => {
-        const symbol = Symbol.for('foo');
+    const fixture = TestBed.createComponent(MockComponent);
 
-        @State({ name: 'bar' })
-        class BarState {
-            @Receiver()
-            public static [symbol]() {}
-        }
+    try {
+      fixture.componentInstance.addTodo.emit();
+    } catch ({ message }) {
+      expect(message.indexOf(`I can't seem to find static metadata`) > -1).toBeTruthy();
+    }
+  });
 
-        const typeContainsClassName = BarState[symbol][RECEIVER_META_KEY].type.indexOf('BarState.Symbol(foo)') > -1;
-        expect(typeContainsClassName).toBeTruthy();
+  it('should be possible to pass an action into @Receiver() decorator', () => {
+    class AddTodo {
+      public static type = '@@[Todos] Add todo';
+      constructor(public payload: Todo) {}
+    }
+
+    @State<Todo[]>({
+      name: 'todos',
+      defaults: []
+    })
+    class TodosState {
+      @Receiver({ action: AddTodo })
+      public static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
+        setState([...getState(), payload]);
+      }
+    }
+
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.addTodo)
+      public addTodoAction!: Emittable<Todo>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('EmitStore.prototype.emitter should return an emittable object', () => {
-        @State({ name: 'bar' })
-        class BarState {
-            @Receiver()
-            public static foo() {}
-        }
+    const store: Store = TestBed.get(Store);
+    const fixture = TestBed.createComponent(MockComponent);
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([BarState]),
-                NgxsEmitPluginModule.forRoot()
-            ]
-        });
-
-        const store: EmitStore = TestBed.get(EmitStore);
-
-        expect(typeof store.emitter(BarState.foo)).toBe('object');
-        expect(typeof store.emitter(BarState.foo).emit).toBe('function');
+    fixture.componentInstance.addTodoAction.emit({
+      text: 'buy coffee',
+      completed: false
     });
 
-    it('should dispatch an action using @Receiver() after delay', () => {
-        @Injectable()
-        class ApiService {
-            private size = 10;
+    const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
+    expect(todos.length).toBe(1);
+  });
 
-            public getTodosFromServer(length: number): Observable<Todo[]> {
-                return of(this.generateTodoMock(length)).pipe(delay(1000));
-            }
+  it('should emit with a default payload', () => {
+    type TodosStateModel = Todo[] | null;
 
-            private generateTodoMock(size?: number): Todo[] {
-                const length = size || this.size;
-                return Array.from({ length }).map(() => ({
-                    text: 'buy some coffee',
-                    completed: false
-                }));
-            }
-        }
+    @State<TodosStateModel>({
+      name: 'todos',
+      defaults: null
+    })
+    class TodosState {
+      @Receiver({ payload: [] })
+      public static setInitialTodos({ setState }: StateContext<Todo[]>, { payload }: EmitterAction<Todo[]>) {
+        setState(payload!);
+      }
+    }
 
-        @State<Todo[]>({
-            name: 'todos',
-            defaults: []
-        })
-        class TodosState {
-            public static api: ApiService = null!;
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(TodosState.setInitialTodos)
+      public addTodoAction!: Emittable<void>;
+    }
 
-            constructor(injector: Injector) {
-                TodosState.api = injector.get<ApiService>(ApiService);
-            }
-
-            @Receiver({ type: '@@[Todos] Set todos sync' })
-            public static async setTodosSync({ setState }: StateContext<Todo[]>) {
-                setState(
-                    await TodosState.api
-                        .getTodosFromServer(10)
-                        .toPromise()
-                );
-            }
-
-            @Receiver({ type: '@@[Todos] Set todos' })
-            public static setTodos({ setState }: StateContext<Todo[]>) {
-                return TodosState.api
-                    .getTodosFromServer(5)
-                    .pipe(
-                        take(1),
-                        tap((todos) => setState(todos))
-                    );
-            }
-        }
-
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.setTodosSync)
-            public setTodosSync!: Emittable<Todo[]>;
-
-            @Emitter(TodosState.setTodos)
-            public setTodos!: Emittable<Todo[]>;
-        }
-
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ],
-            providers: [
-                ApiService
-            ]
-        });
-
-        const store: Store = TestBed.get(Store);
-        const fixture = TestBed.createComponent(MockComponent);
-
-        fixture.componentInstance.setTodosSync.emit().subscribe(() => {
-            const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
-            expect(todos.length).toBe(10);
-        });
-
-        fixture.componentInstance.setTodos.emit().subscribe(() => {
-            const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
-            expect(todos.length).toBe(5);
-        });
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should throw an error if the function passed to @Emitter() is not decorated with @Receiver()', () => {
-        @State({
-            name: 'todos',
-            defaults: []
-        })
-        class TodosState {
-            public static addTodo() {}
-        }
+    const fixture = TestBed.createComponent(MockComponent);
+    const store: Store = TestBed.get(Store);
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.addTodo)
-            public addTodo!: Emittable<void>;
-        }
+    fixture.componentInstance.addTodoAction.emit();
 
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
+    const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
+    expect(Array.isArray(todos)).toBeTruthy();
+  });
 
-        const fixture = TestBed.createComponent(MockComponent);
+  it('should add multiple animals using `emitMany`', () => {
+    @State<string[]>({
+      name: 'animals',
+      defaults: []
+    })
+    class AnimalsState {
+      @Receiver()
+      public static addAnimal({ getState, setState }: StateContext<string[]>, { payload }: EmitterAction<string>) {
+        setState([...getState(), payload!]);
+      }
+    }
 
-        try {
-            fixture.componentInstance.addTodo.emit();
-        } catch ({ message }) {
-            expect(message.indexOf(`I can't seem to find static metadata`) > -1).toBeTruthy();
-        }
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(AnimalsState.addAnimal)
+      public addAnimal!: Emittable<string>;
+    }
+
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([AnimalsState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should be possible to pass an action into @Receiver() decorator', () => {
-        class AddTodo {
-            public static type = '@@[Todos] Add todo';
-            constructor(public payload: Todo) {}
+    const fixture = TestBed.createComponent(MockComponent);
+    const store: Store = TestBed.get(Store);
+
+    fixture.componentInstance.addAnimal.emitMany(['Zebra', 'Panda']);
+
+    const animals = store.selectSnapshot<string[]>(({ animals }) => animals);
+
+    expect(animals.length).toBe(2);
+    expect(animals).toContain('Zebra');
+    expect(animals).toContain('Panda');
+  });
+
+  it('should be possible to pass multiple actions into @Receiver() decorator', () => {
+    class Increment {
+      public static readonly type = '[Counter] Increment';
+    }
+
+    class Decrement {
+      public static readonly type = '[Counter] Decrement';
+    }
+
+    @State({
+      name: 'counter',
+      defaults: 0
+    })
+    class CounterState {
+      @Receiver({ action: [Increment, Decrement] })
+      public static mutate({ setState, getState }: StateContext<number>, action: Increment | Decrement): void {
+        const state = getState();
+
+        if (action instanceof Increment) {
+          setState(state + 1);
+        } else if (action instanceof Decrement) {
+          setState(state - 1);
         }
+      }
+    }
 
-        @State<Todo[]>({
-            name: 'todos',
-            defaults: []
-        })
-        class TodosState {
-            @Receiver({ action: AddTodo })
-            public static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
-                setState([...getState(), payload]);
-            }
-        }
+    @Component({ template: '' })
+    class MockComponent {
+      @Emitter(CounterState.mutate)
+      public mutate!: Emittable<void>;
+    }
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.addTodo)
-            public addTodoAction!: Emittable<Todo>;
-        }
-
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
-
-        const store: Store = TestBed.get(Store);
-        const fixture = TestBed.createComponent(MockComponent);
-
-        fixture.componentInstance.addTodoAction.emit({
-            text: 'buy coffee',
-            completed: false
-        });
-
-        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
-        expect(todos.length).toBe(1);
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
     });
 
-    it('should emit with a default payload', () => {
-        type TodosStateModel = Todo[] | null;
+    const store: Store = TestBed.get(Store);
 
-        @State<TodosStateModel>({
-            name: 'todos',
-            defaults: null
-        })
-        class TodosState {
-            @Receiver({ payload: [] })
-            public static setInitialTodos({ setState }: StateContext<Todo[]>, { payload }: EmitterAction<Todo[]>) {
-                setState(payload!);
-            }
-        }
+    store.dispatch(new Increment());
+    store.dispatch(new Decrement());
 
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(TodosState.setInitialTodos)
-            public addTodoAction!: Emittable<void>;
-        }
-
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([TodosState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
-
-        const fixture = TestBed.createComponent(MockComponent);
-        const store: Store = TestBed.get(Store);
-
-        fixture.componentInstance.addTodoAction.emit();
-
-        const todos = store.selectSnapshot<Todo[]>(({ todos }) => todos);
-        expect(Array.isArray(todos)).toBeTruthy();
-    });
-
-    it('should add multiple animals using `emitMany`', () => {
-        @State<string[]>({
-            name: 'animals',
-            defaults: []
-        })
-        class AnimalsState {
-            @Receiver()
-            public static addAnimal({ getState, setState }: StateContext<string[]>, { payload }: EmitterAction<string>) {
-                setState([
-                    ...getState(),
-                    payload!
-                ]);
-            }
-        }
-
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(AnimalsState.addAnimal)
-            public addAnimal!: Emittable<string>;
-        }
-
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([AnimalsState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
-
-        const fixture = TestBed.createComponent(MockComponent);
-        const store: Store = TestBed.get(Store);
-
-        fixture.componentInstance.addAnimal.emitMany(['Zebra', 'Panda']);
-
-        const animals = store.selectSnapshot<string[]>(({ animals }) => animals);
-
-        expect(animals.length).toBe(2);
-        expect(animals).toContain('Zebra');
-        expect(animals).toContain('Panda');
-    });
-
-    it('should be possible to pass multiple actions into @Receiver() decorator', () => {
-        class Increment {
-            public static readonly type = '[Counter] Increment';
-        }
-
-        class Decrement {
-            public static readonly type = '[Counter] Decrement';
-        }
-
-        @State({
-            name: 'counter',
-            defaults: 0
-        })
-        class CounterState {
-            @Receiver({ action: [Increment, Decrement] })
-            public static mutate({ setState, getState }: StateContext<number>, action: Increment | Decrement): void {
-                const state = getState();
-
-                if (action instanceof Increment) {
-                    setState(state + 1);
-                } else if (action instanceof Decrement) {
-                    setState(state - 1);
-                }
-            }
-        }
-
-        @Component({ template: '' })
-        class MockComponent {
-            @Emitter(CounterState.mutate)
-            public mutate!: Emittable<void>;
-        }
-
-        TestBed.configureTestingModule({
-            imports: [
-                NgxsModule.forRoot([CounterState]),
-                NgxsEmitPluginModule.forRoot()
-            ],
-            declarations: [
-                MockComponent
-            ]
-        });
-
-        const store: Store = TestBed.get(Store);
-
-        store.dispatch(new Increment());
-        store.dispatch(new Decrement());
-
-        const counter = store.selectSnapshot<number>(({ counter }) => counter);
-        expect(counter).toBe(0);
-    });
+    const counter = store.selectSnapshot<number>(({ counter }) => counter);
+    expect(counter).toBe(0);
+  });
 });
