@@ -1,21 +1,21 @@
 environment:
-    nodejs_version: '10'
+  nodejs_version: '10'
 
 matrix:
-    fast_finish: true
+  fast_finish: true
 
 install:
-    - ps: Install-Product node $env:nodejs_version
-    - yarn
+  - ps: Install-Product node $env:nodejs_version
+  - yarn
 
 test_script:
-    - node --version
-    - yarn --version
-    - yarn ci:pipelines
+  - node --version
+  - yarn --version
+  - yarn ci:pipelines
 
 build: off
 deploy: off
 
 cache:
-    - node_modules -> yarn.lock
-    - "%LOCALAPPDATA%\\Yarn"
+  - node_modules -> yarn.lock
+  - "%LOCALAPPDATA%\\Yarn"
