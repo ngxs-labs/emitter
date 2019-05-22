@@ -1,5 +1,4 @@
 import { InjectorAccessor } from '../services/injector-accessor.service';
-import { EmitStore } from '../services/emit-store.service';
 
 /**
  * Decorates a property and defines new getter
@@ -11,7 +10,7 @@ export function Emitter(receiver: Function): PropertyDecorator {
   return (target: Object, key: string | symbol) => {
     Object.defineProperty(target, key, {
       get: () => {
-        const store = InjectorAccessor.getInjector().get<EmitStore>(EmitStore);
+        const store = InjectorAccessor.getEmitStore();
         return store.emitter(receiver);
       }
     });

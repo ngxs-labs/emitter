@@ -86,8 +86,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
     }
 
     if (is.array(action)) {
-      for (let i = 0, length = action.length; i < length; i++) {
-        const { type } = action[i];
+      for (const { type } of action) {
         meta.actions[type] = [
           {
             fn: `${key}`,

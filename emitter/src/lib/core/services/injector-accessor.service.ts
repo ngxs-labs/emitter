@@ -1,6 +1,13 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { is } from '../utils';
+import { EmitStore } from './emit-store.service';
+
+class NgxsEmitPluginModuleIsNotImported extends Error {
+  constructor() {
+    super(`You've forgotten to import \`NgxsEmitPluginModule\``);
+  }
+}
 
 /**
  * Allows multiple decorators to get access to the DI store
@@ -21,14 +28,11 @@ export class InjectorAccessor {
     InjectorAccessor.injector = injector;
   }
 
-  /**
-   * @returns - Error if `NgxsEmitPluginModule` is not imported or injector instance
-   */
-  public static getInjector(): never | Injector {
+  public static getEmitStore(): never | EmitStore {
     if (is.null(this.injector)) {
-      throw new Error(`You've forgotten to import \`NgxsEmitPluginModule\``);
+      throw new NgxsEmitPluginModuleIsNotImported();
     }
 
-    return this.injector;
+    return this.injector.get<EmitStore>(EmitStore);
   }
 }
