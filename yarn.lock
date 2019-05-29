@@ -128,9 +128,9 @@
     semver "5.6.0"
     symbol-observable "1.2.0"
 
-"@angular/common@7.2.15":
-  version "7.2.15"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-7.2.15.tgz#e6c2f6913cdc49f87adcaabc30604e721561374b"
+"@angular/common@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-8.0.0.tgz#700aeda9be8af96692fce0ea6bf6157f7c874c0e"
   dependencies:
     tslib "^1.9.0"
 
@@ -150,27 +150,27 @@
     tslib "^1.9.0"
     yargs "9.0.1"
 
-"@angular/compiler@7.2.15":
-  version "7.2.15"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-7.2.15.tgz#9698dac49dbb46956f0b8a6280580025ea7ab04e"
+"@angular/compiler@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-8.0.0.tgz#302c987737e1473db3a113ff70fbbb315aa41b58"
   dependencies:
     tslib "^1.9.0"
 
-"@angular/core@7.2.15":
-  version "7.2.15"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-7.2.15.tgz#c00d4be0ebe95b70f7631154169509cc97934e9a"
+"@angular/core@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-8.0.0.tgz#bf7a582b818e9181d830219907470e2b865ba32f"
   dependencies:
     tslib "^1.9.0"
 
-"@angular/platform-browser-dynamic@7.2.15":
-  version "7.2.15"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-7.2.15.tgz#e697159b565ef78bd7d276fa876d099172ad8735"
+"@angular/platform-browser-dynamic@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-8.0.0.tgz#c15f394579ff44f3752033de58edc1afa5065d59"
   dependencies:
     tslib "^1.9.0"
 
-"@angular/platform-browser@7.2.15":
-  version "7.2.15"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-7.2.15.tgz#d6df74c427453e563c12bc2ec03a83bf10bb3805"
+"@angular/platform-browser@8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-8.0.0.tgz#fc7c55a0483e67e5606e499c129fda60ae8d4363"
   dependencies:
     tslib "^1.9.0"
 
