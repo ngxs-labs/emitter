@@ -84,7 +84,7 @@ describe(NgxsEmitPluginModule.name, () => {
       @State({ name: 'bar' })
       class BarState {
         @Emitter(BarState.foo)
-        private foo!: Emittable<void>;
+        private foo!: Emittable;
 
         @Receiver({ type: '@@[bar]' })
         public static foo() {}
@@ -102,7 +102,7 @@ describe(NgxsEmitPluginModule.name, () => {
     class TodosState {
       @Receiver({ type: '@@[Todos] Add todo' })
       public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
-        setState([...getState(), action.payload!]);
+        setState([...getState(), action.payload]);
       }
     }
 
@@ -137,7 +137,7 @@ describe(NgxsEmitPluginModule.name, () => {
     class TodosState {
       @Receiver()
       public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
-        setState([...getState(), action.payload!]);
+        setState([...getState(), action.payload]);
       }
     }
 
@@ -184,7 +184,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(CounterState.increment)
-      public increment!: Emittable<void>;
+      public increment!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -228,7 +228,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(Bar2State.foo2)
-      public foo2!: Emittable<void>;
+      public foo2!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -359,10 +359,10 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.setTodosSync)
-      public setTodosSync!: Emittable<Todo[]>;
+      public setTodosSync!: Emittable;
 
       @Emitter(TodosState.setTodos)
-      public setTodos!: Emittable<Todo[]>;
+      public setTodos!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -397,7 +397,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.addTodo)
-      public addTodo!: Emittable<void>;
+      public addTodo!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -464,14 +464,14 @@ describe(NgxsEmitPluginModule.name, () => {
     class TodosState {
       @Receiver({ payload: [] })
       public static setInitialTodos({ setState }: StateContext<Todo[]>, { payload }: EmitterAction<Todo[]>) {
-        setState(payload!);
+        setState(payload);
       }
     }
 
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.setInitialTodos)
-      public addTodoAction!: Emittable<void>;
+      public addTodoAction!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -496,7 +496,7 @@ describe(NgxsEmitPluginModule.name, () => {
     class AnimalsState {
       @Receiver()
       public static addAnimal({ getState, setState }: StateContext<string[]>, { payload }: EmitterAction<string>) {
-        setState([...getState(), payload!]);
+        setState([...getState(), payload]);
       }
     }
 
@@ -552,7 +552,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(CounterState.mutate)
-      public mutate!: Emittable<void>;
+      public mutate!: Emittable;
     }
 
     TestBed.configureTestingModule({

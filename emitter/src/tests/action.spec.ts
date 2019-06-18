@@ -57,7 +57,7 @@ describe('Actions', () => {
     public multiplyBy2?: Emittable<void | number>;
 
     @Emitter(CounterState.throwError)
-    public throwError?: Emittable<void>;
+    public throwError?: Emittable;
   }
 
   it('ofEmittable operators should return factories', () => {
@@ -155,7 +155,7 @@ describe('Actions', () => {
 
     actions$
       .pipe(ofEmittableErrored(CounterState.throwError))
-      .subscribe(({ payload, error }: OfEmittableActionContext<void>) => {
+      .subscribe(({ payload, error }: OfEmittableActionContext) => {
         expect(payload).toBe(undefined);
         expect(error!.message).toBe('Whoops!');
       });
@@ -185,7 +185,7 @@ describe('Actions', () => {
           expect(types).toContain('CounterState.decrement');
         })
       )
-      .subscribe(({ type }: OfEmittableActionContext<void>) => {
+      .subscribe(({ type }: OfEmittableActionContext) => {
         types.push(type);
       });
 
@@ -216,7 +216,7 @@ describe('Actions', () => {
           });
         })
       )
-      .subscribe(({ type }: OfEmittableActionContext<void>) => {
+      .subscribe(({ type }: OfEmittableActionContext) => {
         types.push(type);
       });
 

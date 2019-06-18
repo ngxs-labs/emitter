@@ -104,12 +104,12 @@ export class CounterComponent {
 
     // Use in components to emit asynchronously payload
     @Emitter(CounterState.increment)
-    public increment: Emittable<void>;
+    public increment: Emittable;
 
     @Emitter(CounterState.decrement)
-    public decrement: Emittable<void>;
+    public decrement: Emittable;
 }
-```
+``` 
 
 Alternatively you can use `EmitterService` instead of decorating properties:
 
@@ -175,6 +175,8 @@ export class CounterState {
 ```
 
 ## Payload type safety 
+`Emittable` and `EmitterAction` are generics which allow you to type the payload, which is `void` (alias not present) by default.
+For example, `Emittable` is the same as `Emittable<void>`. Also it's possible to type it like `Emittable<number>` or `Emittable<any>` (if you want it to accept all possible values).
 
 ```typescript
 import { Component } from '@angular/core';
@@ -200,7 +202,7 @@ export class AppComponent {
     private update: Emittable<CustomCounter>;
 
     public update(): void {
-        this.update.emit(undefined as any);
+        this.update.emit({ value: 5 });
     }
 }
 ```
@@ -491,13 +493,13 @@ import { CounterState } from './counter.state';
 })
 export class AppComponent {
     @Emitter(CounterState.increment)
-    private increment: Emittable<void>;
+    private increment: Emittable;
 
     @Emitter(CounterState.decrement)
-    private decrement: Emittable<void>;
+    private decrement: Emittable;
 
     @Emitter(CounterState.throwError)
-    private throwError: Emittable<void>;
+    private throwError: Emittable;
 
     constructor(actions$: Actions) {
         actions$.pipe(
