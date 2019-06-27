@@ -65,7 +65,7 @@
     "@types/semver": "5.5.0",
     "@types/yargs": "12.0.11",
     "codelyzer": "4.5.0",
-    "husky": "2.6.0",
+    "husky": "2.7.0",
     "jest": "24.8.0",
     "lint-staged": "8.2.1",
     "ng-packagr": "4.7.1",
