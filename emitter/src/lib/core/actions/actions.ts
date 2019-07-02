@@ -1,7 +1,7 @@
 /**
  * This class is used as a default action when the user doesn't pass any custom action as an argument
  */
-export class EmitterAction<T = any> {
+export class EmitterAction<T = void> {
   /**
    * Action type
    */
@@ -12,5 +12,5 @@ export class EmitterAction<T = any> {
    *
    * @param payload - Data to dispatch
    */
-  constructor(public payload?: T) {}
+  constructor(public payload: T) {}
 }

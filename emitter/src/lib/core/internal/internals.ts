@@ -39,9 +39,9 @@ export interface ReceiverMetaData<T extends Function = any> {
  * @property emit - Function that dispatches payload under the hood
  * @property emitMany - Function that makes multiple dispatching under the hood
  */
-export interface Emittable<T = any, U = any> {
-  emit(payload?: T): Observable<U>;
-  emitMany(payloads?: T[]): Observable<U>;
+export interface Emittable<T = void, U = any> {
+  emit(payload: T): Observable<U>;
+  emitMany(payloads: T[]): Observable<U>;
 }
 
 /**
@@ -64,7 +64,7 @@ export interface ActionContext {
  * @property payload - Dispatched data
  * @property error - Error that has been throwed or undefined
  */
-export interface OfEmittableActionContext<T = any> {
+export interface OfEmittableActionContext<T = void> {
   type: string;
   payload: T;
   error?: Error;

@@ -19,7 +19,7 @@ export class EmitStore extends Store {
    * @param receiver - Reference to the static function from the store
    * @returns - A plain object with an `emit` function for calling emitter
    */
-  public emitter<T = any, U = any>(receiver: Function): Emittable<T, U> {
+  public emitter<T = void, U = any>(receiver: Function): Emittable<T, U> {
     const metadata: ReceiverMetaData = receiver[RECEIVER_META_KEY];
 
     if (is.falsy(metadata)) {
@@ -27,8 +27,8 @@ export class EmitStore extends Store {
     }
 
     return {
-      emit: (payload?: T) => this.dispatchSingle<T, U>(metadata, payload),
-      emitMany: (payloads?: T[]) => this.dispatchMany<T, U>(metadata, payloads)
+      emit: (payload: T) => this.dispatchSingle<T, U>(metadata, payload),
+      emitMany: (payloads: T[]) => this.dispatchMany<T, U>(metadata, payloads)
     };
   }
 
@@ -37,7 +37,7 @@ export class EmitStore extends Store {
    * @param payload - Data to dispatch
    * @returns - An observable that emits events after dispatch
    */
-  private dispatchSingle<T, U>(metadata: ReceiverMetaData, payload?: T): Observable<U> {
+  private dispatchSingle<T, U>(metadata: ReceiverMetaData, payload: T): Observable<U> {
     EmitterAction.type = metadata.type;
 
     if (is.undefined(payload) && metadata.payload !== undefined) {
@@ -59,7 +59,7 @@ export class EmitStore extends Store {
    * @param payloads - Array with data to dispatch
    * @returns - An observable that emits events after dispatch
    */
-  private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads?: T[]): Observable<U> {
+  private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads: T[]): Observable<U> {
     if (!is.array(payloads)) {
       return this.dispatch([]);
     }
