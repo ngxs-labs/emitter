@@ -43,11 +43,11 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "8.0.3",
-    "@angular/compiler": "8.0.3",
-    "@angular/core": "8.0.3",
-    "@angular/platform-browser": "8.0.3",
-    "@angular/platform-browser-dynamic": "8.0.3",
+    "@angular/common": "8.1.0",
+    "@angular/compiler": "8.1.0",
+    "@angular/core": "8.1.0",
+    "@angular/platform-browser": "8.1.0",
+    "@angular/platform-browser-dynamic": "8.1.0",
     "@ngxs/store": "3.3.4",
     "rxjs": "6.5.2",
     "zone.js": "0.8.26"
