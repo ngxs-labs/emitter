@@ -50,7 +50,7 @@
     "@angular/platform-browser-dynamic": "8.2.0",
     "@ngxs/store": "3.3.4",
     "rxjs": "6.5.2",
-    "zone.js": "0.10.0"
+    "zone.js": "0.10.1"
   },
   "devDependencies": {
     "@angular-builders/jest": "7.4.2",
