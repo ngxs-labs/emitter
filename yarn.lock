@@ -128,9 +128,9 @@
     semver "5.6.0"
     symbol-observable "1.2.0"
 
-"@angular/common@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-8.2.0.tgz#20b345edcaaa5437fa4e6b4e7aeadc9649fbaa63"
+"@angular/common@8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-8.2.1.tgz#f34ee4db45693ce8f382a26800441988fe71316a"
   dependencies:
     tslib "^1.9.0"
 
@@ -150,27 +150,27 @@
     tslib "^1.9.0"
     yargs "9.0.1"
 
-"@angular/compiler@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-8.2.0.tgz#216cbebb9e9a59c2037746112dbf044a26670e36"
+"@angular/compiler@8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-8.2.1.tgz#685d42545a0d3607b4958c92e121ee348e985f0f"
   dependencies:
     tslib "^1.9.0"
 
-"@angular/core@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-8.2.0.tgz#18e50f525d9cb9987a6a84e583a2becbc446919e"
+"@angular/core@8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-8.2.1.tgz#38e504479856f0d063f26ce349cf432575f0185b"
   dependencies:
     tslib "^1.9.0"
 
-"@angular/platform-browser-dynamic@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-8.2.0.tgz#c3457ab5314a17560c604685d9da24e2da59e61b"
+"@angular/platform-browser-dynamic@8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-8.2.1.tgz#a3f378d28329f7507d019fe9348d2652ab9bff63"
   dependencies:
     tslib "^1.9.0"
 
-"@angular/platform-browser@8.2.0":
-  version "8.2.0"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-8.2.0.tgz#aa38096470d6240ba037f543e3b356d0f378ee08"
+"@angular/platform-browser@8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-8.2.1.tgz#cbe58d3f09d33a786a3c82f86b83784decfaa91e"
   dependencies:
     tslib "^1.9.0"
 
