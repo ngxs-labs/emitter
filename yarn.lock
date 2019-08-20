@@ -7922,9 +7922,9 @@ tslint-sonarts@1.9.0:
   dependencies:
     immutable "^3.8.2"
 
-tslint@5.18.0:
-  version "5.18.0"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.18.0.tgz#f61a6ddcf372344ac5e41708095bbf043a147ac6"
+tslint@5.19.0:
+  version "5.19.0"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.19.0.tgz#a2cbd4a7699386da823f6b499b8394d6c47bb968"
   dependencies:
     "@babel/code-frame" "^7.0.0"
     builtin-modules "^1.1.1"
