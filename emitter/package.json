@@ -19,7 +19,7 @@
   "sideEffects": true,
   "peerDependencies": {
     "@angular/core": "^8.2.3",
-    "@ngxs/store": ">=3.3.4"
+    "@ngxs/store": ">=3.5.0"
   },
   "ngPackage": {
     "lib": {
