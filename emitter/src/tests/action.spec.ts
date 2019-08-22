@@ -38,9 +38,26 @@ describe('Actions', () => {
     }
 
     @Receiver()
+    public static dontChange() {
+      CounterStore.increment.emit();
+      CounterStore.decrement.emit();
+    }
+
+    @Receiver()
     public static throwError() {
       return throwError(new Error('Whoops!'));
     }
+  }
+
+  class CounterStore {
+    @Emitter(CounterState.increment)
+    public static increment: Emittable<void>;
+
+    @Emitter(CounterState.decrement)
+    public static decrement: Emittable<void>;
+
+    @Emitter(CounterState.dontChange)
+    public static dontChange: Emittable<void>;
   }
 
   @Component({
@@ -224,5 +241,29 @@ describe('Actions', () => {
     fixture.componentInstance.increment!.emit();
     fixture.componentInstance.decrement!.emit();
     fixture.componentInstance.multiplyBy2!.emit();
+  });
+
+  it('should dispatch actions to correct receivers', () => {
+    TestBed.configureTestingModule({
+      imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
+      declarations: [MockComponent]
+    });
+
+    const store: Store = TestBed.get(Store);
+    const actions$: Actions = TestBed.get(Actions);
+
+    const action = actions$
+      .pipe(
+        ofEmittableSuccessful(CounterState.dontChange, CounterState.increment, CounterState.decrement),
+        take(3)
+      )
+      .toPromise()
+      .then(() => {
+        const counter = store.selectSnapshot<number>((state) => state.counter);
+        expect(counter).toBe(0);
+      });
+
+    CounterStore.dontChange.emit();
+    return action;
   });
 });
