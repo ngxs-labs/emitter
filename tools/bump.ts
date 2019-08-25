@@ -1,33 +1,40 @@
-import * as fs from 'fs';
-import { argv } from 'yargs';
 import { join } from 'path';
-import { promisify } from 'util';
+import { writeFileSync } from 'fs';
 import { ReleaseType, inc } from 'semver';
+import * as colors from 'colors/safe';
 
-const readFile = promisify(fs.readFile);
-const writeFile = promisify(fs.writeFile);
+import { getLastTwoArguments } from './utils';
 
-function getPackage(path: string) {
-  return readFile(path, {
-    encoding: 'utf-8'
-  }).then(JSON.parse);
+const releases = ['major', 'premajor', 'minor', 'preminor', 'patch', 'prepatch', 'prerelase'];
+
+function writePackage(path: string, packageJson: typeof import('../emitter/package.json')) {
+  writeFileSync(path, `${JSON.stringify(packageJson, null, 2)}\n`);
 }
 
-function writePackage(path: string, json: any) {
-  return writeFile(path, `${JSON.stringify(json, null, 4)}\n`);
+function getPackage(path: string): typeof import('../emitter/package.json') {
+  return require(path);
 }
 
-async function bump(): Promise<void> {
-  const release = argv.release as ReleaseType;
+class InvalidBumpArguments extends Error {
+  public message = colors.red(`
+    You've specified invalid arguments, the command should look like
+    "yarn bump --release {${releases.join('|')}}"
+  `);
+}
 
-  if (!release) {
-    return console.warn('Specify `--release` argument!');
+function bump() {
+  const [argument, release] = getLastTwoArguments<string, ReleaseType>();
+
+  if (argument !== '--release' || ~releases.indexOf(release) === 0) {
+    throw new InvalidBumpArguments();
   }
 
-  const path = join(__dirname, '../src/package.json');
-  const json = await getPackage(path);
-  json.version = inc(json.version, release);
-  await writePackage(path, json);
+  const path = join(__dirname, '../emitter/package.json');
+  const packageJson = getPackage(path);
+  packageJson.version = inc(packageJson.version, release)!;
+  writePackage(path, packageJson);
+
+  console.log(colors.green(`I've successfully changed version in the "package.json".`));
 }
 
 bump();
