@@ -23,7 +23,7 @@ export class EmitStore extends Store {
     const metadata: ReceiverMetaData = receiver[RECEIVER_META_KEY];
 
     if (is.falsy(metadata)) {
-      throw new Error(`I can't seem to find static metadata. Have you decorated ${receiver.name} with @Receiver()?`);
+      throw new Error(`Static metadata cannot be found, have you decorated ${receiver.name} with @Receiver()?`);
     }
 
     return {
@@ -38,8 +38,6 @@ export class EmitStore extends Store {
    * @returns - An observable that emits events after dispatch
    */
   private dispatchSingle<T, U>(metadata: ReceiverMetaData, payload: T): Observable<U> {
-    EmitterAction.type = metadata.type;
-
     if (is.undefined(payload) && metadata.payload !== undefined) {
       payload = metadata.payload;
     }
@@ -51,7 +49,7 @@ export class EmitStore extends Store {
       return this.dispatch(constructEventsForSingleDispatching<T>(flattenedConstructors, payload));
     }
 
-    return this.dispatch(new EmitterAction(payload));
+    return this.dispatch(new EmitterAction(payload, metadata.type));
   }
 
   /**
@@ -64,8 +62,6 @@ export class EmitStore extends Store {
       return this.dispatch([]);
     }
 
-    EmitterAction.type = metadata.type;
-
     const { action } = metadata;
 
     if (action) {
@@ -73,6 +69,6 @@ export class EmitStore extends Store {
       return this.dispatch(constructEventsForManyDispatching(flattenedConstructors, payloads));
     }
 
-    return this.dispatch(payloads.map((payload) => new EmitterAction(payload)));
+    return this.dispatch(payloads.map((payload) => new EmitterAction(payload, metadata.type)));
   }
 }

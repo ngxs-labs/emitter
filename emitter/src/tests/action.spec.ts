@@ -225,4 +225,70 @@ describe('Actions', () => {
     fixture.componentInstance.decrement!.emit();
     fixture.componentInstance.multiplyBy2!.emit();
   });
+
+  describe('Receivers interaction', () => {
+    @State<number>({
+      name: 'counter',
+      defaults: 0
+    })
+    class CounterState {
+      @Receiver()
+      static increment(ctx: StateContext<number>) {
+        ctx.setState(ctx.getState() + 1);
+      }
+
+      @Receiver()
+      static decrement(ctx: StateContext<number>) {
+        ctx.setState(ctx.getState() - 1);
+      }
+
+      @Receiver()
+      static dontChange() {
+        CounterService.increment.emit();
+        CounterService.decrement.emit();
+      }
+    }
+
+    class CounterService {
+      @Emitter(CounterState.increment)
+      static increment: Emittable<void>;
+
+      @Emitter(CounterState.decrement)
+      static decrement: Emittable<void>;
+
+      @Emitter(CounterState.dontChange)
+      static dontChange: Emittable<void>;
+    }
+
+    it('should dispatch actions to correct receivers', () => {
+      // Arrange
+      TestBed.configureTestingModule({
+        imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
+        declarations: [MockComponent]
+      });
+
+      // Act
+      const store: Store = TestBed.get(Store);
+      const actions$: Actions = TestBed.get(Actions);
+
+      let emittedTimes = 0;
+
+      actions$
+        .pipe(
+          ofEmittableSuccessful(CounterState.dontChange, CounterState.increment, CounterState.decrement),
+          take(3)
+        )
+        .subscribe(() => {
+          emittedTimes++;
+        });
+
+      CounterService.dontChange.emit();
+
+      const counter: number = store.selectSnapshot(CounterState);
+
+      // Assert
+      expect(counter).toBe(0);
+      expect(emittedTimes).toBe(3);
+    });
+  });
 });
