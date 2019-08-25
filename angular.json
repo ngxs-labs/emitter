@@ -27,7 +27,7 @@
           "options": {
             "tsConfig": [
               "emitter/tsconfig.lib.json",
-              "emitter/tsconfig.spec.json"
+              "tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

@@ -1,6 +1,7 @@
 export const is = {
   null: (value: any): value is null => value === null,
-  undefined: (value: any): value is undefined => typeof value === 'undefined' || value === undefined,
+  undefined: (value: any): value is undefined =>
+    typeof value === 'undefined' || value === undefined,
   nullOrUndefined: (value: any): value is null | undefined => value == null,
   truthy: (value: any): value is true => !!value,
   falsy: (value: any): value is false => !value,

@@ -92,8 +92,11 @@ export const RECEIVER_META_KEY = 'NGXS_RECEIVER_META';
  * @param payload - Payload to dispatch
  * @returns - Array of instances
  */
-export function constructEventsForSingleDispatching<T>(constructors: Type<any>[], payload: T | undefined): any {
-  return constructors.map((Action) => new Action(payload));
+export function constructEventsForSingleDispatching<T>(
+  constructors: Type<any>[],
+  payload: T | undefined
+): any {
+  return constructors.map(Action => new Action(payload));
 }
 
 /**
@@ -102,13 +105,15 @@ export function constructEventsForSingleDispatching<T>(constructors: Type<any>[]
  * @param payloads - Payloads to dispatch
  * @returns - Array of instances
  */
-export function constructEventsForManyDispatching<T>(constructors: Type<any>[], payloads: T[]): any {
+export function constructEventsForManyDispatching<T>(
+  constructors: Type<any>[],
+  payloads: T[]
+): any {
   const events = [];
 
-  for (let i = 0, constructorsLength = constructors.length; i < constructorsLength; i++) {
-    const Action = constructors[i];
-    for (let j = 0, payloadsLength = payloads.length; j < payloadsLength; j++) {
-      events.push(new Action(payloads[j]));
+  for (const Action of constructors) {
+    for (const payload of payloads) {
+      events.push(new Action(payload));
     }
   }
 

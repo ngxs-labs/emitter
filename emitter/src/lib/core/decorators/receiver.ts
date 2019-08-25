@@ -17,7 +17,11 @@ function generateHash(): string {
  * @param target - Decorated target
  * @param key - Decorated key
  */
-function getActionProperties(options: Partial<ReceiverMetaData> | undefined, target: Function, key: string) {
+function getActionProperties(
+  options: Partial<ReceiverMetaData> | undefined,
+  target: Function,
+  key: string
+) {
   const defaultProperties: ReceiverMetaData = {
     type: `[ID:${generateHash()}] ${target.name}.${key}`,
     payload: undefined,
@@ -61,7 +65,11 @@ function getActionProperties(options: Partial<ReceiverMetaData> | undefined, tar
  * @returns - Factory for decorating method
  */
 export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
-  return (target: any, key: string | symbol, descriptor: TypedPropertyDescriptor<ActionHandler>) => {
+  return (
+    target: any,
+    key: string | symbol,
+    descriptor: TypedPropertyDescriptor<ActionHandler>
+  ) => {
     const isNotFunctionOrNotStatic =
       is.undefined(target.prototype) || is.falsy(descriptor) || isNotAFunction(target[key]);
 
@@ -71,7 +79,9 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
 
     const reservedKeyAlreadyExists = key in target.prototype;
     if (reservedKeyAlreadyExists) {
-      throw new Error(`Property with name \`${key.toString()}\` already exists, please rename to avoid conflicts`);
+      throw new Error(
+        `Property with name \`${key.toString()}\` already exists, please rename to avoid conflicts`
+      );
     }
 
     if (typeof key !== 'string') {
