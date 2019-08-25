@@ -79,7 +79,7 @@ describe(NgxsEmitPluginModule.name, () => {
     expect(typeof fixture.componentInstance.addTodoAction.emit).toBe('function');
   });
 
-  it('should throw if decorated properties with @Emitter() and @Receiver() have the same names', () => {
+  it('should throw if decorated properties have the same names', () => {
     try {
       @State({ name: 'bar' })
       class BarState {
@@ -90,7 +90,9 @@ describe(NgxsEmitPluginModule.name, () => {
         public static foo() {}
       }
     } catch ({ message }) {
-      expect(message).toBe('Property with name `foo` already exists, please rename to avoid conflicts');
+      expect(message).toBe(
+        'Property with name `foo` already exists, please rename to avoid conflicts'
+      );
     }
   });
 
@@ -101,7 +103,10 @@ describe(NgxsEmitPluginModule.name, () => {
     })
     class TodosState {
       @Receiver({ type: '@@[Todos] Add todo' })
-      public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
+      public static addTodo(
+        { setState, getState }: StateContext<Todo[]>,
+        action: EmitterAction<Todo>
+      ) {
         setState([...getState(), action.payload]);
       }
     }
@@ -136,7 +141,10 @@ describe(NgxsEmitPluginModule.name, () => {
     })
     class TodosState {
       @Receiver()
-      public static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
+      public static addTodo(
+        { setState, getState }: StateContext<Todo[]>,
+        action: EmitterAction<Todo>
+      ) {
         setState([...getState(), action.payload]);
       }
     }
@@ -241,7 +249,7 @@ describe(NgxsEmitPluginModule.name, () => {
 
     fixture.componentInstance.foo2.emit();
 
-    const bar2Value = store.selectSnapshot((state) => state.bar).bar2;
+    const bar2Value = store.selectSnapshot(state => state.bar).bar2;
     expect(bar2Value).toBe(20);
   });
 
@@ -292,7 +300,8 @@ describe(NgxsEmitPluginModule.name, () => {
       public static [symbol]() {}
     }
 
-    const typeContainsClassName = BarState[symbol][RECEIVER_META_KEY].type.indexOf('BarState.Symbol(foo)') > -1;
+    const typeContainsClassName =
+      BarState[symbol][RECEIVER_META_KEY].type.indexOf('BarState.Symbol(foo)') > -1;
     expect(typeContainsClassName).toBeTruthy();
   });
 
@@ -351,7 +360,7 @@ describe(NgxsEmitPluginModule.name, () => {
       public static setTodos({ setState }: StateContext<Todo[]>) {
         return TodosState.api.getTodosFromServer(5).pipe(
           take(1),
-          tap((todos) => setState(todos))
+          tap(todos => setState(todos))
         );
       }
     }
@@ -385,7 +394,7 @@ describe(NgxsEmitPluginModule.name, () => {
     });
   });
 
-  it('should throw an error if the function passed to @Emitter() is not decorated with @Receiver()', () => {
+  it('should throw if the function passed to @Emitter() is not decorated with @Receiver()', () => {
     @State({
       name: 'todos',
       defaults: []
@@ -463,7 +472,10 @@ describe(NgxsEmitPluginModule.name, () => {
     })
     class TodosState {
       @Receiver({ payload: [] })
-      public static setInitialTodos({ setState }: StateContext<Todo[]>, { payload }: EmitterAction<Todo[]>) {
+      public static setInitialTodos(
+        { setState }: StateContext<Todo[]>,
+        { payload }: EmitterAction<Todo[]>
+      ) {
         setState(payload);
       }
     }
@@ -495,7 +507,10 @@ describe(NgxsEmitPluginModule.name, () => {
     })
     class AnimalsState {
       @Receiver()
-      public static addAnimal({ getState, setState }: StateContext<string[]>, { payload }: EmitterAction<string>) {
+      public static addAnimal(
+        { getState, setState }: StateContext<string[]>,
+        { payload }: EmitterAction<string>
+      ) {
         setState([...getState(), payload]);
       }
     }
@@ -538,7 +553,10 @@ describe(NgxsEmitPluginModule.name, () => {
     })
     class CounterState {
       @Receiver({ action: [Increment, Decrement] })
-      public static mutate({ setState, getState }: StateContext<number>, action: Increment | Decrement): void {
+      public static mutate(
+        { setState, getState }: StateContext<number>,
+        action: Increment | Decrement
+      ): void {
         const state = getState();
 
         if (action instanceof Increment) {

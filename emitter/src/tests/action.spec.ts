@@ -61,11 +61,14 @@ describe('Actions', () => {
   }
 
   it('ofEmittable operators should return factories', () => {
-    [ofEmittableDispatched(), ofEmittableSuccessful(), ofEmittableErrored(), ofEmittableCanceled()].forEach(
-      (factory) => {
-        expect(factory.length).toBe(1);
-      }
-    );
+    [
+      ofEmittableDispatched(),
+      ofEmittableSuccessful(),
+      ofEmittableErrored(),
+      ofEmittableCanceled()
+    ].forEach(factory => {
+      expect(factory.length).toBe(1);
+    });
   });
 
   it('should intercept custom action that is defined in the @Receiver() decorator', () => {
@@ -115,7 +118,7 @@ describe('Actions', () => {
     const store: Store = TestBed.get(Store);
     const actions$: Actions = TestBed.get(Actions);
 
-    actions$.pipe(ofActionDispatched(Increment)).subscribe((action) => {
+    actions$.pipe(ofActionDispatched(Increment)).subscribe(action => {
       expect(action.constructor).toBe(Increment);
     });
 
@@ -207,13 +210,19 @@ describe('Actions', () => {
 
     actions$
       .pipe(
-        ofEmittableSuccessful(CounterState.increment, CounterState.decrement, CounterState.multiplyBy2),
+        ofEmittableSuccessful(
+          CounterState.increment,
+          CounterState.decrement,
+          CounterState.multiplyBy2
+        ),
         take(3),
         finalize(() => {
-          ['CounterState.increment', 'CounterState.decrement', 'CounterState.multiplyBy2'].forEach((type, index) => {
-            const typeContainsClassName = types[index].indexOf(type) > -1;
-            expect(typeContainsClassName).toBeTruthy();
-          });
+          ['CounterState.increment', 'CounterState.decrement', 'CounterState.multiplyBy2'].forEach(
+            (type, index) => {
+              const typeContainsClassName = types[index].indexOf(type) > -1;
+              expect(typeContainsClassName).toBeTruthy();
+            }
+          );
         })
       )
       .subscribe(({ type }: OfEmittableActionContext) => {
@@ -275,7 +284,11 @@ describe('Actions', () => {
 
       actions$
         .pipe(
-          ofEmittableSuccessful(CounterState.dontChange, CounterState.increment, CounterState.decrement),
+          ofEmittableSuccessful(
+            CounterState.dontChange,
+            CounterState.increment,
+            CounterState.decrement
+          ),
           take(3)
         )
         .subscribe(() => {

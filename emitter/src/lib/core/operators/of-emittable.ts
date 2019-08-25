@@ -43,28 +43,36 @@ function getReceiverTypes(receivers: Function[]): Types {
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableDispatched(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+export function ofEmittableDispatched(
+  ...receivers: Function[]
+): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Dispatched);
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableSuccessful(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+export function ofEmittableSuccessful(
+  ...receivers: Function[]
+): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Successful);
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableCanceled(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+export function ofEmittableCanceled(
+  ...receivers: Function[]
+): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Canceled);
 }
 
 /**
  * @param receivers - Array with references to the static functions decorated with `@Receiver()`
  */
-export function ofEmittableErrored(...receivers: Function[]): OperatorFunction<any, OfEmittableActionContext<any>> {
+export function ofEmittableErrored(
+  ...receivers: Function[]
+): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Errored);
 }
 
@@ -73,19 +81,25 @@ export function ofEmittableErrored(...receivers: Function[]): OperatorFunction<a
  * @param status - Status of the dispatched action
  * @returns - RxJS factory operator function
  */
-export function ofEmittable(types: Types, status: ActionStatus): OperatorFunction<any, OfEmittableActionContext<any>> {
-  return (source: Observable<ActionContext>) => {
-    return source.pipe(
+export function ofEmittable(
+  types: Types,
+  status: ActionStatus
+): OperatorFunction<any, OfEmittableActionContext<any>> {
+  return source =>
+    source.pipe(
       filter((ctx: ActionContext) => {
-        const hashMapHasType = types[getActionTypeFromInstance(ctx.action)];
+        const type = getActionTypeFromInstance(ctx.action)!;
+        const hashMapHasType = !!types[type];
         const contextHasTransmittedStatus = ctx.status === status;
         return hashMapHasType && contextHasTransmittedStatus;
       }),
-      map(({ action, error }: ActionContext) => ({
-        type: getActionTypeFromInstance(action),
-        payload: action.payload,
-        error
-      }))
+      map(
+        ({ action, error }: ActionContext) =>
+          <OfEmittableActionContext>{
+            error,
+            type: getActionTypeFromInstance(action),
+            payload: action.payload
+          }
+      )
     );
-  };
 }

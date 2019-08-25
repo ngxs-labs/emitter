@@ -1,9 +1,9 @@
-sudo: required
-dist: trusty
-
 language: node_js
 node_js:
   - '12'
+
+sudo: false
+dist: trusty
 
 cache:
   yarn: true
@@ -11,7 +11,7 @@ cache:
     - node_modules
 
 install:
-  - yarn
+  - yarn --frozen-lockfile --non-interactive
 
 script:
   - yarn ci:pipelines
