@@ -32,7 +32,7 @@
     "label-position": true,
     "max-line-length": [
       true,
-      140
+      120
     ],
     "member-access": false,
     "member-ordering": [
@@ -74,7 +74,6 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [

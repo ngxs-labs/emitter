@@ -3,10 +3,7 @@ dist: trusty
 
 language: node_js
 node_js:
-  - '10'
-
-dist: trusty
-sudo: false
+  - '12'
 
 cache:
   yarn: true

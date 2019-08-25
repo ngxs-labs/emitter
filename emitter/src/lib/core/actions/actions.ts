@@ -3,14 +3,10 @@
  */
 export class EmitterAction<T = void> {
   /**
-   * Action type
-   */
-  public static type: string | null = null;
-
-  /**
    * Creates EmitterAction instance
    *
    * @param payload - Data to dispatch
+   * @param type - Action type
    */
-  constructor(public payload: T) {}
+  constructor(public payload: T, public type: string | null = null) {}
 }

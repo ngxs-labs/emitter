@@ -410,7 +410,7 @@ describe(NgxsEmitPluginModule.name, () => {
     try {
       fixture.componentInstance.addTodo.emit();
     } catch ({ message }) {
-      expect(message.indexOf(`I can't seem to find static metadata`) > -1).toBeTruthy();
+      expect(message.indexOf(`Static metadata cannot be found`) > -1).toBeTruthy();
     }
   });
 
