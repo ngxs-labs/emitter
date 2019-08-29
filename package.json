@@ -49,7 +49,7 @@
     "@angular/core": "^8.2.4",
     "@angular/platform-browser": "^8.2.4",
     "@angular/platform-browser-dynamic": "^8.2.4",
-    "@ngxs/store": "^3.5.0",
+    "@ngxs/store": "^3.5.1",
     "rxjs": "^6.5.2",
     "tslib": "^1.10.0",
     "zone.js": "^0.10.2"
