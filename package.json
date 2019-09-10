@@ -80,7 +80,7 @@
     "semver": "^6.3.0",
     "ts-node": "^8.3.0",
     "tsickle": "^0.37.0",
-    "tslint": "^5.19.0",
+    "tslint": "^5.20.0",
     "tslint-sonarts": "^1.9.0",
     "typescript": "3.5.3",
     "yargs": "^14.0.0"
