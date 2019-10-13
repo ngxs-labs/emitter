@@ -68,7 +68,7 @@
     "@types/yargs": "^13.0.3",
     "codelyzer": "^5.1.2",
     "colors": "^1.4.0",
-    "husky": "^3.0.8",
+    "husky": "^3.0.9",
     "jest": "^24.9.0",
     "lint-staged": "^9.4.2",
     "ng-packagr": "^5.6.1",
