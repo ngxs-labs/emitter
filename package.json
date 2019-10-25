@@ -62,7 +62,7 @@
     "@angular/compiler-cli": "^8.2.12",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-angular": "^8.2.0",
-    "@types/jest": "^24.0.19",
+    "@types/jest": "^24.0.20",
     "@types/node": "^12.7.2",
     "@types/semver": "^6.0.2",
     "@types/yargs": "^13.0.3",
