@@ -82,7 +82,7 @@
     "tsickle": "^0.37.1",
     "tslint": "^5.20.1",
     "tslint-sonarts": "^1.9.0",
-    "typescript": "3.5.3",
+    "typescript": "3.7.3",
     "yargs": "^14.2.0"
   },
   "husky": {
