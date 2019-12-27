@@ -50,7 +50,7 @@
     "@angular/platform-browser": "^8.2.14",
     "@angular/platform-browser-dynamic": "^8.2.14",
     "@ngxs/store": "^3.6.0",
-    "rxjs": "^6.5.3",
+    "rxjs": "^6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "^0.10.2"
   },
