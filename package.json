@@ -61,7 +61,7 @@
     "@angular/cli": "^8.3.21",
     "@angular/compiler-cli": "^8.2.14",
     "@commitlint/cli": "^8.3.4",
-    "@commitlint/config-angular": "^8.2.0",
+    "@commitlint/config-angular": "^8.3.4",
     "@types/jest": "^24.0.25",
     "@types/node": "^12.7.2",
     "@types/semver": "^6.2.0",
