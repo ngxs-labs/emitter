@@ -1273,10 +1273,10 @@
     tree-kill "1.2.1"
     webpack-sources "1.4.3"
 
-"@ngxs/store@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.6.0.tgz#4536f90445e0d5231eb418c84408d39a58a34e6f"
-  integrity sha512-SE/2XK83snCDUj1c3iLRKp7YgCfBb9I+b+N82i1k5odn14oWvnalzB6oComu8zDwxzpD92Gt3CoZWr0V8Xct+A==
+"@ngxs/store@^3.6.1":
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.6.1.tgz#3349fe91580cbb704bb5063fe8215db0868d5140"
+  integrity sha512-q8SsQ2/GwUz1bdQTm6KvuorRlUu2EbhqYznZAtOvaes81Ntd9RftUAfiiMu+NlrZ3bU3859kUIW3Po65sj/sNA==
   dependencies:
     tslib "^1.9.0"
 
