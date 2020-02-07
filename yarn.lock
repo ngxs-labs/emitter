@@ -1416,10 +1416,10 @@
     tree-kill "1.2.2"
     webpack-sources "1.4.3"
 
-"@ngxs/store@^3.6.1":
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.6.1.tgz#3349fe91580cbb704bb5063fe8215db0868d5140"
-  integrity sha512-q8SsQ2/GwUz1bdQTm6KvuorRlUu2EbhqYznZAtOvaes81Ntd9RftUAfiiMu+NlrZ3bU3859kUIW3Po65sj/sNA==
+"@ngxs/store@^3.6.2":
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/@ngxs/store/-/store-3.6.2.tgz#cfba63dc1e5bd422e89e54b3332cd69818510624"
+  integrity sha512-al7GU618SAuz2Ul4rFYVDgS1DM0gHReGOGvbnE7LBt4Etz3gsJERNYXPp2bSA7lZGaRPRaFfIHJN+Lm/GikFJw==
   dependencies:
     tslib "^1.9.0"
 
