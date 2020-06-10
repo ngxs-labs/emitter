@@ -153,10 +153,10 @@
     universal-analytics "^0.4.20"
     uuid "^3.3.2"
 
-"@angular/common@^9.1.10":
-  version "9.1.10"
-  resolved "https://registry.yarnpkg.com/@angular/common/-/common-9.1.10.tgz#34c36f9b889ec009c5a4aa1628acb4e002a4e280"
-  integrity sha512-qX7ZUIwRkQi/kO6aKmpa8iGdkLXfe+80D+svC02x5PvafdQAcuBlUQQkrr1XapBqYE/Nu2GK0yYmvpa2CzxjPQ==
+"@angular/common@^9.1.11":
+  version "9.1.11"
+  resolved "https://registry.yarnpkg.com/@angular/common/-/common-9.1.11.tgz#1323f7b043410791bd2d0d71b0bbb1f862319c04"
+  integrity sha512-Vh5lF7zWwDK9RedmYXUc8vUXyrecR3j1mAWlTlnmcHYxxFThPzN/dr0slQcPi6nyJn0EmyRKUGvAoZx4rIb7wg==
 
 "@angular/compiler-cli@^8.2.14":
   version "8.2.14"
@@ -174,25 +174,25 @@
     tslib "^1.9.0"
     yargs "13.1.0"
 
-"@angular/compiler@^9.1.10":
-  version "9.1.10"
-  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-9.1.10.tgz#2e43cb51203e18faf3673244a78946d7a7194041"
-  integrity sha512-VlyTVK9elvtKGXxrkW9BWfKYRfeqXVLR3erukv03vy9u/pZppkG1xJ32SgAPKzYckGRV3kKHP6B7ZOXWMb9cog==
+"@angular/compiler@^9.1.11":
+  version "9.1.11"
+  resolved "https://registry.yarnpkg.com/@angular/compiler/-/compiler-9.1.11.tgz#4c7100f53c87f47e793e149427b8bdee44302381"
+  integrity sha512-MbVheCG0U8gt6xtiipau20N26mD2sXjLChVmRKgO6rbDruxboNMZfEd94q9NP9JRaUsVnjXvY7GMDldoymdXig==
 
-"@angular/core@^9.1.10":
-  version "9.1.10"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-9.1.10.tgz#cb9c99cd99a61cc55337220cafac005332ff9fdf"
-  integrity sha512-pp8g0razdSi3HzSBHRzBdn5WmnVJZ5IF+sWuApvplnl4edBO0CFdZAKALmRgjctRD9y9aVPXhkEi17Spiip9aA==
+"@angular/core@^9.1.11":
+  version "9.1.11"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-9.1.11.tgz#7a92d27292212ed381be15f9000d4019867f1c7c"
+  integrity sha512-KAlEedBo761O1aeoTJVziOSHi8Fttk9ipvbDZXYT/o0W/KdVwubxP34g9t5aD8LCcF8+L0z4VLw++HjdJAUpwg==
 
-"@angular/platform-browser-dynamic@^9.1.10":
-  version "9.1.10"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-9.1.10.tgz#a885b7903c1dcce36c327e9ca9b5f6e7ec1aa716"
-  integrity sha512-z8urbP03LYxiCci076SYXz+9elCukePP0ykq5RVJYe5300V6JhamGftTQgsaKszas0KlGYUz/jTULhWQ+OEv/A==
+"@angular/platform-browser-dynamic@^9.1.11":
+  version "9.1.11"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser-dynamic/-/platform-browser-dynamic-9.1.11.tgz#82af336b05e0d7b7478a2ca7f6282825b211f340"
+  integrity sha512-Qw3rfVFF0Wtu+UwraqKPCgTA3uoNPGf4vKSfuCuXTrG0p7j+3mCP59aUv5gGH7GV1UQ++jZRx5pbWF43zrC8Hw==
 
-"@angular/platform-browser@^9.1.10":
-  version "9.1.10"
-  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-9.1.10.tgz#d014e59a2ec4722d0bb428910116c41176868d77"
-  integrity sha512-u8PHq92+OV0vrRKwc5bqS0SCR/VkzhuaUUXKYbjYeLsmXG+HUtg/pUCDo95ze4zPO1WFSeUvwsnRb2x1hurYAw==
+"@angular/platform-browser@^9.1.11":
+  version "9.1.11"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-9.1.11.tgz#4da8e2a4231d5162304746a39f54cb2d3f241b7c"
+  integrity sha512-KDxoiFhW4UD+EqchcKpQVSLwg9Rd3JbWytZLchFV6nH8BFnshfJtw2tyPT8bMhFVG9n9zSR4QSGaozWgoDs9mw==
 
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.5.5":
   version "7.5.5"
