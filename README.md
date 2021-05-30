@@ -6,11 +6,9 @@
 
 > ER is a new pattern that provides the opportunity to feel free from actions
 
-[![Build Status](https://travis-ci.org/ngxs-labs/emitter.svg?branch=master)](https://travis-ci.org/ngxs-labs/emitter)
-[![Build status](https://ci.appveyor.com/api/projects/status/o6g3tjxmprr2qef9/branch/master?svg=true)](https://ci.appveyor.com/project/arturovt/emitter/branch/master)
+[![@ngxs-labs/emitter](https://github.com/ngxs-labs/emitter/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ngxs-labs/emitter/actions/workflows/ci.yml)
 [![NPM](https://badge.fury.io/js/%40ngxs-labs%2Femitter.svg)](https://www.npmjs.com/package/@ngxs-labs/emitter)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/ngxs-labs/tools/blob/master/license)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/079272acc4104332b904dc6818929d06)](https://www.codacy.com/app/arturovt/emitter?utm_source=github.com&utm_medium=referral&utm_content=ngxs-contrib/emitter&utm_campaign=Badge_Grade)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/ngxs-labs/emitter/blob/master/LICENSE)
 
 [🚀 See it in action on Stackblitz](https://stackblitz.com/edit/ngxs-emitter-example)
 
