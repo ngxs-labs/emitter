@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } from '@ngxs/store';
 
@@ -21,24 +21,25 @@ describe('Actions', () => {
     name: 'counter',
     defaults: 0
   })
+  @Injectable()
   class CounterState {
     @Receiver()
-    public static increment({ setState, getState }: StateContext<number>) {
+    static increment({ setState, getState }: StateContext<number>) {
       setState(getState() + 1);
     }
 
     @Receiver()
-    public static decrement({ setState, getState }: StateContext<number>) {
+    static decrement({ setState, getState }: StateContext<number>) {
       setState(getState() - 1);
     }
 
     @Receiver()
-    public static multiplyBy2({ setState, getState }: StateContext<number>) {
+    static multiplyBy2({ setState, getState }: StateContext<number>) {
       setState(getState() * 2);
     }
 
     @Receiver()
-    public static throwError() {
+    static throwError() {
       return throwError(new Error('Whoops!'));
     }
   }
@@ -73,40 +74,41 @@ describe('Actions', () => {
 
   it('should intercept custom action that is defined in the @Receiver() decorator', () => {
     class Increment {
-      public static type = '[Counter] Increment';
+      static type = '[Counter] Increment';
     }
 
     class Decrement {
-      public static type = '[Counter] Decrement';
+      static type = '[Counter] Decrement';
     }
 
     class MultiplyBy2 {
-      public static type = '[Counter] Multiply by 2';
+      static type = '[Counter] Multiply by 2';
     }
 
     @State<number>({
       name: 'counter',
       defaults: 0
     })
+    @Injectable()
     class CounterStateWithCustomActions {
       @Receiver({
         action: Increment
       })
-      public static increment({ setState, getState }: StateContext<number>) {
+      static increment({ setState, getState }: StateContext<number>) {
         setState(getState() + 1);
       }
 
       @Receiver({
         action: Decrement
       })
-      public static decrement({ setState, getState }: StateContext<number>) {
+      static decrement({ setState, getState }: StateContext<number>) {
         setState(getState() - 1);
       }
 
       @Receiver({
         action: MultiplyBy2
       })
-      public static multiplyBy2({ setState, getState }: StateContext<number>) {
+      static multiplyBy2({ setState, getState }: StateContext<number>) {
         setState(getState() * 2);
       }
     }
@@ -115,8 +117,8 @@ describe('Actions', () => {
       imports: [NgxsModule.forRoot([CounterStateWithCustomActions]), NgxsEmitPluginModule.forRoot()]
     });
 
-    const store: Store = TestBed.get(Store);
-    const actions$: Actions = TestBed.get(Actions);
+    const store: Store = TestBed.inject(Store);
+    const actions$: Actions = TestBed.inject(Actions);
 
     actions$.pipe(ofActionDispatched(Increment)).subscribe(action => {
       expect(action.constructor).toBe(Increment);
@@ -134,7 +136,7 @@ describe('Actions', () => {
     });
 
     const fixture = TestBed.createComponent(MockComponent);
-    const actions$: Actions = TestBed.get(Actions);
+    const actions$: Actions = TestBed.inject(Actions);
 
     actions$
       .pipe(ofEmittableDispatched(CounterState.increment))
@@ -154,7 +156,7 @@ describe('Actions', () => {
     });
 
     const fixture = TestBed.createComponent(MockComponent);
-    const actions$: Actions = TestBed.get(Actions);
+    const actions$: Actions = TestBed.inject(Actions);
 
     actions$
       .pipe(ofEmittableErrored(CounterState.throwError))
@@ -176,7 +178,7 @@ describe('Actions', () => {
     });
 
     const fixture = TestBed.createComponent(MockComponent);
-    const actions$: Actions = TestBed.get(Actions);
+    const actions$: Actions = TestBed.inject(Actions);
     const types: string[] = [];
 
     actions$
@@ -205,7 +207,7 @@ describe('Actions', () => {
     });
 
     const fixture = TestBed.createComponent(MockComponent);
-    const actions$: Actions = TestBed.get(Actions);
+    const actions$: Actions = TestBed.inject(Actions);
     const types: string[] = [];
 
     actions$
@@ -240,6 +242,7 @@ describe('Actions', () => {
       name: 'counter',
       defaults: 0
     })
+    @Injectable()
     class CounterState {
       @Receiver()
       static increment(ctx: StateContext<number>) {
@@ -277,8 +280,8 @@ describe('Actions', () => {
       });
 
       // Act
-      const store: Store = TestBed.get(Store);
-      const actions$: Actions = TestBed.get(Actions);
+      const store: Store = TestBed.inject(Store);
+      const actions$: Actions = TestBed.inject(Actions);
 
       let emittedTimes = 0;
 

@@ -1,7 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
 
-import { is } from '../utils';
 import { EmitStore } from './emit-store.service';
+
+declare const ngDevMode: boolean;
 
 class NgxsEmitPluginModuleIsNotImported extends Error {
   constructor() {
@@ -9,30 +10,19 @@ class NgxsEmitPluginModuleIsNotImported extends Error {
   }
 }
 
-/**
- * Allows multiple decorators to get access to the DI store
- */
 @Injectable()
 export class InjectorAccessor {
-  /**
-   * Injector for accessing DI
-   */
   private static injector: Injector | null = null;
 
-  /**
-   * Creates InjectorAccessor instance
-   *
-   * @param injector - Root injector
-   */
   constructor(injector: Injector) {
     InjectorAccessor.injector = injector;
   }
 
-  public static getEmitStore(): never | EmitStore {
-    if (is.null(this.injector)) {
+  static getEmitStore(): never | EmitStore {
+    if ((typeof ngDevMode === 'undefined' || ngDevMode) && this.injector === null) {
       throw new NgxsEmitPluginModuleIsNotImported();
     }
 
-    return this.injector.get<EmitStore>(EmitStore);
+    return this.injector!.get<EmitStore>(EmitStore);
   }
 }

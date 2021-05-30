@@ -21,6 +21,7 @@ describe(NgxsEmitPluginModule.name, () => {
   it('should throw an error if a decorated method is not static', () => {
     try {
       @State({ name: 'bar' })
+      @Injectable()
       class BarState {
         @Receiver()
         public foo() {}
@@ -32,9 +33,10 @@ describe(NgxsEmitPluginModule.name, () => {
 
   it('static metadata should have `type` property same as in @Receiver() decorator', () => {
     @State({ name: 'bar' })
+    @Injectable()
     class BarState {
       @Receiver({ type: '@@[bar]' })
-      public static foo() {}
+      static foo() {}
     }
 
     const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
@@ -43,9 +45,10 @@ describe(NgxsEmitPluginModule.name, () => {
 
   it('static metadata should have default `type` property', () => {
     @State({ name: 'bar' })
+    @Injectable()
     class BarState {
       @Receiver()
-      public static foo() {}
+      static foo() {}
     }
 
     const BarFooMeta = BarState.foo[RECEIVER_META_KEY];
@@ -58,9 +61,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: []
     })
+    @Injectable()
     class TodosState {
       @Receiver()
-      public static addTodo() {}
+      static addTodo() {}
     }
 
     @Component({ template: '' })
@@ -82,12 +86,13 @@ describe(NgxsEmitPluginModule.name, () => {
   it('should throw if decorated properties have the same names', () => {
     try {
       @State({ name: 'bar' })
+      @Injectable()
       class BarState {
         @Emitter(BarState.foo)
         private foo!: Emittable;
 
         @Receiver({ type: '@@[bar]' })
-        public static foo() {}
+        static foo() {}
       }
     } catch ({ message }) {
       expect(message).toBe(
@@ -101,12 +106,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: []
     })
+    @Injectable()
     class TodosState {
       @Receiver({ type: '@@[Todos] Add todo' })
-      public static addTodo(
-        { setState, getState }: StateContext<Todo[]>,
-        action: EmitterAction<Todo>
-      ) {
+      static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
         setState([...getState(), action.payload]);
       }
     }
@@ -122,7 +125,7 @@ describe(NgxsEmitPluginModule.name, () => {
       declarations: [MockComponent]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
     fixture.componentInstance.addTodoAction.emit({
@@ -139,12 +142,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: []
     })
+    @Injectable()
     class TodosState {
       @Receiver()
-      public static addTodo(
-        { setState, getState }: StateContext<Todo[]>,
-        action: EmitterAction<Todo>
-      ) {
+      static addTodo({ setState, getState }: StateContext<Todo[]>, action: EmitterAction<Todo>) {
         setState([...getState(), action.payload]);
       }
     }
@@ -160,7 +161,7 @@ describe(NgxsEmitPluginModule.name, () => {
       declarations: [MockComponent]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
     fixture.componentInstance.addTodo.emit({
@@ -177,9 +178,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'counter',
       defaults: 0
     })
+    @Injectable()
     class CounterState {
       @Receiver({ cancelUncompleted: true })
-      public static increment({ setState, getState }: StateContext<number>): Observable<null> {
+      static increment({ setState, getState }: StateContext<number>): Observable<null> {
         return of(null).pipe(
           delay(1000),
           tap(() => {
@@ -200,7 +202,7 @@ describe(NgxsEmitPluginModule.name, () => {
       declarations: [MockComponent]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
     Promise.all([
@@ -219,9 +221,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'bar2',
       defaults: 10
     })
+    @Injectable()
     class Bar2State {
       @Receiver()
-      public static foo2({ setState }: StateContext<number>) {
+      static foo2({ setState }: StateContext<number>) {
         setState(20);
       }
     }
@@ -231,6 +234,7 @@ describe(NgxsEmitPluginModule.name, () => {
       defaults: {},
       children: [Bar2State]
     })
+    @Injectable()
     class BarState {}
 
     @Component({ template: '' })
@@ -244,7 +248,7 @@ describe(NgxsEmitPluginModule.name, () => {
       declarations: [MockComponent]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
     fixture.componentInstance.foo2.emit();
@@ -259,12 +263,13 @@ describe(NgxsEmitPluginModule.name, () => {
         name: 'bar',
         defaults: 10
       })
+      @Injectable()
       class BarState {
         @Receiver({ type: 'foo' })
-        public static foo1() {}
+        static foo1() {}
 
         @Receiver({ type: 'foo' })
-        public static foo2() {}
+        static foo2() {}
       }
 
       TestBed.configureTestingModule({
@@ -277,14 +282,15 @@ describe(NgxsEmitPluginModule.name, () => {
 
   it('should throw an error if an action passed to the @Receiver() does not have static `type` property', () => {
     class FooAction {
-      public static readonly type = 'FooAction';
+      static readonly type = 'FooAction';
     }
 
     try {
       @State({ name: 'bar' })
+      @Injectable()
       class BarState {
         @Receiver({ action: FooAction })
-        public static foo() {}
+        static foo() {}
       }
     } catch ({ message }) {
       expect(message).toBe('FooAction`s type should be defined as a static property `type`');
@@ -295,9 +301,10 @@ describe(NgxsEmitPluginModule.name, () => {
     const symbol = Symbol.for('foo');
 
     @State({ name: 'bar' })
+    @Injectable()
     class BarState {
       @Receiver()
-      public static [symbol]() {}
+      static [symbol]() {}
     }
 
     const typeContainsClassName =
@@ -307,16 +314,17 @@ describe(NgxsEmitPluginModule.name, () => {
 
   it('EmitStore.prototype.emitter should return an emittable object', () => {
     @State({ name: 'bar' })
+    @Injectable()
     class BarState {
       @Receiver()
-      public static foo() {}
+      static foo() {}
     }
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()]
     });
 
-    const store: EmitStore = TestBed.get(EmitStore);
+    const store: EmitStore = TestBed.inject(EmitStore);
 
     expect(typeof store.emitter(BarState.foo)).toBe('object');
     expect(typeof store.emitter(BarState.foo).emit).toBe('function');
@@ -344,20 +352,21 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: []
     })
+    @Injectable()
     class TodosState {
-      public static api: ApiService = null!;
+      static api: ApiService = null!;
 
       constructor(injector: Injector) {
         TodosState.api = injector.get<ApiService>(ApiService);
       }
 
       @Receiver({ type: '@@[Todos] Set todos sync' })
-      public static async setTodosSync({ setState }: StateContext<Todo[]>) {
+      static async setTodosSync({ setState }: StateContext<Todo[]>) {
         setState(await TodosState.api.getTodosFromServer(10).toPromise());
       }
 
       @Receiver({ type: '@@[Todos] Set todos' })
-      public static setTodos({ setState }: StateContext<Todo[]>) {
+      static setTodos({ setState }: StateContext<Todo[]>) {
         return TodosState.api.getTodosFromServer(5).pipe(
           take(1),
           tap(todos => setState(todos))
@@ -380,7 +389,7 @@ describe(NgxsEmitPluginModule.name, () => {
       providers: [ApiService]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
     fixture.componentInstance.setTodosSync.emit().subscribe(() => {
@@ -399,8 +408,9 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: []
     })
+    @Injectable()
     class TodosState {
-      public static addTodo() {}
+      static addTodo() {}
     }
 
     @Component({ template: '' })
@@ -425,7 +435,7 @@ describe(NgxsEmitPluginModule.name, () => {
 
   it('should be possible to pass an action into @Receiver() decorator', () => {
     class AddTodo {
-      public static type = '@@[Todos] Add todo';
+      static type = '@@[Todos] Add todo';
       constructor(public payload: Todo) {}
     }
 
@@ -433,9 +443,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: []
     })
+    @Injectable()
     class TodosState {
       @Receiver({ action: AddTodo })
-      public static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
+      static addTodo({ setState, getState }: StateContext<Todo[]>, { payload }: AddTodo) {
         setState([...getState(), payload]);
       }
     }
@@ -451,7 +462,7 @@ describe(NgxsEmitPluginModule.name, () => {
       declarations: [MockComponent]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
     fixture.componentInstance.addTodoAction.emit({
@@ -470,9 +481,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'todos',
       defaults: null
     })
+    @Injectable()
     class TodosState {
       @Receiver({ payload: [] })
-      public static setInitialTodos(
+      static setInitialTodos(
         { setState }: StateContext<Todo[]>,
         { payload }: EmitterAction<Todo[]>
       ) {
@@ -492,7 +504,7 @@ describe(NgxsEmitPluginModule.name, () => {
     });
 
     const fixture = TestBed.createComponent(MockComponent);
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
 
     fixture.componentInstance.addTodoAction.emit();
 
@@ -505,9 +517,10 @@ describe(NgxsEmitPluginModule.name, () => {
       name: 'animals',
       defaults: []
     })
+    @Injectable()
     class AnimalsState {
       @Receiver()
-      public static addAnimal(
+      static addAnimal(
         { getState, setState }: StateContext<string[]>,
         { payload }: EmitterAction<string>
       ) {
@@ -527,7 +540,7 @@ describe(NgxsEmitPluginModule.name, () => {
     });
 
     const fixture = TestBed.createComponent(MockComponent);
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
 
     fixture.componentInstance.addAnimal.emitMany(['Zebra', 'Panda']);
 
@@ -540,20 +553,21 @@ describe(NgxsEmitPluginModule.name, () => {
 
   it('should be possible to pass multiple actions into @Receiver() decorator', () => {
     class Increment {
-      public static readonly type = '[Counter] Increment';
+      static readonly type = '[Counter] Increment';
     }
 
     class Decrement {
-      public static readonly type = '[Counter] Decrement';
+      static readonly type = '[Counter] Decrement';
     }
 
     @State({
       name: 'counter',
       defaults: 0
     })
+    @Injectable()
     class CounterState {
       @Receiver({ action: [Increment, Decrement] })
-      public static mutate(
+      static mutate(
         { setState, getState }: StateContext<number>,
         action: Increment | Decrement
       ): void {
@@ -578,7 +592,7 @@ describe(NgxsEmitPluginModule.name, () => {
       declarations: [MockComponent]
     });
 
-    const store: Store = TestBed.get(Store);
+    const store: Store = TestBed.inject(Store);
 
     store.dispatch(new Increment());
     store.dispatch(new Decrement());

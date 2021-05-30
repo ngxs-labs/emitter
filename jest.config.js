@@ -7,7 +7,7 @@ module.exports = {
   moduleNameMapper,
   globals: {
     'ts-jest': {
-      tsConfig: '<rootDir>/tsconfig.json',
+      tsconfig: '<rootDir>/tsconfig.spec.json',
       allowSyntheticDefaultImports: true
     }
   },

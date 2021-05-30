@@ -26,8 +26,8 @@ describe(StoreTestBedModule.name, () => {
       imports: [StoreTestBedModule.configureTestingModule([CounterState])]
     });
 
-    const store: Store = TestBed.get(Store);
-    const emitter: EmitterService = TestBed.get(EmitterService);
+    const store: Store = TestBed.inject(Store);
+    const emitter: EmitterService = TestBed.inject(EmitterService);
 
     emitter.action(CounterState.increment).emit();
     emitter.action(CounterState.increment).emit();
