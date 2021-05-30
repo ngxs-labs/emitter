@@ -6,12 +6,9 @@ import { InjectorAccessor } from './core/services/injector-accessor.service';
 
 @NgModule()
 export class NgxsEmitPluginModule {
-  constructor(@Self() private injectorAccessor: InjectorAccessor) {}
+  constructor(@Self() _injectorAccessor: InjectorAccessor) {}
 
-  /**
-   * @returns - A wrapper around `NgModule`
-   */
-  public static forRoot(): ModuleWithProviders<NgxsEmitPluginModule> {
+  static forRoot(): ModuleWithProviders<NgxsEmitPluginModule> {
     return {
       ngModule: NgxsEmitPluginModule,
       providers: [EmitStore, EmitterService, InjectorAccessor]

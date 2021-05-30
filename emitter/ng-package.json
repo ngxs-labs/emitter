@@ -1,0 +1,11 @@
+{
+  "$schema": "../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../dist/emitter",
+  "lib": {
+    "flatModuleFile": "ngxs-labs-emitter",
+    "entryFile": "src/index.ts",
+    "umdModuleIds": {
+      "@ngxs/store": "ngxs-store"
+    }
+  }
+}

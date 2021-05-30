@@ -3,7 +3,7 @@ import { Store } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
 
-import { is, flatten } from '../utils';
+import { flatten } from '../utils';
 import { EmitterAction } from '../actions/actions';
 import {
   RECEIVER_META_KEY,
@@ -13,16 +13,14 @@ import {
   constructEventsForManyDispatching
 } from '../internal/internals';
 
+declare const ngDevMode: boolean;
+
 @Injectable()
 export class EmitStore extends Store {
-  /**
-   * @param receiver - Reference to the static function from the store
-   * @returns - A plain object with an `emit` function for calling emitter
-   */
-  public emitter<T = void, U = any>(receiver: Function): Emittable<T, U> {
+  emitter<T = void, U = any>(receiver: Function): Emittable<T, U> {
     const metadata: ReceiverMetaData = receiver[RECEIVER_META_KEY];
 
-    if (is.falsy(metadata)) {
+    if ((typeof ngDevMode === 'undefined' || ngDevMode) && metadata == null) {
       throw new Error(
         `Static metadata cannot be found, have you decorated ${receiver.name} with @Receiver()?`
       );
@@ -34,13 +32,8 @@ export class EmitStore extends Store {
     };
   }
 
-  /**
-   * @param metadata - Receiver function metadata
-   * @param payload - Data to dispatch
-   * @returns - An observable that emits events after dispatch
-   */
   private dispatchSingle<T, U>(metadata: ReceiverMetaData, payload: T): Observable<U> {
-    if (is.undefined(payload) && metadata.payload !== undefined) {
+    if (payload === undefined && metadata.payload !== undefined) {
       payload = metadata.payload;
     }
 
@@ -54,13 +47,8 @@ export class EmitStore extends Store {
     return this.dispatch(new EmitterAction(payload, metadata.type));
   }
 
-  /**
-   * @param metadata - Receiver function metadata
-   * @param payloads - Array with data to dispatch
-   * @returns - An observable that emits events after dispatch
-   */
   private dispatchMany<T, U>(metadata: ReceiverMetaData, payloads: T[]): Observable<U> {
-    if (!is.array(payloads)) {
+    if (!Array.isArray(payloads)) {
       return this.dispatch([]);
     }
 

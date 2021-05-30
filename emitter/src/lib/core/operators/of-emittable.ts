@@ -1,9 +1,8 @@
 import { getActionTypeFromInstance } from '@ngxs/store';
 
-import { Observable, OperatorFunction } from 'rxjs';
+import { OperatorFunction } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { is, isNotAFunction } from '../utils';
 import {
   RECEIVER_META_KEY,
   ActionStatus,
@@ -13,24 +12,23 @@ import {
   Types
 } from '../internal/internals';
 
+declare const ngDevMode: boolean;
+
 /**
  * `getReceiverTypes([CounterState.increment, CounterState.decrement])`
  * will return a hashmap => `{ 'CounterState.increment': true, 'CounterState.decrement': true }`
- *
- * @param receivers - Array with references to the static functions
- * @returns - A key-value map where a key is a type and value is `true`
  */
 function getReceiverTypes(receivers: Function[]): Types {
   const types: Types = {};
 
   for (const receiver of receivers) {
-    if (isNotAFunction(receiver)) {
+    if ((typeof ngDevMode === 'undefined' || ngDevMode) && typeof receiver !== 'function') {
       throw new TypeError(`Receiver should be a function, got ${receiver}`);
     }
 
     const meta: ReceiverMetaData = receiver[RECEIVER_META_KEY];
 
-    if (is.falsy(meta) || is.falsy(meta.type)) {
+    if ((typeof ngDevMode === 'undefined' || ngDevMode) && (meta == null || meta.type == null)) {
       throw new Error(`${receiver.name} should be decorated with @Receiver() decorator`);
     }
 
@@ -40,47 +38,30 @@ function getReceiverTypes(receivers: Function[]): Types {
   return types;
 }
 
-/**
- * @param receivers - Array with references to the static functions decorated with `@Receiver()`
- */
 export function ofEmittableDispatched(
   ...receivers: Function[]
 ): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Dispatched);
 }
 
-/**
- * @param receivers - Array with references to the static functions decorated with `@Receiver()`
- */
 export function ofEmittableSuccessful(
   ...receivers: Function[]
 ): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Successful);
 }
 
-/**
- * @param receivers - Array with references to the static functions decorated with `@Receiver()`
- */
 export function ofEmittableCanceled(
   ...receivers: Function[]
 ): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Canceled);
 }
 
-/**
- * @param receivers - Array with references to the static functions decorated with `@Receiver()`
- */
 export function ofEmittableErrored(
   ...receivers: Function[]
 ): OperatorFunction<any, OfEmittableActionContext<any>> {
   return ofEmittable(getReceiverTypes(receivers), ActionStatus.Errored);
 }
 
-/**
- * @param types - Hashmap that contains action types
- * @param status - Status of the dispatched action
- * @returns - RxJS factory operator function
- */
 export function ofEmittable(
   types: Types,
   status: ActionStatus

@@ -20,15 +20,5 @@
   "peerDependencies": {
     "@angular/core": ">=12.0.2",
     "@ngxs/store": ">=3.7.2"
-  },
-  "ngPackage": {
-    "lib": {
-      "flatModuleFile": "ngxs-labs-emitter",
-      "entryFile": "src/index.ts",
-      "umdModuleIds": {
-        "@ngxs/store": "ngxs-store"
-      }
-    },
-    "dest": "../dist/emitter"
   }
 }
