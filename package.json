@@ -32,8 +32,7 @@
     "lint": "ng lint",
     "build": "ng build",
     "postbuild": "cpy README.md ./dist/emitter",
-    "test": "ng test --run-in-band --silent",
-    "bump": "ts-node ./tools/bump"
+    "test": "ng test --run-in-band --silent"
   },
   "private": true,
   "dependencies": {
