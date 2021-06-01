@@ -1,1 +1,1 @@
-export * from './public_api';
+export * from './lib/store-test-bed.module';

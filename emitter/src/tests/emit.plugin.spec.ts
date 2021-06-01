@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { Component, Injectable, Injector } from '@angular/core';
 import { State, Store, NgxsModule, StateContext } from '@ngxs/store';
 
-import { Observable, of } from 'rxjs';
+import { firstValueFrom, Observable, of, timer } from 'rxjs';
 import { delay, take, tap } from 'rxjs/operators';
 
 import { Receiver } from '../lib/core/decorators/receiver';
@@ -24,7 +24,7 @@ describe(NgxsEmitPluginModule.name, () => {
       @Injectable()
       class BarState {
         @Receiver()
-        public foo() {}
+        foo() {}
       }
     } catch ({ message }) {
       expect(message).toBe('Only static functions can be decorated with @Receiver() decorator');
@@ -70,7 +70,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.addTodo)
-      public addTodoAction!: Emittable<Todo>;
+      addTodoAction!: Emittable<Todo>;
     }
 
     TestBed.configureTestingModule({
@@ -117,7 +117,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.addTodo)
-      public addTodoAction!: Emittable<Todo>;
+      addTodoAction!: Emittable<Todo>;
     }
 
     TestBed.configureTestingModule({
@@ -153,7 +153,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.addTodo)
-      public addTodo!: Emittable<Todo>;
+      addTodo!: Emittable<Todo>;
     }
 
     TestBed.configureTestingModule({
@@ -173,7 +173,7 @@ describe(NgxsEmitPluginModule.name, () => {
     expect(todos.length).toBe(1);
   });
 
-  it('should cancel uncompleted action', (done: jest.DoneCallback) => {
+  it('should cancel uncompleted action', async () => {
     @State<number>({
       name: 'counter',
       defaults: 0
@@ -181,9 +181,8 @@ describe(NgxsEmitPluginModule.name, () => {
     @Injectable()
     class CounterState {
       @Receiver({ cancelUncompleted: true })
-      static increment({ setState, getState }: StateContext<number>): Observable<null> {
-        return of(null).pipe(
-          delay(1000),
+      static increment({ setState, getState }: StateContext<number>) {
+        return timer(1000).pipe(
           tap(() => {
             setState(getState() + 1);
           })
@@ -194,7 +193,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(CounterState.increment)
-      public increment!: Emittable;
+      increment!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -205,15 +204,13 @@ describe(NgxsEmitPluginModule.name, () => {
     const store: Store = TestBed.inject(Store);
     const fixture = TestBed.createComponent(MockComponent);
 
-    Promise.all([
-      fixture.componentInstance.increment.emit().toPromise(),
-      fixture.componentInstance.increment.emit().toPromise()
-    ]).then(() => {
-      const counter = store.selectSnapshot<number>(({ counter }) => counter);
-      expect(counter).toBe(1);
+    await Promise.all([
+      firstValueFrom(fixture.componentInstance.increment.emit(), { defaultValue: null }),
+      firstValueFrom(fixture.componentInstance.increment.emit(), { defaultValue: null })
+    ]);
 
-      done();
-    });
+    const counter = store.selectSnapshot<number>(({ counter }) => counter);
+    expect(counter).toBe(1);
   });
 
   it('should dispatch an action from the sub state', () => {
@@ -240,7 +237,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(Bar2State.foo2)
-      public foo2!: Emittable;
+      foo2!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -335,7 +332,7 @@ describe(NgxsEmitPluginModule.name, () => {
     class ApiService {
       private size = 10;
 
-      public getTodosFromServer(length: number): Observable<Todo[]> {
+      getTodosFromServer(length: number): Observable<Todo[]> {
         return of(this.generateTodoMock(length)).pipe(delay(1000));
       }
 
@@ -362,7 +359,7 @@ describe(NgxsEmitPluginModule.name, () => {
 
       @Receiver({ type: '@@[Todos] Set todos sync' })
       static async setTodosSync({ setState }: StateContext<Todo[]>) {
-        setState(await TodosState.api.getTodosFromServer(10).toPromise());
+        setState(await firstValueFrom(TodosState.api.getTodosFromServer(10)));
       }
 
       @Receiver({ type: '@@[Todos] Set todos' })
@@ -377,10 +374,10 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.setTodosSync)
-      public setTodosSync!: Emittable;
+      setTodosSync!: Emittable;
 
       @Emitter(TodosState.setTodos)
-      public setTodos!: Emittable;
+      setTodos!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -416,7 +413,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.addTodo)
-      public addTodo!: Emittable;
+      addTodo!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -454,7 +451,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.addTodo)
-      public addTodoAction!: Emittable<Todo>;
+      addTodoAction!: Emittable<Todo>;
     }
 
     TestBed.configureTestingModule({
@@ -495,7 +492,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(TodosState.setInitialTodos)
-      public addTodoAction!: Emittable;
+      addTodoAction!: Emittable;
     }
 
     TestBed.configureTestingModule({
@@ -531,7 +528,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(AnimalsState.addAnimal)
-      public addAnimal!: Emittable<string>;
+      addAnimal!: Emittable<string>;
     }
 
     TestBed.configureTestingModule({
@@ -584,7 +581,7 @@ describe(NgxsEmitPluginModule.name, () => {
     @Component({ template: '' })
     class MockComponent {
       @Emitter(CounterState.mutate)
-      public mutate!: Emittable;
+      mutate!: Emittable;
     }
 
     TestBed.configureTestingModule({

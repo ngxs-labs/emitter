@@ -40,7 +40,7 @@ describe('Actions', () => {
 
     @Receiver()
     static throwError() {
-      return throwError(new Error('Whoops!'));
+      return throwError(() => new Error('Whoops!'));
     }
   }
 
