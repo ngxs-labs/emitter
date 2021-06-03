@@ -6630,10 +6630,10 @@ nested-error-stacks@^2.0.0, nested-error-stacks@^2.1.0:
   resolved "https://registry.yarnpkg.com/nested-error-stacks/-/nested-error-stacks-2.1.0.tgz#0fbdcf3e13fe4994781280524f8b96b0cdff9c61"
   integrity sha512-AO81vsIO1k1sM4Zrd6Hu7regmJN1NSiAja10gc4bX3F0wd+9rQmcuHQaHVQCYIEC8iFXnE+mavh23GOt7wBgug==
 
-ng-packagr@^12.0.2:
-  version "12.0.2"
-  resolved "https://registry.yarnpkg.com/ng-packagr/-/ng-packagr-12.0.2.tgz#2d6802866af218e5d1f479298a05fb0363dbac86"
-  integrity sha512-7628N8Wb/XsJdfyGsKJep0XCRz0qoZ7tOBCnAMq+M8B1/7gYo0riq4xmeveR5x2b22NGo6a/rNSH4BHiri/TYw==
+ng-packagr@^12.0.3:
+  version "12.0.3"
+  resolved "https://registry.yarnpkg.com/ng-packagr/-/ng-packagr-12.0.3.tgz#5d8ee82a0f9f6829233423ff236bf0f550d0d30a"
+  integrity sha512-kVTnGedBflcZu8XA/yY99ArwqD3/fFGRA4DFwPmgmhB/80BBmZuXsRUUWXCfQDYdxb7zFkBIk9EtXDgFsi3qew==
   dependencies:
     "@rollup/plugin-commonjs" "^19.0.0"
     "@rollup/plugin-json" "^4.1.0"
