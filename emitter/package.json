@@ -18,7 +18,7 @@
   ],
   "sideEffects": true,
   "peerDependencies": {
-    "@angular/core": ">=12.2.11",
+    "@angular/core": ">=12.2.12",
     "@ngxs/store": ">=3.7.2"
   }
 }
