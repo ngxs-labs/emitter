@@ -5,7 +5,8 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "useUnknownInCatchVariables": false
   },
   "include": [
     "**/*.spec.ts",

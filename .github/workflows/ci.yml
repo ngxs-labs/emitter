@@ -30,9 +30,6 @@ jobs:
           HUSKY_SKIP_INSTALL: 'true'
         run: yarn --frozen-lockfile --no-progress --non-interactive
 
-      - name: Run TSLint
-        run: yarn lint
-
       - name: Run tests
         run: yarn test
 

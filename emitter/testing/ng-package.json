@@ -2,9 +2,6 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "lib": {
     "flatModuleFile": "ngxs-labs-emitter-testing",
-    "entryFile": "src/index.ts",
-    "umdModuleIds": {
-      "@ngxs/store": "ngxs-store"
-    }
+    "entryFile": "src/index.ts"
   }
 }
