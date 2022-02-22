@@ -23,7 +23,8 @@ describe(StoreTestBedModule.name, () => {
     }
 
     TestBed.configureTestingModule({
-      imports: [StoreTestBedModule.configureTestingModule([CounterState])]
+      imports: [StoreTestBedModule.configureTestingModule([CounterState])],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);

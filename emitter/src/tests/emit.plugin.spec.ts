@@ -75,7 +75,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -122,7 +123,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -158,7 +160,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -198,7 +201,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -242,7 +246,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([BarState, Bar2State]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -270,7 +275,8 @@ describe(NgxsEmitPluginModule.name, () => {
       }
 
       TestBed.configureTestingModule({
-        imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()]
+        imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()],
+        teardown: { destroyAfterEach: false }
       });
     } catch ({ message }) {
       expect(message).toBe('Method decorated with such type `foo` already exists');
@@ -318,7 +324,8 @@ describe(NgxsEmitPluginModule.name, () => {
     }
 
     TestBed.configureTestingModule({
-      imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()]
+      imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: EmitStore = TestBed.inject(EmitStore);
@@ -383,7 +390,8 @@ describe(NgxsEmitPluginModule.name, () => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
       declarations: [MockComponent],
-      providers: [ApiService]
+      providers: [ApiService],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -418,7 +426,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -456,7 +465,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -497,7 +507,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TodosState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -533,7 +544,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([AnimalsState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -586,7 +598,8 @@ describe(NgxsEmitPluginModule.name, () => {
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);

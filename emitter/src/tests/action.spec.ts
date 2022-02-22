@@ -114,7 +114,11 @@ describe('Actions', () => {
     }
 
     TestBed.configureTestingModule({
-      imports: [NgxsModule.forRoot([CounterStateWithCustomActions]), NgxsEmitPluginModule.forRoot()]
+      imports: [
+        NgxsModule.forRoot([CounterStateWithCustomActions]),
+        NgxsEmitPluginModule.forRoot()
+      ],
+      teardown: { destroyAfterEach: false }
     });
 
     const store: Store = TestBed.inject(Store);
@@ -132,7 +136,8 @@ describe('Actions', () => {
   it('should intercept only CounterState.increment receiver', () => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -152,7 +157,8 @@ describe('Actions', () => {
   it('should intercept receiver that throws an error', () => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -174,7 +180,8 @@ describe('Actions', () => {
   it('should intercept multiple dispatched emittables', () => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -203,7 +210,8 @@ describe('Actions', () => {
   it('should intercept multiple successful emittables', () => {
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-      declarations: [MockComponent]
+      declarations: [MockComponent],
+      teardown: { destroyAfterEach: false }
     });
 
     const fixture = TestBed.createComponent(MockComponent);
@@ -276,7 +284,8 @@ describe('Actions', () => {
       // Arrange
       TestBed.configureTestingModule({
         imports: [NgxsModule.forRoot([CounterState]), NgxsEmitPluginModule.forRoot()],
-        declarations: [MockComponent]
+        declarations: [MockComponent],
+        teardown: { destroyAfterEach: false }
       });
 
       // Act

@@ -108,7 +108,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
       payload
     };
 
-    target.prototype[key] = function(ctx: StateContext<any>, action: any) {
+    target.prototype[key] = function (ctx: StateContext<any>, action: any) {
       return target[key].call(target, ctx, action);
     };
   };
