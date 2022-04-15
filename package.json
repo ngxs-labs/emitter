@@ -48,7 +48,7 @@
     "cpy-cli": "^3.1.1",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "lint-staged": "^12.3.7",
+    "lint-staged": "^12.3.8",
     "ng-packagr": "^13.3.1",
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
