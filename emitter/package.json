@@ -19,6 +19,6 @@
   "sideEffects": true,
   "peerDependencies": {
     "@angular/core": ">=14.0.1",
-    "@ngxs/store": ">=3.7.3"
+    "@ngxs/store": ">=3.7.4"
   }
 }
