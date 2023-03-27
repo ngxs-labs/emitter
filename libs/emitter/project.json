@@ -1,0 +1,47 @@
+{
+  "name": "emitter",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/emitter/src",
+  "prefix": "emitter",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/emitter/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/emitter/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/emitter/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/emitter/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/emitter/**/*.ts", "libs/emitter/**/*.html"]
+      }
+    }
+  },
+  "tags": ["lib"]
+}

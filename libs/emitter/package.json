@@ -1,0 +1,23 @@
+{
+  "name": "@ngxs-labs/emitter",
+  "version": "4.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngxs-labs/emitter.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/ngxs-labs/emitter#readme",
+  "bugs": {
+    "url": "https://github.com/ngxs-labs/emitter/issues"
+  },
+  "keywords": [
+    "ngxs",
+    "redux",
+    "store"
+  ],
+  "sideEffects": true,
+  "peerDependencies": {
+    "@angular/core": ">=14.0.2",
+    "@ngxs/store": ">=3.7.4"
+  }
+}
