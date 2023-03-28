@@ -16,13 +16,10 @@
     "store"
   ],
   "scripts": {
-    "postinstall": "ngcc && husky install",
-    "ng": "ng",
-    "start": "ng serve",
-    "lint": "ng lint",
-    "build": "ng build",
-    "postbuild": "cpy README.md dist/emitter",
-    "test": "ng test --run-in-band --silent"
+    "prebuild": "nx build emitter --skip-nx-cache",
+    "build": "yarn prebuild && yarn postbuild",
+    "postbuild": "cpx README.md dist/libs/emitter",
+    "test": "nx test emitter"
   },
   "private": true,
   "devDependencies": {
