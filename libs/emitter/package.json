@@ -1,6 +1,6 @@
 {
   "name": "@ngxs-labs/emitter",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ngxs-labs/emitter.git"
@@ -15,9 +15,9 @@
     "redux",
     "store"
   ],
-  "sideEffects": true,
+  "sideEffects": false,
   "peerDependencies": {
-    "@angular/core": ">=14.0.2",
+    "@angular/core": ">=15.0.0",
     "@ngxs/store": ">=3.7.4"
   }
 }
