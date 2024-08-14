@@ -1,4 +1,5 @@
-import { ensureStoreMetadata, StateContext } from '@ngxs/store';
+import { StateContext } from '@ngxs/store';
+import { ɵensureStoreMetadata } from '@ngxs/store/internals';
 
 import { RECEIVER_META_KEY, ReceiverMetaData } from '../internal/internals';
 
@@ -73,7 +74,7 @@ export function Receiver(options?: Partial<ReceiverMetaData>): MethodDecorator {
       key = String(key);
     }
 
-    const meta = ensureStoreMetadata(target);
+    const meta = ɵensureStoreMetadata(target);
     const { type, payload, action, cancelUncompleted } = getActionProperties(options, target, key);
 
     if (NG_DEV_MODE && Object.prototype.hasOwnProperty.call(meta.actions, type)) {
