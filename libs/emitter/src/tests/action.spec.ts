@@ -1,6 +1,14 @@
 import { Component, Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Actions, NgxsModule, State, StateContext, ofActionDispatched, Store } from '@ngxs/store';
+import {
+  Actions,
+  NgxsModule,
+  State,
+  StateContext,
+  ofActionDispatched,
+  Store,
+  Selector
+} from '@ngxs/store';
 
 import { throwError } from 'rxjs';
 import { take, finalize } from 'rxjs/operators';
@@ -252,6 +260,11 @@ describe('Actions', () => {
     })
     @Injectable()
     class CounterState {
+      @Selector()
+      static getCounter(state: number) {
+        return state;
+      }
+
       @Receiver()
       static increment(ctx: StateContext<number>) {
         ctx.setState(ctx.getState() + 1);
@@ -309,7 +322,7 @@ describe('Actions', () => {
 
       CounterService.dontChange.emit();
 
-      const counter: number = store.selectSnapshot(CounterState);
+      const counter: number = store.selectSnapshot(CounterState.getCounter);
 
       // Assert
       expect(counter).toBe(0);

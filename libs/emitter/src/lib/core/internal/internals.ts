@@ -1,15 +1,7 @@
 import { Type } from '@angular/core';
-import { StateContext } from '@ngxs/store';
+import type { ActionStatus, StateContext } from '@ngxs/store';
 
 import { Observable } from 'rxjs';
-
-export const enum ActionStatus {
-  Dispatched = 'DISPATCHED',
-  Successful = 'SUCCESSFUL',
-  Canceled = 'CANCELED',
-  Errored = 'ERRORED'
-}
-
 export type Action<T> = Type<T> & {
   type: string;
 };
@@ -21,9 +13,9 @@ export interface ReceiverMetaData<T extends Function = any> {
   cancelUncompleted: boolean;
 }
 
-export interface Emittable<T = void, U = any> {
-  emit(payload: T): Observable<U>;
-  emitMany(payloads: T[]): Observable<U>;
+export interface Emittable<T = void> {
+  emit(payload: T): Observable<void>;
+  emitMany(payloads: T[]): Observable<void>;
 }
 
 export interface ActionContext {

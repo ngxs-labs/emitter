@@ -1,20 +1,63 @@
-/.angular/cache
-dist
-node_modules
-.idea
-.vscode
-.cache
-yarn-error.log
-coverage
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# compiled output
+/dist
+/tmp
+/out-tsc
+/elements
+/functions
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+.history/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDE - Visual Studio
+.vs/
+
+# misc
+/.sass-cache
+/.angular/cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+__diff_output__
+
+# System Files
+.DS_Store
+Thumbs.db
+/reports/
 migrations.json
 
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+.yarn
 
 .angular
+# there's a bug in Nx that forces creation of prettier config in a default format
+# should be fixed by https://github.com/nrwl/nx/pull/17157
+.prettierrc
+
+.env
+
+# The incremental cache file, so local type-checks should become faster.
+/tsconfig.spec.tsbuildinfo
+
+.nx/cache
+.nx/workspace-data

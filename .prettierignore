@@ -1,0 +1,12 @@
+/.firebase
+/dist
+node_modules
+/package.json
+/.vscode
+/.idea
+
+.angular
+
+/.nx/cache
+
+/.nx/workspace-data

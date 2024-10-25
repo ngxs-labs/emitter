@@ -18,7 +18,7 @@ const NG_DEV_MODE = typeof ngDevMode === 'undefined' || ngDevMode;
 
 @Injectable()
 export class EmitStore extends Store {
-  emitter<T = void, U = any>(receiver: Function): Emittable<T, U> {
+  emitter<T = void>(receiver: Function): Emittable<T> {
     const metadata = getReceiverMetadata(receiver);
 
     if (NG_DEV_MODE && metadata == null) {
@@ -28,12 +28,12 @@ export class EmitStore extends Store {
     }
 
     return {
-      emit: (payload: T) => this._dispatchSingle<T, U>(metadata, payload),
-      emitMany: (payloads: T[]) => this._dispatchMany<T, U>(metadata, payloads)
+      emit: (payload: T) => this._dispatchSingle<T>(metadata, payload),
+      emitMany: (payloads: T[]) => this._dispatchMany<T>(metadata, payloads)
     };
   }
 
-  private _dispatchSingle<T, U>(metadata: ReceiverMetaData, payload: T): Observable<U> {
+  private _dispatchSingle<T>(metadata: ReceiverMetaData, payload: T): Observable<void> {
     if (payload === undefined && metadata.payload !== undefined) {
       payload = metadata.payload;
     }
@@ -48,7 +48,7 @@ export class EmitStore extends Store {
     return this.dispatch(new EmitterAction(payload, metadata.type));
   }
 
-  private _dispatchMany<T, U>(metadata: ReceiverMetaData, payloads: T[]): Observable<U> {
+  private _dispatchMany<T>(metadata: ReceiverMetaData, payloads: T[]): Observable<void> {
     if (!Array.isArray(payloads)) {
       return this.dispatch([]);
     }

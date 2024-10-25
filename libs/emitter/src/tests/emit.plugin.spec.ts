@@ -27,8 +27,10 @@ describe(NgxsEmitPluginModule.name, () => {
         @Receiver()
         foo() {}
       }
-    } catch ({ message }) {
-      expect(message).toBe('Only static functions can be decorated with @Receiver() decorator');
+    } catch (e) {
+      expect((e as any).message).toBe(
+        'Only static functions can be decorated with @Receiver() decorator'
+      );
     }
   });
 
@@ -96,8 +98,8 @@ describe(NgxsEmitPluginModule.name, () => {
         @Receiver({ type: '@@[bar]' })
         static foo() {}
       }
-    } catch ({ message }) {
-      expect(message).toBe(
+    } catch (e) {
+      expect((e as any).message).toBe(
         'Property with name `foo` already exists, please rename to avoid conflicts'
       );
     }
@@ -279,8 +281,8 @@ describe(NgxsEmitPluginModule.name, () => {
         imports: [NgxsModule.forRoot([BarState]), NgxsEmitPluginModule.forRoot()],
         teardown: { destroyAfterEach: false }
       });
-    } catch ({ message }) {
-      expect(message).toBe('Method decorated with such type `foo` already exists');
+    } catch (e) {
+      expect((e as any).message).toBe('Method decorated with such type `foo` already exists');
     }
   });
 
@@ -296,8 +298,10 @@ describe(NgxsEmitPluginModule.name, () => {
         @Receiver({ action: FooAction })
         static foo() {}
       }
-    } catch ({ message }) {
-      expect(message).toBe('FooAction`s type should be defined as a static property `type`');
+    } catch (e) {
+      expect((e as any).message).toBe(
+        'FooAction`s type should be defined as a static property `type`'
+      );
     }
   });
 

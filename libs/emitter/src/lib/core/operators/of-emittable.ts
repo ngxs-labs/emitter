@@ -1,15 +1,9 @@
-import { getActionTypeFromInstance } from '@ngxs/store';
+import { ActionStatus, getActionTypeFromInstance } from '@ngxs/store';
 
-import { OperatorFunction } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { type OperatorFunction, filter, map } from 'rxjs';
 
-import {
-  ActionStatus,
-  ActionContext,
-  OfEmittableActionContext,
-  Types
-} from '../internal/internals';
 import { getReceiverMetadata } from '../utils';
+import type { ActionContext, OfEmittableActionContext, Types } from '../internal/internals';
 
 declare const ngDevMode: boolean;
 

@@ -7,7 +7,7 @@ import { Emittable } from '../internal/internals';
 export class EmitterService {
   constructor(private _emitStore: EmitStore) {}
 
-  action<T = void, U = any>(receiver: Function): Emittable<T, U> {
+  action<T = void>(receiver: Function): Emittable<T> {
     return this._emitStore.emitter(receiver);
   }
 }
